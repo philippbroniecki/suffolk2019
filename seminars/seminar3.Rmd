@@ -6,7 +6,51 @@ par(bg = '#fdf6e3')
 
 ## Seminar
 
-### bla bla blahhhh
+In this section, we will load data in csv, txt, excel and R format. We will learn how to check and set our working directory.
 
-buladfdsfdsaf
+### Setting up
+
+We set our working directory. R operates in specific directory (folder) on our computer. We create a folder on where we save our scripts. We name the folder `suffolk2019`. Let's create the folder on our computers now (in finder on Mac and explorer on Windows).
+
+Now, we set our working directory to the folder, we just created like so:
+
+![](./img/setwdir.png)
+
+Create a new R script and save it as day1.R to your `suffolk2019` directory. 
+
+At the beginning of each new script, we want to clear the workspace. The workspace is stored in working memory on our computer. If we do not clear it for a new script, it becomes too full over time. Our computer will slow down and it will become difficult for us to know which objects are stored in working memory.
+
+We check the contents of our workspce like so:
+
+```{r, eval=FALSE}
+# check workspace
+ls()
+```
+
+To remove a specific object, we use the `rm()` function which stands for remove. Within the round brackets, we put the name of the object we want to remove. We could remove the object `a` like so:
+
+```{r, eval=FALSE}
+# delete variable 'a' from workspace
+rm(a)
+```
+
+At the beginning of each script, we should always clear the entire workspace. We can do so in the following way:
+
+```{r, eval=FALSE}
+# delete everything from workspace
+rm( list = ls() )
+```
+
+You can also clear text from the console window. To do so press Crtl+l on Winowds or Command+l on Mac.
+
+
+### setting up
+
+Data comes in different file formats such as `.txt`, `.csv`, `.xlsx`, `.RData`, `.dta` and many more. To know the file type of a file right click on it and view preferences (in Windows explorer or Mac finder).
+
+### Importing a data set in `.csv` format
+
+One of the most common file types is `.csv` which means comma seperated values. Columns are seperated by commas and rows by line breaks. 
+
+
 

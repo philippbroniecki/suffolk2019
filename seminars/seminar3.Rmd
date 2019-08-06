@@ -52,5 +52,13 @@ Data comes in different file formats such as `.txt`, `.csv`, `.xlsx`, `.RData`, 
 
 One of the most common file types is `.csv` which means comma seperated values. Columns are seperated by commas and rows by line breaks. 
 
+The dataset's name is "non_western_immigrants.csv". To load it, we use the `read.csv()` function.
+
+```{r}
+dat1 <- read.csv("non_western_immigrants.csv")
+```
+
+
+
 
 

@@ -44,11 +44,13 @@ rm( list = ls() )
 You can also clear text from the console window. To do so press Crtl+l on Winowds or Command+l on Mac.
 
 
-### setting up
+### Loading data
 
 Data comes in different file formats such as `.txt`, `.csv`, `.xlsx`, `.RData`, `.dta` and many more. To know the file type of a file right click on it and view preferences (in Windows explorer or Mac finder).
 
-### Importing a data set in `.csv` format
+R can load files coming in many different file formats. To find out how to import a file coming in a specific format, it is usually a good idea to the google "R load file_format".
+
+### Importing a dataset in `.csv` format
 
 One of the most common file types is `.csv` which means comma seperated values. Columns are seperated by commas and rows by line breaks. 
 
@@ -58,7 +60,62 @@ The dataset's name is "non_western_immigrants.csv". To load it, we use the `read
 dat1 <- read.csv("non_western_immigrants.csv")
 ```
 
+### Importing a dataset in Excel (xlsx) format
+
+Another common file format is Microsoft's Excel `xlsx` format. We will load a dataset in this format now. To do so, we will need to install a package first. Packages are additional functions that we can add to R. A package is like an app on our phones. 
+
+We install the `readxl` package using `install.packages("readxl")`. 
+
+```{r, eval=FALSE}
+install.packages("readxl")
+```
+
+We only need to install a package once. It does not hurt to do it more often though, because every time we install, it will install the most recent version of the package.
+
+Once a package is installed, we need to load it using the `library()` function. 
+
+```{r}
+library(readxl)
+```
+
+To load the excel file, we can now use the `read_excel()` function that is included in the `readxl` library. We need to provide the follwing arguments to the function:
+
+|Argument         |Description               |
+|-----------------|--------------------------|
+|path             |Filename of excel sheet   |
+|sheet            |Sheet number to import    |
+
+Now, let's load the file:
+
+```{r}
+dat2 <- read_excel("non_western_immigrants.xlsx", sheet = 1)
+```
+
+### Importing a dataset in RData format
+
+The native file format of R is called `.RData`. To load files saved in this format, we use the `load()` function like so:
+
+```{r}
+load(file = "non_western_immigrants.RData")
+```
+
+Notice that we usually need to assign the object we load to using the `<-` operator. The `load()` function is an exception where we do not need to do this.
 
 
+### Importing a dataset in .txt format.
 
+Loading a dataset that comes in .txt format requires some additional information. The format is a text format and we need to know how the columns are sepearted. Usually it is enough to open the file in a word processor such as notepad to see how this is done. The most common ways to serpate columns is by using commas or tabs but other seperators such as for instance semicolons are sometimes also used.
+
+In our example, columns are seperated by semicolons. We use the `read.table()` function and provide the following arguments:
+
+|Argument         |Description               |
+|-----------------|--------------------------|
+|file             |Filename of excel sheet   |
+|sep              |the symbol that seperates columns    |
+|header           |whether the first row contains variable names or not    |
+
+
+```{r}
+dat3 <- read.table(file = "non_western_immigrants.txt", sep =";", header = TRUE)
+```
 

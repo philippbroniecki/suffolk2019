@@ -42,7 +42,7 @@ While this is a toy example, it illustrates how we could do pairwise comparisons
 
 ### Conditions
 
-To illustrate the use of conditions we load the non-western foreingers dataset. 
+To illustrate the use of conditions we load the non-western foreigners dataset. 
 
 ```{r}
 dat1 <- read.csv("non_western_immigrants.csv")
@@ -86,4 +86,17 @@ Take the mean of over.estimate for women on your own.
 mean( dat1$over.estimate[ dat1$RSex== 2] )
 ```
 
+It turns out, that females in our sample over estimate the number of non-western immigrants more. Whether the difference in our sample is systematic, i.e. whether it would hold in the population as well is a matter that we will return to.
+
+Here we have taken two conditional means and compared them. Doing so is the first step towards statistical inference.
+
+### The ifelse() function
+
+Categorical variables such as "RSex" are usually coded 0/1 and the variable name usually refers to the category that is 1. "RSex" is a bad variable name because it is not clear whehter the values 1 and 2 refer to males or females. 
+
+We will create a new variable called "female" that is equal to 1 if the respondent is female and 0 otherwise. We do so using the `ifelse()` function. The function first evaluates a logical condition and subsequently carries out one operation if the statement is true (yes) and another if the statement is false (no).
+
+```{r}
+dat1$female <- ifelse( dat1$RSex == 2, yes = 1, no = 0 )
+```
 

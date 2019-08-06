@@ -1361,7 +1361,7 @@ While this is a toy example, it illustrates how we could do pairwise comparisons
 \hypertarget{conditions}{%
 \subsubsection{Conditions}\label{conditions}}
 
-To illustrate the use of conditions we load the non-western foreingers dataset.
+To illustrate the use of conditions we load the non-western foreigners dataset.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1485,6 +1485,23 @@ Take the mean of over.estimate for women on your own.
 \begin{verbatim}
 [1] 0.7828371
 \end{verbatim}
+
+It turns out, that females in our sample over estimate the number of non-western immigrants more. Whether the difference in our sample is systematic, i.e.~whether it would hold in the population as well is a matter that we will return to.
+
+Here we have taken two conditional means and compared them. Doing so is the first step towards statistical inference.
+
+\hypertarget{the-ifelse-function}{%
+\subsubsection{The ifelse() function}\label{the-ifelse-function}}
+
+Categorical variables such as ``RSex'' are usually coded 0/1 and the variable name usually refers to the category that is 1. ``RSex'' is a bad variable name because it is not clear whehter the values 1 and 2 refer to males or females.
+
+We will create a new variable called ``female'' that is equal to 1 if the respondent is female and 0 otherwise. We do so using the \texttt{ifelse()} function. The function first evaluates a logical condition and subsequently carries out one operation if the statement is true (yes) and another if the statement is false (no).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat1}\OperatorTok{$}\NormalTok{female <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{( dat1}\OperatorTok{$}\NormalTok{RSex }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{ )}
+\end{Highlighting}
+\end{Shaded}
 
 
 \end{document}

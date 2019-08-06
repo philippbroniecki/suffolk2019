@@ -11,7 +11,7 @@ rmd_files: [
   
   #dropin_sessions.Rmd,
   
-  #seminars/seminar1.Rmd, 
+  seminars/seminar1.Rmd, 
   #solutions/solutions1.Rmd,
   
   #seminars/seminar2.Rmd,

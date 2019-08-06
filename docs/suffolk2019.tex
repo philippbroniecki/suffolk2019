@@ -647,5 +647,40 @@ Access the second column of the third layer on your own.
 [1] 15 16
 \end{verbatim}
 
+\hypertarget{data-import-from-csv-txt-and-excel}{%
+\section{Data import (from csv, txt, and excel)}\label{data-import-from-csv-txt-and-excel}}
+
+\hypertarget{seminar-1}{%
+\subsection{Seminar}\label{seminar-1}}
+
+\hypertarget{bla-bla-blahhhh}{%
+\subsubsection{bla bla blahhhh}\label{bla-bla-blahhhh}}
+
+buladfdsfdsaf
+
+\hypertarget{r-syntax-data-structures-and-types-1}{%
+\section{R-syntax, data structures and types}\label{r-syntax-data-structures-and-types-1}}
+
+\hypertarget{seminar-2}{%
+\subsection{Seminar}\label{seminar-2}}
+
+\hypertarget{data-frames}{%
+\subsubsection{Data frames}\label{data-frames}}
+
+A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g.~numbers and text).
+
+We start by creating a dataframe with the \texttt{data.frame()} function. We will give each column a name (a variable name) followed by the \texttt{=} operator and the respective vector of data that we want to assign to that column.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
+  \DataTypeTok{name =} \KeywordTok{c}\NormalTok{(}\StringTok{"South East"}\NormalTok{, }\StringTok{"London"}\NormalTok{, }\StringTok{"North West"}\NormalTok{, }\StringTok{"East of England"}\NormalTok{, }\StringTok{"West Midlands"}\NormalTok{, }\StringTok{"South West"}\NormalTok{,}
+           \StringTok{"Yorkshire and the Humber"}\NormalTok{, }\StringTok{"East Midlands"}\NormalTok{, }\StringTok{"North East"}\NormalTok{),}
+  \DataTypeTok{population =} \KeywordTok{c}\NormalTok{(}\FloatTok{8.6}\NormalTok{, }\FloatTok{8.2}\NormalTok{, }\FloatTok{7.1}\NormalTok{, }\FloatTok{5.9}\NormalTok{, }\FloatTok{5.6}\NormalTok{, }\FloatTok{5.3}\NormalTok{, }\FloatTok{5.3}\NormalTok{, }\FloatTok{4.5}\NormalTok{, }\FloatTok{2.6}\NormalTok{),}
+  \DataTypeTok{earnings =} \KeywordTok{c}\NormalTok{(}\FloatTok{28.7}\NormalTok{, }\FloatTok{35.1}\NormalTok{, }\FloatTok{25.2}\NormalTok{, }\FloatTok{26.6}\NormalTok{, }\FloatTok{24.9}\NormalTok{, }\FloatTok{25.6}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{25}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
 
 \end{document}

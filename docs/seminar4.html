@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Introduction to R and RStudio | Suffolk 2019</title>
-  <meta name="description" content="Chapter 1 Introduction to R and RStudio | Suffolk 2019" />
+  <title>Chapter 4 R-syntax, data structures and types | Suffolk 2019</title>
+  <meta name="description" content="Chapter 4 R-syntax, data structures and types | Suffolk 2019" />
   <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Introduction to R and RStudio | Suffolk 2019" />
+  <meta property="og:title" content="Chapter 4 R-syntax, data structures and types | Suffolk 2019" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Introduction to R and RStudio | Suffolk 2019" />
+  <meta name="twitter:title" content="Chapter 4 R-syntax, data structures and types | Suffolk 2019" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="seminar2.html">
+<link rel="prev" href="seminar3.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -180,92 +180,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction-to-r-and-rstudio" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction to R and RStudio</h1>
-<div id="learning-objectives" class="section level2">
-<h2><span class="header-section-number">1.1</span> Learning objectives</h2>
-<p>In this session, we will have a look at R and RStudio. We will interact with both and use the various components of RStudio.</p>
-<div id="what-is-r" class="section level3">
-<h3><span class="header-section-number">1.1.1</span> What is R?</h3>
-<p>R is an environment for statistical computing and graphics. RStudio is an editor or integrated development environment (IDE) that makes working with R much more comfortable.</p>
-<p>To install R and RStudio on your computer, download both from the following sources:</p>
-<ul>
-<li>Download R from <a href="https://cran.r-project.org">The Comprehensive R Archive Network (CRAN)</a></li>
-<li>Download RStudio from <a href="https://www.rstudio.com">RStudio.com</a></li>
-</ul>
-<p>Keep both R and RStudio up to date. That means go online and check for newer versions. In case there are new versions, download those and re-install.</p>
-</div>
-<div id="rstudio" class="section level3">
-<h3><span class="header-section-number">1.1.2</span> RStudio</h3>
-<p>Let’s get acquainted with R. When you start RStudio for the first time, you’ll see three panes:</p>
-<p><img src="img/rstudio_default.png" /></p>
-</div>
-<div id="console" class="section level3">
-<h3><span class="header-section-number">1.1.3</span> Console</h3>
-<p>The Console in RStudio is the simplest way to interact with R. You can type some code at the Console and when you press ENTER, R will run that code. Depending on what you type, you may see some output in the Console or if you make a mistake, you may get a warning or an error message.</p>
-<p>Let’s familiarize ourselves with the console by using R as a simple calculator:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span></a></code></pre></div>
-<pre><code>[1] 6</code></pre>
-<p>Now that we know how to use the <code>+</code> sign for addition, let’s try some other mathematical operations such as subtraction (<code>-</code>), multiplication (<code>*</code>), and division (<code>/</code>).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="dv">10</span> <span class="op">-</span><span class="st"> </span><span class="dv">4</span></a></code></pre></div>
-<pre><code>[1] 6</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="dv">5</span> <span class="op">*</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
-<pre><code>[1] 15</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="dv">7</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a></code></pre></div>
-<pre><code>[1] 3.5</code></pre>
-<table>
-<colgroup>
-<col width="73%" />
-<col width="26%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>You can use the cursor or arrow keys on your keyboard to edit your code at the console:<br>- Use the UP and DOWN keys to re-run something without typing it again<br>- Use the LEFT and RIGHT keys to edit</td>
-<td><img src="img/rstudio_cursorkeys.png" /></td>
-</tr>
-</tbody>
-</table>
-<p>Take a few minutes to play around at the console and try different things out. Don’t worry if you make a mistake, you can’t break anything easily!</p>
-</div>
-<div id="scripts" class="section level3">
-<h3><span class="header-section-number">1.1.4</span> Scripts</h3>
-<p>The Console is great for simple tasks but if you’re working on a project you would mostly likely want to save your work in some sort of a document or a file. Scripts in R are just plain text files that contain R code. You can edit a script just like you would edit a file in any word processing or note-taking application.</p>
-<p>Create a new script using the menu or the toolbar button as shown below.</p>
-<p><img src="img/rstudio_newfile.png" /></p>
-<p>Once you’ve created a script, it is generally a good idea to give it a meaningful name and save it immediately. For our first session save your script as <strong>seminar1.R</strong></p>
-<table>
-<colgroup>
-<col width="55%" />
-<col width="44%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>Familiarize yourself with the script window in RStudio, and especially the two buttons labeled <strong>Run</strong> and <strong>Source</strong></td>
-<td><img src="img/rstudio_script.png" /></td>
-</tr>
-</tbody>
-</table>
-<p>There are a few different ways to run your code from a script.</p>
-<table>
-<colgroup>
-<col width="24%" />
-<col width="75%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>One line at a time</td>
-<td>Place the cursor on the line you want to run and hit CTRL-ENTER or use the <strong>Run</strong> button</td>
-</tr>
-<tr class="even">
-<td>Multiple lines</td>
-<td>Select the lines you want to run and hit CTRL-ENTER or use the <strong>Run</strong> button</td>
-</tr>
-<tr class="odd">
-<td>Entire script</td>
-<td>Use the <strong>Source</strong> button</td>
-</tr>
-</tbody>
-</table>
+<div id="r-syntax-data-structures-and-types-1" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> R-syntax, data structures and types</h1>
+<div id="seminar-2" class="section level2">
+<h2><span class="header-section-number">4.1</span> Seminar</h2>
+<div id="data-frames" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Data frames</h3>
+<p>A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g. numbers and text).</p>
+<p>We start by creating a dataframe with the <code>data.frame()</code> function. We will give each column a name (a variable name) followed by the <code>=</code> operator and the respective vector of data that we want to assign to that column.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">england &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb48-2" title="2">  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;South East&quot;</span>, <span class="st">&quot;London&quot;</span>, <span class="st">&quot;North West&quot;</span>, <span class="st">&quot;East of England&quot;</span>, <span class="st">&quot;West Midlands&quot;</span>, <span class="st">&quot;South West&quot;</span>,</a>
+<a class="sourceLine" id="cb48-3" title="3">           <span class="st">&quot;Yorkshire and the Humber&quot;</span>, <span class="st">&quot;East Midlands&quot;</span>, <span class="st">&quot;North East&quot;</span>),</a>
+<a class="sourceLine" id="cb48-4" title="4">  <span class="dt">population =</span> <span class="kw">c</span>(<span class="fl">8.6</span>, <span class="fl">8.2</span>, <span class="fl">7.1</span>, <span class="fl">5.9</span>, <span class="fl">5.6</span>, <span class="fl">5.3</span>, <span class="fl">5.3</span>, <span class="fl">4.5</span>, <span class="fl">2.6</span>),</a>
+<a class="sourceLine" id="cb48-5" title="5">  <span class="dt">earnings =</span> <span class="kw">c</span>(<span class="fl">28.7</span>, <span class="fl">35.1</span>, <span class="fl">25.2</span>, <span class="fl">26.6</span>, <span class="fl">24.9</span>, <span class="fl">25.6</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb48-6" title="6">)</a></code></pre></div>
 
 </div>
 </div>
@@ -275,8 +203,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="seminar2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="seminar3.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

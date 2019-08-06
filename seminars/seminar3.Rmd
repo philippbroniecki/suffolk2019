@@ -1,10 +1,12 @@
 # Data import (from csv, txt, and excel)
 
-```{r package_options, include=FALSE}
-knitr::opts_knit$set(global.par = TRUE)
-```
-
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')
 ```
+
+## Seminar
+
+### bla bla blahhhh
+
+buladfdsfdsaf
 

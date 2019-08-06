@@ -387,125 +387,264 @@ data1 &\tabularnewline
 \bottomrule
 \end{longtable}
 
-\hypertarget{sequences}{%
-\subsubsection{Sequences}\label{sequences}}
+\hypertarget{vecors-and-subsetting}{%
+\subsubsection{Vecors and subsetting}\label{vecors-and-subsetting}}
 
-We often need to create sequences when manipulating data. For instance, you might want to perform an operation on the first 10 rows of a dataset so we need a way to select the range we're interested in.
+A vector is one dimensional. It can contain one element in which case it is also called a scalar or many elements. We can add and multiply vectors. Think of a vector as a row or column in your excel spreadsheet.
 
-There are two ways to create a sequence. Let's try to create a sequence of numbers from 1 to 10 using the two methods:
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Using the colon \texttt{:} operator. If you're familiar with spreadsheets then you might've already used \texttt{:} to select cells, for example \texttt{A1:A20}. In R, you can use the \texttt{:} to create a sequence in a similar fashion:
-\end{enumerate}
+To create a vector, we use the \texttt{c()} function, where c stands for collect. We start by creating a numeric vector.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\DecValTok{1}\OperatorTok{:}\DecValTok{10}
+\NormalTok{vec1 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{10}\NormalTok{, }\DecValTok{47}\NormalTok{, }\DecValTok{99}\NormalTok{, }\DecValTok{34}\NormalTok{, }\DecValTok{21}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Creating a character vector works in the same way. We need to use quotation marks to indicate that the data type is textual data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vec2 <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Emilia"}\NormalTok{, }\StringTok{"Martin"}\NormalTok{, }\StringTok{"Agatha"}\NormalTok{, }\StringTok{"James"}\NormalTok{, }\StringTok{"Luke"}\NormalTok{, }\StringTok{"Jacques"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's see how many elements our vector contains using the \texttt{length()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{length}\NormalTok{(vec1)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
- [1]  1  2  3  4  5  6  7  8  9 10
+[1] 5
 \end{verbatim}
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Using the \texttt{seq} function we get the exact same result:
-\end{enumerate}
-
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \DecValTok{1}\NormalTok{, }\DataTypeTok{to =} \DecValTok{10}\NormalTok{)}
+\KeywordTok{length}\NormalTok{(vec2)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
- [1]  1  2  3  4  5  6  7  8  9 10
+[1] 6
 \end{verbatim}
 
-The \texttt{seq} function has a number of options which control how the sequence is generated. For example to create a sequence from 0 to 100 in increments of \texttt{5}, we can use the optional \texttt{by} argument. Notice how we wrote \texttt{by\ =\ 5} as the third argument. It is a common practice to specify the name of argument when the argument is optional. The arguments \texttt{from} and \texttt{to} are not optional, se we can write \texttt{seq(0,\ 100,\ by\ =\ 5)} instead of \texttt{seq(from\ =\ 0,\ to\ =\ 100,\ by\ =\ 5)}. Both, are valid ways of achieving the same outcome. You can code whichever way you like. We recommend to write code such that you make it easy for your future self and others to read and understand the code.
+We need one coordinate to identify a unique element in a vector. For instance, we may be interested in the first element of the vector only. We use square brackets \texttt{{[}{]}} to access a specific element. The number in square brackets is the vector element that we wish to see.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \DecValTok{0}\NormalTok{, }\DataTypeTok{to =} \DecValTok{100}\NormalTok{, }\DataTypeTok{by =} \DecValTok{5}\NormalTok{)}
+\NormalTok{vec1[}\DecValTok{1}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
- [1]   0   5  10  15  20  25  30  35  40  45  50  55  60  65  70  75  80
-[18]  85  90  95 100
+[1] 10
 \end{verbatim}
 
-Another common use of the \texttt{seq} function is to create a sequence of a specific length. Here, we create a sequence from 0 to 100 with length 9, i.e., the result is a vector with 9 elements.
+To access all elements except the first element, we use the \texttt{-} operator
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \DecValTok{0}\NormalTok{, }\DataTypeTok{to =} \DecValTok{100}\NormalTok{, }\DataTypeTok{length.out =}  \DecValTok{9}\NormalTok{)}
+\NormalTok{vec1[}\OperatorTok{-}\DecValTok{1}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-[1]   0.0  12.5  25.0  37.5  50.0  62.5  75.0  87.5 100.0
+[1] 47 99 34 21
 \end{verbatim}
 
-Now it's your turn:
-
-\begin{itemize}
-\tightlist
-\item
-  Create a sequence of \textbf{odd} numbers between 0 and 100 and save it in an object called \texttt{odd\_numbers}
-\end{itemize}
+We can access elements 2 to 4 by using the colon \texttt{:} operator.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{odd_numbers <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{100}\NormalTok{, }\DecValTok{2}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{itemize}
-\tightlist
-\item
-  Next, display \texttt{odd\_numbers} on the console to verify that you did it correctly
-\end{itemize}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{odd_numbers}
+\NormalTok{vec1[}\DecValTok{2}\OperatorTok{:}\DecValTok{4}\NormalTok{]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
- [1]  1  3  5  7  9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45
-[24] 47 49 51 53 55 57 59 61 63 65 67 69 71 73 75 77 79 81 83 85 87 89 91
-[47] 93 95 97 99
+[1] 47 99 34
 \end{verbatim}
 
-\begin{itemize}
-\item
-  What do the numbers in square brackets \texttt{{[}\ {]}} mean? Look at the number of values displayed in each line to find out the answer.
-\item
-  Use the \texttt{length} function to find out how many values are in the object \texttt{odd\_numbers}.
-
-  \begin{itemize}
-  \tightlist
-  \item
-    HINT: Try \texttt{help(length)} and look at the examples section at the end of the help screen.
-  \end{itemize}
-\end{itemize}
+We can access non-adjacent elements bu using the collect function \texttt{c()}.
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\KeywordTok{length}\NormalTok{(odd_numbers)}
+\NormalTok{vec1[}\KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{,}\DecValTok{5}\NormalTok{)]}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-[1] 50
+[1] 47 21
+\end{verbatim}
+
+Finally, we combine the \texttt{length()} function with the square brackets to access the last element in our vector.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{vec1[ }\KeywordTok{length}\NormalTok{(vec1) ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 21
+\end{verbatim}
+
+\hypertarget{matrices}{%
+\subsubsection{Matrices}\label{matrices}}
+
+A matrix has two dimensions and stores data of the same type, e.g.~numbers or text but never both. A matrix is always rectengular. Think of it as your excel spreadsheet - essentially, it is a data table.
+
+We create a matrix using the \texttt{matrix()} function. We need to provide the follwing arguments:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mat1 <-}\StringTok{ }\KeywordTok{matrix}\NormalTok{(}
+  \DataTypeTok{data =} \KeywordTok{c}\NormalTok{(}\DecValTok{99}\NormalTok{, }\DecValTok{17}\NormalTok{, }\DecValTok{19}\NormalTok{, }\DecValTok{49}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{54}\NormalTok{),}
+  \DataTypeTok{nrow =} \DecValTok{2}\NormalTok{,}
+  \DataTypeTok{ncol =} \DecValTok{3}\NormalTok{,}
+  \DataTypeTok{byrow =} \OtherTok{TRUE}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Argument & Description\tabularnewline
+\midrule
+\endhead
+data & the data in the matrix\tabularnewline
+nrow & number of rows\tabularnewline
+ncol & number of columns\tabularnewline
+byrow & TRUE = matrix is filled rowwise\tabularnewline
+\bottomrule
+\end{longtable}
+
+To display the matrix, we simply call the object by its name (in this case mat1).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mat1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+     [,1] [,2] [,3]
+[1,]   99   17   19
+[2,]   49   88   54
+\end{verbatim}
+
+To access a unique element in a matrix, we need 2 coordinates. First, a row coordinate and second, a column coordinate. We use square brackets and separate the coordinates with a comma \texttt{{[}\ ,\ {]}}. The row coordinate goes before the comma and the column coordinate after.
+
+We can access the the second row and third column like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mat1[}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 54
+\end{verbatim}
+
+To display an entire column, we specify the column we want to display and leave the row coordinate empty like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# display the 2nd column}
+\NormalTok{mat1[ , }\DecValTok{2}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 17 88
+\end{verbatim}
+
+Similarly, to diplay the entire second row, we specify the row coordinate but leave the column coordinate empty.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{mat1[}\DecValTok{2}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 49 88 54
+\end{verbatim}
+
+\hypertarget{arrays}{%
+\subsubsection{Arrays}\label{arrays}}
+
+Arrays are similar to matrices but can contain more dimensions. You can think of an array as stacking multiple matrices. Generally, we refer to the rows, columns and layers in array. Let's create an array with 2 rows, 3 columns and 4 layers using the \texttt{array()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr1 <-}\StringTok{ }\KeywordTok{array}\NormalTok{(}
+  \DataTypeTok{data =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{24}\NormalTok{),}
+  \DataTypeTok{dim =} \KeywordTok{c}\NormalTok{(}\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{, }\DecValTok{4}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+To display the object, we call it by its name.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+, , 1
+
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+
+, , 2
+
+     [,1] [,2] [,3]
+[1,]    7    9   11
+[2,]    8   10   12
+
+, , 3
+
+     [,1] [,2] [,3]
+[1,]   13   15   17
+[2,]   14   16   18
+
+, , 4
+
+     [,1] [,2] [,3]
+[1,]   19   21   23
+[2,]   20   22   24
+\end{verbatim}
+
+We can subset an array using the square brackets \texttt{{[}{]}}. To access a single element we need as many coordinates as our object has dimensions. Let's check the number of dimensions in our object first.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(arr1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 2 3 4
+\end{verbatim}
+
+The \texttt{dim()} function informs us that we have 3 dimensions. The first is of length 2, the second of length 3 and the fourth of length 4.
+
+Access the second column of the third layer on your own.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{arr1[ , }\DecValTok{2}\NormalTok{, }\DecValTok{3}\NormalTok{] }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 15 16
 \end{verbatim}
 
 

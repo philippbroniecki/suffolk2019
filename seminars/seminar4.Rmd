@@ -1,10 +1,23 @@
-# Creating, amending, exporting data frames
-
-```{r package_options, include=FALSE}
-knitr::opts_knit$set(global.par = TRUE)
-```
+# R-syntax, data structures and types
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')
+```
+
+## Seminar
+
+### Data frames
+
+A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g. numbers and text).
+
+We start by creating a dataframe with the `data.frame()` function. We will give each column a name (a variable name) followed by the `=` operator and the respective vector of data that we want to assign to that column.
+
+```{r}
+england <- data.frame(
+  name = c("South East", "London", "North West", "East of England", "West Midlands", "South West",
+           "Yorkshire and the Humber", "East Midlands", "North East"),
+  population = c(8.6, 8.2, 7.1, 5.9, 5.6, 5.3, 5.3, 4.5, 2.6),
+  earnings = c(28.7, 35.1, 25.2, 26.6, 24.9, 25.6, 25, 25, 25)
+)
 ```
 

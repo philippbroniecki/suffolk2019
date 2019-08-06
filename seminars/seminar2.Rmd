@@ -79,55 +79,135 @@ We called our object `myresult` but we can call it anything as long as we follow
 |my_result        |                          |
 |data1            |                          |
 
-### Sequences
+### Vecors and subsetting
 
-We often need to create sequences when manipulating data. For instance, you might want to perform an operation on the first 10 rows of a dataset so we need a way to select the range we're interested in. 
+A vector is one dimensional. It can contain one element in which case it is also called a scalar or many elements. We can add and multiply vectors. Think of a vector as a row or column in your excel spreadsheet.
 
-There are two ways to create a sequence. Let's try to create a sequence of numbers from 1 to 10 using the two methods:
-
-1. Using the colon `:` operator. If you're familiar with spreadsheets then you might've already used `:` to select cells, for example `A1:A20`. In R, you can use the `:` to create a sequence in a similar fashion:
+To create a vector, we use the `c()` function, where c stands for collect. We start by creating a numeric vector.
 
 ```{r}
-1:10
+vec1 <- c(10, 47, 99, 34, 21)
 ```
 
-1. Using the `seq` function we get the exact same result:
+Creating a character vector works in the same way. We need to use quotation marks to indicate that the data type is textual data.
 
 ```{r}
-seq(from = 1, to = 10)
+vec2 <- c("Emilia", "Martin", "Agatha", "James", "Luke", "Jacques")
 ```
 
-The `seq` function has a number of options which control how the sequence is generated. For example to create a sequence from 0 to 100 in increments of `5`, we can use the optional `by` argument. Notice how we wrote `by = 5` as the third argument. It is a common practice to specify the name of argument when the argument is optional. The arguments `from` and `to` are not optional, se we can write `seq(0, 100, by = 5)` instead of `seq(from = 0, to = 100, by = 5)`. Both, are valid ways of achieving the same outcome. You can code whichever way you like. We recommend to write code such that you make it easy for your future self and others to read and understand the code. 
+Let's see how many elements our vector contains using the `length()` function.
 
 ```{r}
-seq(from = 0, to = 100, by = 5)
+length(vec1)
+length(vec2)
 ```
 
-Another common use of the `seq` function is to create a sequence of a specific length. Here, we create a sequence from 0 to 100 with length 9, i.e., the result is a vector with 9 elements.
+We need one coordinate to identify a unique element in a vector. For instance, we may be interested in the first element of the vector only. We use square brackets `[]` to access a specific element. The number in square brackets is the vector element that we wish to see.
 
 ```{r}
-seq(from = 0, to = 100, length.out =  9)
+vec1[1]
 ```
 
-Now it's your turn: 
+To access all elements except the first element, we use the `-` operator
 
-- Create a sequence of **odd** numbers between 0 and 100 and save it in an object called `odd_numbers`
+```{r}
+vec1[-1]
+```
+
+We can access elements 2 to 4 by using the colon `:` operator.
+
+```{r}
+vec1[2:4]
+```
+
+We can access non-adjacent elements bu using the collect function `c()`.
+
+```{r}
+vec1[c(2,5)]
+```
+
+Finally, we combine the `length()` function with the square brackets to access the last element in our vector.
+
+```{r}
+vec1[ length(vec1) ]
+```
+
+### Matrices
+
+A matrix has two dimensions and stores data of the same type, e.g. numbers or text but never both. A matrix is always rectengular. Think of it as your excel spreadsheet - essentially, it is a data table.
+
+We create a matrix using the `matrix()` function. We need to provide the follwing arguments:
+
+```{r}
+mat1 <- matrix(
+  data = c(99, 17, 19, 49, 88, 54),
+  nrow = 2,
+  ncol = 3,
+  byrow = TRUE
+)
+```
+
+|Argument         |Description               |
+|-----------------|--------------------------|
+|data             |the data in the matrix    |
+|nrow             |number of rows            |
+|ncol             |number of columns         |
+|byrow            |TRUE = matrix is filled rowwise|
+
+To display the matrix, we simply call the object by its name (in this case mat1).
+
+```{r}
+mat1
+```
+
+To access a unique element in a matrix, we need 2 coordinates. First, a row coordinate and second, a column coordinate. We use square brackets and separate the coordinates with a comma `[ , ]`. The row coordinate goes before the comma and the column coordinate after.
+
+We can access the the second row and third column like so:
+
+```{r}
+mat1[2, 3]
+```
+
+To display an entire column, we specify the column we want to display and leave the row coordinate empty like so:
+
+```{r}
+# display the 2nd column
+mat1[ , 2]
+```
+
+Similarly, to diplay the entire second row, we specify the row coordinate but leave the column coordinate empty.
+
+```{r}
+mat1[2, ]
+```
+
+### Arrays
+
+Arrays are similar to matrices but can contain more dimensions. You can think of an array as stacking multiple matrices. Generally, we refer to the rows, columns and layers in array. Let's create an array with 2 rows, 3 columns and 4 layers using the `array()` function.
+
+```{r}
+arr1 <- array(
+  data = c(1:24),
+  dim = c(2, 3, 4)
+)
+```
+
+To display the object, we call it by its name.
+
+```{r}
+arr1
+```
+
+We can subset an array using the square brackets `[]`. To access a single element we need as many coordinates as our object has dimensions. Let's check the number of dimensions in our object first.
+
+```{r}
+dim(arr1)
+```
+
+The `dim()` function informs us that we have 3 dimensions. The first is of length 2, the second of length 3 and the fourth of length 4.
+
+Access the second column of the third layer on your own.
 
 ```{r class.source="collapsible"}
-odd_numbers <- seq(1, 100, 2)
-```
-
-- Next, display `odd_numbers` on the console to verify that you did it correctly
-
-```{r class.source="collapsible"}
-odd_numbers
-```
-
-- What do the numbers in square brackets `[ ]` mean? Look at the number of values displayed in each line to find out the answer.
-
-- Use the `length` function to find out how many values are in the object `odd_numbers`. 
-    - HINT: Try `help(length)` and look at the examples section at the end of the help screen. 
-
-```{r class.source="collapsible"}
-length(odd_numbers)
+arr1[ , 2, 3] 
 ```

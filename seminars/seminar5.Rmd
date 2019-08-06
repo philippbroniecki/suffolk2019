@@ -6,17 +6,13 @@ par(bg = '#fdf6e3')
 
 ## Seminar
 
-We often need to change the type of variable. This can be necessary to clean data or because we add a new level to a factor like in the previous section on amending data frames. We begin be loading the england dataset that we created previously.
+We often need to change the type of a variable. This can be necessary to clean data or because we add a new level to a factor like in the previous section on amending data frames. We begin by loading the england dataset that we created previously.
 
 ```{r}
 england <- read.csv(file = "england.csv", sep = "", header = TRUE)
 ```
 
-Recall that we could not add "Brittany" to our dataset like so:
-
-```{r}
-england <- rbind(england, c( "Brittany", 4.5, NA) )
-```
+Recall that we could not add "Brittany" as a name to our variable. This was because the variable name is stored as a factor and "Brittany" was a new category. The easiest way to add the name "Brittany" is to convert the name variable into a character variable.
 
 ### Coerce a factor to character
 

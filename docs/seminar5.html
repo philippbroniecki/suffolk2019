@@ -197,30 +197,24 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 5</span> Type coercion</h1>
 <div id="seminar-3" class="section level2">
 <h2><span class="header-section-number">5.1</span> Seminar</h2>
-<p>We often need to change the type of variable. This can be necessary to clean data or because we add a new level to a factor like in the previous section on amending data frames. We begin be loading the england dataset that we created previously.</p>
+<p>We often need to change the type of a variable. This can be necessary to clean data or because we add a new level to a factor like in the previous section on amending data frames. We begin by loading the england dataset that we created previously.</p>
 <div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb85-1" title="1">england &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="dt">file =</span> <span class="st">&quot;england.csv&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
-<p>Recall that we could not add “Brittany” to our dataset like so:</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1">england &lt;-<span class="st"> </span><span class="kw">rbind</span>(england, <span class="kw">c</span>( <span class="st">&quot;Brittany&quot;</span>, <span class="fl">4.5</span>, <span class="ot">NA</span>) )</a></code></pre></div>
-<pre><code>Warning in `[&lt;-.factor`(`*tmp*`, ri, value = &quot;Brittany&quot;): invalid factor
-level, NA generated
-
-Warning in `[&lt;-.factor`(`*tmp*`, ri, value = &quot;Brittany&quot;): invalid factor
-level, NA generated</code></pre>
+<p>Recall that we could not add “Brittany” as a name to our variable. This was because the variable name is stored as a factor and “Brittany” was a new category. The easiest way to add the name “Brittany” is to convert the name variable into a character variable.</p>
 <div id="coerce-a-factor-to-character" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Coerce a factor to character</h3>
 <p>Let’s check our england dataset’s variable types.
 .</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
-<pre><code>&#39;data.frame&#39;:   11 obs. of  2 variables:
- $ name                     : Factor w/ 10 levels &quot;East Midlands&quot;,..: 7 3 6 2 9 8 10 1 5 4 ...
- $ X..population...earnings.: Factor w/ 10 levels &quot;&quot;,&quot;,\&quot;2.6\&quot;,\&quot;25\&quot;&quot;,..: 10 9 8 7 6 5 4 3 2 1 ...</code></pre>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb86-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   10 obs. of  2 variables:
+ $ name                     : Factor w/ 10 levels &quot;East Midlands&quot;,..: 7 3 6 2 9 8 10 1 5 4
+ $ X..population...earnings.: Factor w/ 10 levels &quot;&quot;,&quot;,\&quot;2.6\&quot;,\&quot;25\&quot;&quot;,..: 10 9 8 7 6 5 4 3 2 1</code></pre>
 <p>The variable “name” is a factor variable and needs to be converted to a character variable. We coerce the variable into a different type using the <code>as.character()</code> function.</p>
-<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb90-1" title="1">england<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">as.character</span>(england<span class="op">$</span>name)</a></code></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb88-1" title="1">england<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">as.character</span>(england<span class="op">$</span>name)</a></code></pre></div>
 <p>Let’s inspect the variable types of our dataset again:</p>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
-<pre><code>&#39;data.frame&#39;:   11 obs. of  2 variables:
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb89-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   10 obs. of  2 variables:
  $ name                     : chr  &quot;South East&quot; &quot;London&quot; &quot;North West&quot; &quot;East of England&quot; ...
- $ X..population...earnings.: Factor w/ 10 levels &quot;&quot;,&quot;,\&quot;2.6\&quot;,\&quot;25\&quot;&quot;,..: 10 9 8 7 6 5 4 3 2 1 ...</code></pre>
+ $ X..population...earnings.: Factor w/ 10 levels &quot;&quot;,&quot;,\&quot;2.6\&quot;,\&quot;25\&quot;&quot;,..: 10 9 8 7 6 5 4 3 2 1</code></pre>
 
 </div>
 </div>

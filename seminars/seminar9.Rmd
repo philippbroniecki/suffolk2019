@@ -1,10 +1,9 @@
-# Correlations and differences in means
-
-```{r package_options, include=FALSE}
-knitr::opts_knit$set(global.par = TRUE)
-```
+# Regression
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')
 ```
 
+## Seminar
+
+Will be uploaded tomorrow

@@ -173,3 +173,4 @@ Create a plot that includes both points and lines.
 ```{r class.source = "collapsible"}
 plot(longley$Year, longley$Employed, type = "b")
 ```
+

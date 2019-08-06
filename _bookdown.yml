@@ -32,13 +32,13 @@ rmd_files: [
   seminars/seminar7.Rmd,
   #solutions/solutions7.Rmd,
 
-  #seminars/seminar8.Rmd,
+  seminars/seminar8.Rmd,
   #solutions/solutions8.Rmd,
 
-  #seminars/seminar9.Rmd,
+  seminars/seminar9.Rmd,
   #solutions/solutions9.Rmd,
   
-  #seminars/seminar10.Rmd,
+  seminars/seminar10.Rmd,
   #solutions/solutions9.Rmd,
   
   #seminars/seminar11.Rmd,

@@ -138,8 +138,6 @@ This course is an introduction R, RStudio and statistics. Our primary aims are t
 
 \begin{center}\rule{0.5\linewidth}{\linethickness}\end{center}
 
-Agenda
-
 \hypertarget{introduction-to-r-and-rstudio}{%
 \section{Introduction to R and RStudio}\label{introduction-to-r-and-rstudio}}
 
@@ -1528,6 +1526,300 @@ Let's check whetehr we correctly converted the variable using the \texttt{table(
   0   1 
 478 571 
 \end{verbatim}
+
+\hypertarget{visualising-data}{%
+\section{Visualising data}\label{visualising-data}}
+
+\hypertarget{seminar-5}{%
+\subsection{Seminar}\label{seminar-5}}
+
+In this section, we will learn how to visualise data which is an important step towards understanding relationships better.
+
+The non-western foreingers data is about the subjective perception of immigrants from non-western countries. The perception of immigrants from a context that is not similar to the one's own ,is often used as a proxy for racism. Whether this is a fair measure or not is debatable but let's examine the data from a survey carried out in Britain.
+
+Let's check the codebook of our data.
+
+\begin{tabular}{l|l}
+\hline
+Variable & Description\\
+\hline
+IMMBRIT & Out of every 100 people in Britain, how many do you think are immigrants from non-western countries?\\
+\hline
+over.estimate & 1 if estimate is higher than 10.7\%.\\
+\hline
+RSex & 1 = male, 2 = female\\
+\hline
+RAge & Age of respondent\\
+\hline
+Househld & Number of people living in respondent's household\\
+\hline
+party identification & 1 = Conservatives, 2 = Labour, 3 = SNP, 4 = Greens, 5 = Ukip, 6 = BNP, 7 = other\\
+\hline
+paper & Do you normally read any daily morning newspaper 3+ times/week?\\
+\hline
+WWWhourspW & How many hours WWW per week?\\
+\hline
+religious & Do you regard yourself as belonging to any particular religion?\\
+\hline
+employMonths & How many mnths w. present employer?\\
+\hline
+urban & Population density, 4 categories (highest density is 4, lowest is 1)\\
+\hline
+health.good & How is your health in general for someone of your age? (0: bad, 1: fair, 2: fairly good, 3: good)\\
+\hline
+HHInc & Income bands for household, high number = high HH income\\
+\hline
+\end{tabular}
+
+Let's load the dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"non_western_immigrants.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We can look at the variable names in our data with the \href{http://bit.ly/R_names}{\texttt{names()}} function.
+
+The \href{http://bit.ly/R_dim}{\texttt{dim()}} function can be used to find out the dimensions of the dataset (dimension 1 = rows, dimension 2 = columns).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(dat1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1049   13
+\end{verbatim}
+
+So, the \href{http://bit.ly/R_dim}{\texttt{dim()}} function tells us that we have data from 1049 respondents with 13 variables for each respondent.
+
+Let's take a quick peek at the first 10 observations to see what the dataset looks like. By default the \href{http://bit.ly/R_head}{\texttt{head()}} function returns the first 6 rows, but let's tell it to return the first 10 rows instead.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(dat1, }\DataTypeTok{n =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   IMMBRIT over.estimate RSex RAge Househld paper WWWhourspW religious
+1        1             0    1   50        2     0          1         0
+2       50             1    2   18        3     0          4         0
+3       50             1    2   60        1     0          1         0
+4       15             1    2   77        2     1          2         1
+5       20             1    2   67        1     0          1         1
+6       30             1    1   30        4     1         14         0
+7       60             1    2   56        2     0          5         1
+8        7             0    1   49        1     1          8         0
+9       30             1    1   40        4     0          3         1
+10       2             0    1   61        3     1          0         1
+   employMonths urban health.good HHInc party_self
+1            72     4           1    13          2
+2            72     4           2     3          7
+3           456     3           3     9          7
+4            72     1           3     8          7
+5            72     3           3     9          7
+6            72     1           2     9          7
+7           180     1           2    13          3
+8           156     4           2    14          7
+9           264     2           2    11          3
+10           72     1           3     8          1
+\end{verbatim}
+
+Finally, let's look at summary statistics of our dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(dat1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    IMMBRIT       over.estimate         RSex            RAge      
+ Min.   :  0.00   Min.   :0.0000   Min.   :1.000   Min.   :17.00  
+ 1st Qu.: 10.00   1st Qu.:0.0000   1st Qu.:1.000   1st Qu.:36.00  
+ Median : 25.00   Median :1.0000   Median :2.000   Median :49.00  
+ Mean   : 29.03   Mean   :0.7235   Mean   :1.544   Mean   :49.75  
+ 3rd Qu.: 40.00   3rd Qu.:1.0000   3rd Qu.:2.000   3rd Qu.:62.00  
+ Max.   :100.00   Max.   :1.0000   Max.   :2.000   Max.   :99.00  
+    Househld         paper          WWWhourspW        religious     
+ Min.   :1.000   Min.   :0.0000   Min.   :  0.000   Min.   :0.0000  
+ 1st Qu.:1.000   1st Qu.:0.0000   1st Qu.:  0.000   1st Qu.:0.0000  
+ Median :2.000   Median :0.0000   Median :  2.000   Median :0.0000  
+ Mean   :2.392   Mean   :0.4538   Mean   :  5.251   Mean   :0.4929  
+ 3rd Qu.:3.000   3rd Qu.:1.0000   3rd Qu.:  7.000   3rd Qu.:1.0000  
+ Max.   :8.000   Max.   :1.0000   Max.   :100.000   Max.   :1.0000  
+  employMonths        urban        health.good        HHInc       
+ Min.   :  1.00   Min.   :1.000   Min.   :0.000   Min.   : 1.000  
+ 1st Qu.: 72.00   1st Qu.:2.000   1st Qu.:2.000   1st Qu.: 6.000  
+ Median : 72.00   Median :3.000   Median :2.000   Median : 9.000  
+ Mean   : 86.56   Mean   :2.568   Mean   :2.044   Mean   : 9.586  
+ 3rd Qu.: 72.00   3rd Qu.:3.000   3rd Qu.:3.000   3rd Qu.:13.000  
+ Max.   :600.00   Max.   :4.000   Max.   :3.000   Max.   :17.000  
+   party_self   
+ Min.   :1.000  
+ 1st Qu.:1.000  
+ Median :2.000  
+ Mean   :3.825  
+ 3rd Qu.:7.000  
+ Max.   :7.000  
+\end{verbatim}
+
+\hypertarget{plots}{%
+\subsubsection{Plots}\label{plots}}
+
+We can visualize the data with the help of a boxplot, so let's see how the perception of the number of immigrants is distributed.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# how good are we at guessing immigration}
+\KeywordTok{boxplot}\NormalTok{(}
+\NormalTok{  dat1}\OperatorTok{$}\NormalTok{IMMBRIT, }
+  \DataTypeTok{main =} \StringTok{"Perception of Immigration from Non-Western Countries"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Subjective number of immigrants per 100 British"}\NormalTok{, }
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{col =} \StringTok{"darkgray"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-87-1.pdf}
+
+Notice how the lower whisker is much shorter than the upper one. The distribution is right skewed. The right tail (higher values) is a lot longer. We can see this beter using a density plot. We combine R's \texttt{denisty()} function with the \texttt{plot()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \KeywordTok{density}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{IMMBRIT),}
+  \DataTypeTok{bty =} \StringTok{"n"}\NormalTok{,}
+  \DataTypeTok{main =} \StringTok{"Perception of Immigration from Non-Western Countries"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Subjective number of immigrants per 100 British"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-88-1.pdf}
+
+We can also plot histograms using the \texttt{hist()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# histogram}
+\KeywordTok{hist}\NormalTok{( dat1}\OperatorTok{$}\NormalTok{employMonths, }\DataTypeTok{main =} \StringTok{"histogram"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-89-1.pdf}
+
+It is plausible that perception of immigration from Non-Western countries is related to party affiliation. In our dataset, we have a some party affiliation dummies (binary variables). We can use square brackets to subset our data such that we produce a boxplot only for members of the Conservative Party. We first create the binary variables \emph{Cons} and \emph{Lab} for (Conservatives and Labour respectively) using the \texttt{ifelse()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat1}\OperatorTok{$}\NormalTok{Cons <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{dat1}\OperatorTok{$}\NormalTok{Lab <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We have a look at the variable \emph{Cons} using the \texttt{table()} function first.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{Cons)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+  0   1 
+765 284 
+\end{verbatim}
+
+In our data, 284 respondents associate with the Conservative party and 765 do not. We create a boxplot of \emph{IMMBRIT} but only for members of the Conservative Party. We do so by using the square brackets to subset our data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# boxplot of immbrit for those observations where Cons is 1}
+\KeywordTok{boxplot}\NormalTok{(}
+\NormalTok{  dat1}\OperatorTok{$}\NormalTok{IMMBRIT[dat1}\OperatorTok{$}\NormalTok{Cons}\OperatorTok{==}\DecValTok{1}\NormalTok{],}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Conservatives"}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"blue"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-92-1.pdf}
+
+We would now like to compare the distribution of the perception fo Conservatives to the distribution among Labour respondents. We can subset the data just like we did for the Conservative Party. In addtion, we want to plot the two plots next to each other, i.e., they should be in the same plot. We can achieve this with the \texttt{par()} function and the \texttt{mfrow} argument. This will spilt the plot window into rows and columns. We want 2 columns to plot 2 boxplots next to each other.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# split plot window into 1 row and 2 columns}
+\KeywordTok{par}\NormalTok{(}\DataTypeTok{mfrow =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{))}
+
+\CommentTok{# plot 1}
+\KeywordTok{boxplot}\NormalTok{(}
+\NormalTok{  dat1}\OperatorTok{$}\NormalTok{IMMBRIT[dat1}\OperatorTok{$}\NormalTok{Cons}\OperatorTok{==}\DecValTok{1}\NormalTok{],}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Conservatives"}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"blue"}
+\NormalTok{  )}
+
+\CommentTok{# plot 2}
+\KeywordTok{boxplot}\NormalTok{(}
+\NormalTok{  dat1}\OperatorTok{$}\NormalTok{IMMBRIT[dat1}\OperatorTok{$}\NormalTok{Lab}\OperatorTok{==}\DecValTok{1}\NormalTok{],}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Labour"}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"red"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-93-1.pdf}
+
+It is very hard to spot differences. The distributions are similar. The median for Labour respondents is larger which mean that the central Labour respondent over-estimates immigration more than the central Conservative respondent.
+
+You can play around with the non-western foreigners data on your own time. We now turn to a dataset that is integrated in R already. It is called \texttt{longley}. Use the \texttt{help()} function to see what this dataset is about.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{help}\NormalTok{(longley)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's create a scatterplot with the \texttt{Year} variable on the x-axis and \texttt{Employed} on the y-axis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ longley}\OperatorTok{$}\NormalTok{Year, }\CommentTok{# x-axis variable}
+     \DataTypeTok{y =}\NormalTok{ longley}\OperatorTok{$}\NormalTok{Employed, }\CommentTok{# y-axis variable}
+     \DataTypeTok{bty =} \StringTok{"n"} \CommentTok{# no box around the plot}
+\NormalTok{     )}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-96-1.pdf}
+
+To create a line plot instead, we use the same function with one additional argument \texttt{type\ =\ "l"}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(longley}\OperatorTok{$}\NormalTok{Year, longley}\OperatorTok{$}\NormalTok{Employed, }\DataTypeTok{type =} \StringTok{"l"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-97-1.pdf}
+
+Create a plot that includes both points and lines.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(longley}\OperatorTok{$}\NormalTok{Year, longley}\OperatorTok{$}\NormalTok{Employed, }\DataTypeTok{type =} \StringTok{"b"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-98-1.pdf}
 
 
 \end{document}

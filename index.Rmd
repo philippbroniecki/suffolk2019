@@ -13,7 +13,3 @@ site: bookdown::bookdown_site
 This course is an introduction R, RStudio and statistics. Our primary aims are to get comfortable working with R and to be able to prepare, manipulate, analyse and visualise data..
 
 ----
-
-<div class="container btn-container">
-  <button type = "button" class = "btn btn-lg btn-primary" onclick="window.open('https://github.com/philippbroniecki/suffolk2019/raw/master/admin/agenda.pdf');">Agenda</button>
-</div>

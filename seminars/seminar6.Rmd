@@ -107,4 +107,3 @@ table(dat1$RSex)
 table(dat1$female)
 ```
 
-

@@ -1,0 +1,10 @@
+# Functions, packages, libraries
+
+```{r package_options, include=FALSE}
+knitr::opts_knit$set(global.par = TRUE)
+```
+
+```{r, include = FALSE}
+par(bg = '#fdf6e3')
+```
+

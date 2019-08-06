@@ -141,9 +141,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.2" data-path="seminar1.html"><a href="seminar1.html#rstudio"><i class="fa fa-check"></i><b>1.1.2</b> RStudio</a></li>
 <li class="chapter" data-level="1.1.3" data-path="seminar1.html"><a href="seminar1.html#console"><i class="fa fa-check"></i><b>1.1.3</b> Console</a></li>
 <li class="chapter" data-level="1.1.4" data-path="seminar1.html"><a href="seminar1.html#scripts"><i class="fa fa-check"></i><b>1.1.4</b> Scripts</a></li>
-<li class="chapter" data-level="1.1.5" data-path="seminar1.html"><a href="seminar1.html#central-tendency"><i class="fa fa-check"></i><b>1.1.5</b> Central Tendency</a></li>
-<li class="chapter" data-level="1.1.6" data-path="seminar1.html"><a href="seminar1.html#dispersion"><i class="fa fa-check"></i><b>1.1.6</b> Dispersion</a></li>
-<li class="chapter" data-level="1.1.7" data-path="seminar1.html"><a href="seminar1.html#exercises"><i class="fa fa-check"></i><b>1.1.7</b> Exercises</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="2" data-path="seminar2.html"><a href="seminar2.html"><i class="fa fa-check"></i><b>2</b> R-syntax, data structures and types</a><ul>
@@ -179,16 +176,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="functions" class="section level3">
 <h3><span class="header-section-number">2.1.1</span> Functions</h3>
 <p>Functions are a set of instructions that carry out a specific task. Functions often require some input and generate some output. For example, instead of using the <code>+</code> operator for addition, we can use the <code>sum</code> function to add two or more numbers.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb36-1" title="1"><span class="kw">sum</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw">sum</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">10</span>)</a></code></pre></div>
 <pre><code>[1] 15</code></pre>
 <p>In the example above, <code>1, 4, 10</code> are the inputs and 15 is the output. A function always requires the use of parenthesis or round brackets <code>()</code>. Inputs to the function are called <strong>arguments</strong> and go inside the brackets. The output of a function is displayed on the screen but we can also have the option of saving the result of the output. More on this later.</p>
 </div>
 <div id="getting-help" class="section level3">
 <h3><span class="header-section-number">2.1.2</span> Getting Help</h3>
 <p>Another useful function in R is <code>help</code> which we can use to display online documentation. For example, if we wanted to know how to use the <code>sum</code> function, we could type <code>help(sum)</code> and look at the online documentation.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" title="1"><span class="kw">help</span>(sum)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">help</span>(sum)</a></code></pre></div>
 <p>The question mark <code>?</code> can also be used as a shortcut to access online help.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1">?sum</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">?sum</a></code></pre></div>
 <p><img src="img/rstudio_help.png" /></p>
 <p>Use the toolbar button shown in the picture above to expand and display the help in a new window.</p>
 <p>Help pages for functions in R follow a consistent layout generally include these sections:</p>
@@ -225,9 +222,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">2.1.3</span> The Assignment Operator</h3>
 <p>Now we know how to provide inputs to a function using parenthesis or round brackets <code>()</code>, but what about the output of a function?</p>
 <p>We use the assignment operator <strong><code>&lt;-</code></strong> for creating or updating objects. If we wanted to save the result of adding <code>sum(1, 4, 10)</code>, we would do the following:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1">myresult &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">myresult &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">10</span>)</a></code></pre></div>
 <p>The line above creates a new object called <code>myresult</code> in our environment and saves the result of the <code>sum(1, 4, 10)</code> in it. To see what’s in <code>myresult</code>, just type it at the console:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1">myresult</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">myresult</a></code></pre></div>
 <pre><code>[1] 15</code></pre>
 <p>Take a look at the <strong>Environment</strong> pane in RStudio and you’ll see <code>myresult</code> there.</p>
 <p><img src="img/rstudio_env.png" /></p>
@@ -271,29 +268,29 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <ol style="list-style-type: decimal">
 <li>Using the colon <code>:</code> operator. If you’re familiar with spreadsheets then you might’ve already used <code>:</code> to select cells, for example <code>A1:A20</code>. In R, you can use the <code>:</code> to create a sequence in a similar fashion:</li>
 </ol>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" title="1"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span></a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span></a></code></pre></div>
 <pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <ol style="list-style-type: decimal">
 <li>Using the <code>seq</code> function we get the exact same result:</li>
 </ol>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" title="1"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">1</span>, <span class="dt">to =</span> <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">1</span>, <span class="dt">to =</span> <span class="dv">10</span>)</a></code></pre></div>
 <pre><code> [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <p>The <code>seq</code> function has a number of options which control how the sequence is generated. For example to create a sequence from 0 to 100 in increments of <code>5</code>, we can use the optional <code>by</code> argument. Notice how we wrote <code>by = 5</code> as the third argument. It is a common practice to specify the name of argument when the argument is optional. The arguments <code>from</code> and <code>to</code> are not optional, se we can write <code>seq(0, 100, by = 5)</code> instead of <code>seq(from = 0, to = 100, by = 5)</code>. Both, are valid ways of achieving the same outcome. You can code whichever way you like. We recommend to write code such that you make it easy for your future self and others to read and understand the code.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" title="1"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">100</span>, <span class="dt">by =</span> <span class="dv">5</span>)</a></code></pre></div>
 <pre><code> [1]   0   5  10  15  20  25  30  35  40  45  50  55  60  65  70  75  80
 [18]  85  90  95 100</code></pre>
 <p>Another common use of the <code>seq</code> function is to create a sequence of a specific length. Here, we create a sequence from 0 to 100 with length 9, i.e., the result is a vector with 9 elements.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">100</span>, <span class="dt">length.out =</span>  <span class="dv">9</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1"><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">0</span>, <span class="dt">to =</span> <span class="dv">100</span>, <span class="dt">length.out =</span>  <span class="dv">9</span>)</a></code></pre></div>
 <pre><code>[1]   0.0  12.5  25.0  37.5  50.0  62.5  75.0  87.5 100.0</code></pre>
 <p>Now it’s your turn:</p>
 <ul>
 <li>Create a sequence of <strong>odd</strong> numbers between 0 and 100 and save it in an object called <code>odd_numbers</code></li>
 </ul>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">odd_numbers &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">100</span>, <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">odd_numbers &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">100</span>, <span class="dv">2</span>)</a></code></pre></div>
 <ul>
 <li>Next, display <code>odd_numbers</code> on the console to verify that you did it correctly</li>
 </ul>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">odd_numbers</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">odd_numbers</a></code></pre></div>
 <pre><code> [1]  1  3  5  7  9 11 13 15 17 19 21 23 25 27 29 31 33 35 37 39 41 43 45
 [24] 47 49 51 53 55 57 59 61 63 65 67 69 71 73 75 77 79 81 83 85 87 89 91
 [47] 93 95 97 99</code></pre>
@@ -304,7 +301,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>HINT: Try <code>help(length)</code> and look at the examples section at the end of the help screen.</li>
 </ul></li>
 </ul>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" title="1"><span class="kw">length</span>(odd_numbers)</a></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1"><span class="kw">length</span>(odd_numbers)</a></code></pre></div>
 <pre><code>[1] 50</code></pre>
 
 </div>
@@ -362,19 +359,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

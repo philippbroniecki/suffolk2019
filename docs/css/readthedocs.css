@@ -1,0 +1,63 @@
+.book .book-summary {
+  font-size: 14px;
+  line-height: 1.4;
+  border-right: 0;
+}
+
+.book .book-summary,
+.book .book-summary ul.summary li.active li a {
+  background: #657b83;
+}
+
+.book .book-summary ul.summary li a,
+.book .book-summary ul.summary li.active li a {
+  color: #eee8d5;
+}
+
+.book .book-summary ul.summary li ul {
+  padding-left: 0;
+}
+
+.book .book-summary ul.summary li.active a {
+  color: #eee8d5;
+  background: #093043;
+}
+
+.book .book-summary ul.summary li a {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.book .book-summary ul.summary li li a,
+.book .book-summary ul.summary li.active li a {
+  color: #eee8d5;
+  padding-left: 30px;
+}
+
+.book .book-summary ul.summary li a:hover,
+.book .book-summary ul.summary li.active a:hover {
+  color: #eee8d5;
+  background: #093043;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal pre {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal div.sourceCode pre.sourceCode {
+  background: #DFEBF5;
+}
+
+.book .book-body .page-wrapper .page-inner section.normal {
+  background: #fdf6e3;
+}
+
+.book .book-body  {
+  background: #fdf6e3;
+}
+
+
+.book .book-body div.Answer {
+    background-color: #E6E9EA;
+}

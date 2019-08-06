@@ -697,13 +697,15 @@ At the beginning of each script, we should always clear the entire workspace. We
 
 You can also clear text from the console window. To do so press Crtl+l on Winowds or Command+l on Mac.
 
-\hypertarget{setting-up-1}{%
-\subsubsection{setting up}\label{setting-up-1}}
+\hypertarget{loading-data}{%
+\subsubsection{Loading data}\label{loading-data}}
 
 Data comes in different file formats such as \texttt{.txt}, \texttt{.csv}, \texttt{.xlsx}, \texttt{.RData}, \texttt{.dta} and many more. To know the file type of a file right click on it and view preferences (in Windows explorer or Mac finder).
 
-\hypertarget{importing-a-data-set-in-.csv-format}{%
-\subsubsection{\texorpdfstring{Importing a data set in \texttt{.csv} format}{Importing a data set in .csv format}}\label{importing-a-data-set-in-.csv-format}}
+R can load files coming in many different file formats. To find out how to import a file coming in a specific format, it is usually a good idea to the google ``R load file\_format''.
+
+\hypertarget{importing-a-dataset-in-.csv-format}{%
+\subsubsection{\texorpdfstring{Importing a dataset in \texttt{.csv} format}{Importing a dataset in .csv format}}\label{importing-a-dataset-in-.csv-format}}
 
 One of the most common file types is \texttt{.csv} which means comma seperated values. Columns are seperated by commas and rows by line breaks.
 
@@ -712,6 +714,86 @@ The dataset's name is ``non\_western\_immigrants.csv''. To load it, we use the \
 \begin{Shaded}
 \begin{Highlighting}[]
 \NormalTok{dat1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"non_western_immigrants.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{importing-a-dataset-in-excel-xlsx-format}{%
+\subsubsection{Importing a dataset in Excel (xlsx) format}\label{importing-a-dataset-in-excel-xlsx-format}}
+
+Another common file format is Microsoft's Excel \texttt{xlsx} format. We will load a dataset in this format now. To do so, we will need to install a package first. Packages are additional functions that we can add to R. A package is like an app on our phones.
+
+We install the \texttt{readxl} package using \texttt{install.packages("readxl")}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"readxl"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We only need to install a package once. It does not hurt to do it more often though, because every time we install, it will install the most recent version of the package.
+
+Once a package is installed, we need to load it using the \texttt{library()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(readxl)}
+\end{Highlighting}
+\end{Shaded}
+
+To load the excel file, we can now use the \texttt{read\_excel()} function that is included in the \texttt{readxl} library. We need to provide the follwing arguments to the function:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Argument & Description\tabularnewline
+\midrule
+\endhead
+path & Filename of excel sheet\tabularnewline
+sheet & Sheet number to import\tabularnewline
+\bottomrule
+\end{longtable}
+
+Now, let's load the file:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat2 <-}\StringTok{ }\KeywordTok{read_excel}\NormalTok{(}\StringTok{"non_western_immigrants.xlsx"}\NormalTok{, }\DataTypeTok{sheet =} \DecValTok{1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{importing-a-dataset-in-rdata-format}{%
+\subsubsection{Importing a dataset in RData format}\label{importing-a-dataset-in-rdata-format}}
+
+The native file format of R is called \texttt{.RData}. To load files saved in this format, we use the \texttt{load()} function like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{load}\NormalTok{(}\DataTypeTok{file =} \StringTok{"non_western_immigrants.RData"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Notice that we usually need to assign the object we load to using the \texttt{\textless{}-} operator. The \texttt{load()} function is an exception where we do not need to do this.
+
+\hypertarget{importing-a-dataset-in-.txt-format.}{%
+\subsubsection{Importing a dataset in .txt format.}\label{importing-a-dataset-in-.txt-format.}}
+
+Loading a dataset that comes in .txt format requires some additional information. The format is a text format and we need to know how the columns are sepearted. Usually it is enough to open the file in a word processor such as notepad to see how this is done. The most common ways to serpate columns is by using commas or tabs but other seperators such as for instance semicolons are sometimes also used.
+
+In our example, columns are seperated by semicolons. We use the \texttt{read.table()} function and provide the following arguments:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Argument & Description\tabularnewline
+\midrule
+\endhead
+file & Filename of excel sheet\tabularnewline
+sep & the symbol that seperates columns\tabularnewline
+header & whether the first row contains variable names or not\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat3 <-}\StringTok{ }\KeywordTok{read.table}\NormalTok{(}\DataTypeTok{file =} \StringTok{"non_western_immigrants.txt"}\NormalTok{, }\DataTypeTok{sep =}\StringTok{";"}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 

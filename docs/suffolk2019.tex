@@ -234,6 +234,425 @@ You can use the cursor or arrow keys on your keyboard to edit your code at the c
 
 Take a few minutes to play around at the console and try different things out. Don't worry if you make a mistake, you can't break anything easily!
 
+\hypertarget{scripts}{%
+\subsubsection{Scripts}\label{scripts}}
+
+The Console is great for simple tasks but if you're working on a project you would mostly likely want to save your work in some sort of a document or a file. Scripts in R are just plain text files that contain R code. You can edit a script just like you would edit a file in any word processing or note-taking application.
+
+Create a new script using the menu or the toolbar button as shown below.
+
+\includegraphics{./img/rstudio_newfile.png}
+
+Once you've created a script, it is generally a good idea to give it a meaningful name and save it immediately. For our first session save your script as \textbf{seminar1.R}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\endhead
+\begin{minipage}[t]{0.52\columnwidth}\raggedright
+Familiarize yourself with the script window in RStudio, and especially the two buttons labeled \textbf{Run} and \textbf{Source}\strut
+\end{minipage} & \begin{minipage}[t]{0.42\columnwidth}\raggedright
+\includegraphics{./img/rstudio_script.png}\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+There are a few different ways to run your code from a script.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\endhead
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+One line at a time\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright
+Place the cursor on the line you want to run and hit CTRL-ENTER or use the \textbf{Run} button\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Multiple lines\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright
+Select the lines you want to run and hit CTRL-ENTER or use the \textbf{Run} button\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.23\columnwidth}\raggedright
+Entire script\strut
+\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright
+Use the \textbf{Source} button\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{central-tendency}{%
+\subsubsection{Central Tendency}\label{central-tendency}}
+
+The appropriate measure of central tendency depends on the level of measurement of the variable. To recap:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Level of measurement & Appropriate measure of central tendency\tabularnewline
+\midrule
+\endhead
+Continuous & arithmetic mean (or average)\tabularnewline
+Ordered & median (or the central observation)\tabularnewline
+Nominal & mode (the most frequent value)\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{mean}{%
+\paragraph{Mean}\label{mean}}
+
+We calculate the average grade on our eleven homework assignments in statistics 1. We create our vector of 11 (fake) grades first using the \texttt{c()} function, where \texttt{c} stands for collect or concatenate.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{hw.grades <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{80}\NormalTok{, }\DecValTok{90}\NormalTok{, }\DecValTok{85}\NormalTok{, }\DecValTok{71}\NormalTok{, }\DecValTok{69}\NormalTok{, }\DecValTok{85}\NormalTok{, }\DecValTok{83}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{99}\NormalTok{, }\DecValTok{81}\NormalTok{, }\DecValTok{92}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We now take the sum of the grades.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sum.hw.grades <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(hw.grades)}
+\end{Highlighting}
+\end{Shaded}
+
+We also take the number of grades
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{number.hw.grades <-}\StringTok{ }\KeywordTok{length}\NormalTok{(hw.grades) }
+\end{Highlighting}
+\end{Shaded}
+
+The mean is the sum of grades over the number of grades.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{sum.hw.grades }\OperatorTok{/}\StringTok{ }\NormalTok{number.hw.grades}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 83.90909
+\end{verbatim}
+
+R provides us with an even easier way to do the same with a function called \href{http://bit.ly/R_mean}{\texttt{mean()}}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(hw.grades)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 83.90909
+\end{verbatim}
+
+\hypertarget{median}{%
+\paragraph{Median}\label{median}}
+
+The median is the appropriate measure of central tendency for ordinal variables. Ordinal means that there is a rank ordering but not equally spaced intervals between values of the variable. Education is a common example. In education, more education is better. But the difference between primary school and secondary school is not the same as the difference between secondary school and an undergraduate degree.
+
+Let's generate a fake example with 100 people. We use numbers to code different levels of education.
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\endhead
+Code & Meaning & Frequency in our data\tabularnewline
+0 & no education & 1\tabularnewline
+1 & primary school & 5\tabularnewline
+2 & secondary school & 55\tabularnewline
+3 & undergraduate degree & 20\tabularnewline
+4 & postgraduate degree & 10\tabularnewline
+5 & doctorate & 9\tabularnewline
+\bottomrule
+\end{longtable}
+
+We introduce a new function to create a vector. The function \texttt{rep()}, replicates elements of a vector. Its arguments are the item \texttt{x} to be replicated and the number of \texttt{times} to replicate. Below, we create the variable education with the frequency of education level indicated above. Note that the arguments \texttt{x} and \texttt{times} do not have to be written out.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{edu <-}\StringTok{ }\KeywordTok{c}\NormalTok{( }\KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{0}\NormalTok{, }\DataTypeTok{times=}\DecValTok{1}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{, }\DataTypeTok{times=}\DecValTok{5}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{, }\DataTypeTok{times=}\DecValTok{55}\NormalTok{),}
+          \KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{3}\NormalTok{, }\DataTypeTok{times=}\DecValTok{20}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{10}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{9}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+The median level of education is the level where 50 percent of the observations have a lower or equal level of education and 50 percent have a higher or equal level of education. That means that the median splits the data in half.
+
+We use the \href{http://bit.ly/R_median}{\texttt{median()}} function for finding the median.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{median}\NormalTok{(edu)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 2
+\end{verbatim}
+
+The median level of education is secondary school.
+
+\hypertarget{mode}{%
+\paragraph{Mode}\label{mode}}
+
+The mode is the appropriate measure of central tendency if the level of measurement is nominal. Nominal means that there is no ordering implicit in the values that a variable takes on. We create data from 1000 (fake) voters in the United Kingdom who each express their preference on remaining in or leaving the European Union. The options are leave or stay. Leaving is not greater than staying and vice versa (even though we all order the two options normatively).
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\endhead
+Code & Meaning & Frequency in our data\tabularnewline
+0 & leave & 509\tabularnewline
+1 & stay & 491\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{stay <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{509}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{491}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+The mode is the most common value in the data. There is no mode function in R. The most straightforward way to determine the mode is to use the \href{http://bit.ly/R_table}{\texttt{table()}} function. It returns a frequency table. We can easily see the mode in the table. As your coding skills increase, you will see other ways of recovering the mode from a vector.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(stay)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+stay
+  0   1 
+509 491 
+\end{verbatim}
+
+The mode is leaving the EU because the number of `leavers' (0) is greater than the number of `remainers' (1).
+
+\hypertarget{dispersion}{%
+\subsubsection{Dispersion}\label{dispersion}}
+
+The appropriate measure of dispersion depends on the level of measurement of the variable we wish to describe.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Level of measurement & Appropriate measure of dispersion\tabularnewline
+\midrule
+\endhead
+Continuous & variance and/or standard deviation\tabularnewline
+Ordered & range or interquartile range\tabularnewline
+Nominal & proportion in each category\tabularnewline
+\bottomrule
+\end{longtable}
+
+\hypertarget{variance-and-standard-deviation}{%
+\paragraph{Variance and standard deviation}\label{variance-and-standard-deviation}}
+
+Both the variance and the standard deviation tell by how much an average realisation of a variable differs from the mean of that variable. Let's assume that our variable is income in the UK. Let's assume that its mean is 35 000 per year. We also assume that the average deviation from 35 000 is 5 000. If we ask 100 people in the UK at random about their income, we get 100 different answers. If we average the differences betweeen the 100 answers and 35 000, we would get 5 000. Suppose that the average income in France is also 35 000 per year but the average deviation is 10 000 instead. This would imply that income is more equally distributed in the UK than in France.
+
+Dispersion is important to describe data as this example illustrates. Although, mean income in our hypothetical example is the same in France and the UK, the distribution is tighter in the UK. The figure below illustrates our example:
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-15-1.pdf}
+
+The variance gives us an idea about the variability of data. The formula for the variance in the population is \[ \frac{\sum_{i=1}^n(x_i - \mu_x)^2}{n}\]
+
+The formula for the variance in a sample adjusts for sampling variability, i.e., uncertainty about how well our sample reflects the population by subtracting 1 in the denominator. Subtracting 1 will have next to no effect if n is large but the effect increases the smaller n.~The smaller n, the larger the sample variance. The intuition is, that in smaller samples, we are less certain that our sample reflects the population. We, therefore, adjust variability of the data upwards. The formula is
+
+\[ \frac{\sum_{i=1}^n(x_i - \bar{x})^2}{n-1}\]
+
+Notice the different notation for the mean in the two formulas. We write \(\mu_x\) for the mean of x in the population and \(\bar{x}\) for the mean of x in the sample. Notation is, however, unfortunately not always consistent.
+
+Take a minute to think your way through the formula. There are 4 setps: (1), In the numerator, we subtract the mean of x from some realisation of x. (2), We square the deviations from the mean because we want positive numbers only. (3) We sum the squared deviations. (4) We divide the sum by \((n-1)\). Below we show this for the homework example. In the last row, we add a 5th step. We take the square root in order to return to the orginial units of the homework grades.
+
+\begin{longtable}[]{@{}llll@{}}
+\toprule
+Obs & Var & Dev. from mean & Squared dev. from mean\tabularnewline
+\midrule
+\endhead
+i & grade & \(x_i-\bar{x}\) & \((x_i-\bar{x})^2\)\tabularnewline
+1 & 80 & -3.9090909 & 15.2809917\tabularnewline
+2 & 90 & 6.0909091 & 37.0991736\tabularnewline
+3 & 85 & 1.0909091 & 1.1900826\tabularnewline
+4 & 71 & -12.9090909 & 166.6446281\tabularnewline
+5 & 69 & -14.9090909 & 222.2809917\tabularnewline
+6 & 85 & 1.0909091 & 1.1900826\tabularnewline
+7 & 83 & -0.9090909 & 0.8264463\tabularnewline
+8 & 88 & 4.0909091 & 16.7355372\tabularnewline
+9 & 99 & 15.0909091 & 227.7355372\tabularnewline
+10 & 81 & -2.9090909 & 8.4628099\tabularnewline
+11 & 92 & 8.0909091 & 65.4628099\tabularnewline
+\(\sum_{i=1}^n\) & & & 762.9090909\tabularnewline
+\(\div n-1\) & & & 76.2909091\tabularnewline
+\(\sqrt{}\) & & & 8.7344667\tabularnewline
+\bottomrule
+\end{longtable}
+
+Our first grade (80) is below the mean (83.9090909). The sum is, thus, negative. Our second grade (90) is above the mean, so that the sum is positive. Both are deviations from the mean (think of them as distances). Our sum shall reflect the total sum of distances and distances must be positive. Hence, we square the distances from the mean. Having done this for all eleven observations, we sum the squared distances. Dividing by 10 (with the sample adjustment), gives us the average squared deviation. This is the variance. The units of the variance---squared deviations---are somewhat awkward. We return to this in a moment.
+
+We take the variance in R by using the \href{http://bit.ly/R_var}{\texttt{var()}} function. By default \texttt{var()} takes the sample variance.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{var}\NormalTok{(hw.grades)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 76.29091
+\end{verbatim}
+
+The average squared difference form our mean grade is 76.2909091. But what does that mean? We would like to get rid of the square in our units. That's what the standard deviation does. The standard deviation is the square root over the variance.
+
+\[ \sqrt{\frac{\sum_{i=1}^n(x_i - \bar{x})^2}{n-1}}\]
+
+We get the average deviation from our mean grade (83.9090909) with the \href{http://bit.ly/R_sd}{\texttt{sd()}} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{sd}\NormalTok{(hw.grades)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 8.734467
+\end{verbatim}
+
+The standard deviation is much more intuitive than the variance because its units are the same as the units of the variable we are interested in. ``Why teach us about this awful variance then'', you ask. Mathematically, we have to compute the variance before getting the standard deviation. We recommend that you use the standard deviation to describe the variability of your continuous data.
+
+Note: We used the sample variance and sample standard deviation formulas. If the eleven assignments represent the population, we would use the population variance formula. Whether the 11 cases represent a sample or the population depends on what we want to know. If we want learn about all students' assignments or future assignments, the 11 cases are a sample.
+
+\hypertarget{range-and-interquartile-range}{%
+\paragraph{Range and interquartile range}\label{range-and-interquartile-range}}
+
+The proper measure of dispersion of an ordinal variable is the range or the interquartile range. The interquartile range is usually the preferred measure because the range is strongly affected by outlying cases.
+
+Let's take the range first. We get back to our education example. In R, we use the \href{http://bit.ly/R_range}{\texttt{range()}} function to compute the range.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{range}\NormalTok{(edu)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0 5
+\end{verbatim}
+
+Our data ranges from no education all the way to those with a doctorate. However, no education is not a common value. Only one person in our sample did not have any education. The interquartile range is the range from the 25th to the 75th percentiles, i.e., it contains the central 50 percent of the distribution.
+
+The 25th percentile is the value of education that 25 percent or fewer people have (when we order education from lowest to highest). We use the \href{http://bit.ly/R_quantile}{\texttt{quantile()}} function in R to get percentiles. The function takes two arguments: \texttt{x} is the data vector and \texttt{probs} is the percentile.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{quantile}\NormalTok{(edu, }\FloatTok{0.25}\NormalTok{) }\CommentTok{# 25th percentile}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+25% 
+  2 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{quantile}\NormalTok{(edu, }\FloatTok{0.75}\NormalTok{) }\CommentTok{# 75th percentile}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+75% 
+  3 
+\end{verbatim}
+
+Therefore, the interquartile range is from 2, secondary school to 3, undergraduate degree.
+
+\hypertarget{proportion-in-each-category}{%
+\paragraph{Proportion in each category}\label{proportion-in-each-category}}
+
+To describe the distribution of our nominal variable, support for remaining in the European Union, we use the proportions in each category.
+
+Recall, that we looked at the frequency table to determine the mode:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(stay)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+stay
+  0   1 
+509 491 
+\end{verbatim}
+
+To get the proportions in each category, we divide the values in the table, i.e., 509 and 491, by the sum of the table, i.e., 1000.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(stay) }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{table}\NormalTok{(stay))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+stay
+    0     1 
+0.509 0.491 
+\end{verbatim}
+
+\hypertarget{exercises}{%
+\subsubsection{Exercises}\label{exercises}}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Create a script and call it assignment01. Save your script.
+\item
+  Download this \href{https://www.rstudio.com/wp-content/uploads/2016/06/r-cheat-sheet.pdf}{cheat-sheet} and go over it. You won't understand most of it right a away. But it will become a useful resource. Look at it often.
+\item
+  Calculate the square root of 1369 using the \texttt{sqrt()} function.
+\item
+  Square the number 13 using the \texttt{\^{}} operator.
+\item
+  What is the result of summing all numbers from 1 to 100?
+\end{enumerate}
+
+We take a sample of yearly income in Berlin. The values that we got are: 19395, 22698, 40587, 25705, 26292, 42150, 29609, 12349, 18131, 20543, 37240, 28598, 29007, 26106, 19441, 42869, 29978, 5333, 32013, 20272, 14321, 22820, 14739, 17711, 18749.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{5}
+\tightlist
+\item
+  Create the variable \texttt{income} with the values form our Berlin sample in R.
+\item
+  Describe Berlin income using the appropriate measures of central tendency and dispersion.
+\item
+  Compute the average deviation without using the \texttt{sd()} function.
+\end{enumerate}
+
+Take a look at the Sunday Question (who would you vote for if the general election were next Sunday?) by following this link \href{https://www.wahlrecht.de/umfragen/}{Sunday Question Germany}. You should be able to translate the website into English by right clicking in your browser and clicking ``Translate to English.''
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{8}
+\tightlist
+\item
+  What is the level of measurement of the variable in the Sunday Question?
+\item
+  Take the most recent poll and describe what you see in terms of central tendency and dispersion.
+\item
+  Save your script, which should now include the answers to all the exercises.
+\item
+  Source your script, i.e.~run the entire script without error message. Clean your script if you get error messages.
+\end{enumerate}
+
+\hypertarget{r-syntax-data-structures-and-types}{%
+\section{R-syntax, data structures and types}\label{r-syntax-data-structures-and-types}}
+
+\hypertarget{seminar}{%
+\subsection{Seminar}\label{seminar}}
+
+In this session we introduce R-syntax, and data types.
+
 \hypertarget{functions}{%
 \subsubsection{Functions}\label{functions}}
 
@@ -454,425 +873,6 @@ Now it's your turn:
 \begin{verbatim}
 [1] 50
 \end{verbatim}
-
-\hypertarget{scripts}{%
-\subsubsection{Scripts}\label{scripts}}
-
-The Console is great for simple tasks but if you're working on a project you would mostly likely want to save your work in some sort of a document or a file. Scripts in R are just plain text files that contain R code. You can edit a script just like you would edit a file in any word processing or note-taking application.
-
-Create a new script using the menu or the toolbar button as shown below.
-
-\includegraphics{./img/rstudio_newfile.png}
-
-Once you've created a script, it is generally a good idea to give it a meaningful name and save it immediately. For our first session save your script as \textbf{seminar1.R}
-
-\begin{longtable}[]{@{}ll@{}}
-\toprule
-\endhead
-\begin{minipage}[t]{0.52\columnwidth}\raggedright
-Familiarize yourself with the script window in RStudio, and especially the two buttons labeled \textbf{Run} and \textbf{Source}\strut
-\end{minipage} & \begin{minipage}[t]{0.42\columnwidth}\raggedright
-\includegraphics{./img/rstudio_script.png}\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\end{longtable}
-
-There are a few different ways to run your code from a script.
-
-\begin{longtable}[]{@{}ll@{}}
-\toprule
-\endhead
-\begin{minipage}[t]{0.23\columnwidth}\raggedright
-One line at a time\strut
-\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright
-Place the cursor on the line you want to run and hit CTRL-ENTER or use the \textbf{Run} button\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.23\columnwidth}\raggedright
-Multiple lines\strut
-\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright
-Select the lines you want to run and hit CTRL-ENTER or use the \textbf{Run} button\strut
-\end{minipage}\tabularnewline
-\begin{minipage}[t]{0.23\columnwidth}\raggedright
-Entire script\strut
-\end{minipage} & \begin{minipage}[t]{0.71\columnwidth}\raggedright
-Use the \textbf{Source} button\strut
-\end{minipage}\tabularnewline
-\bottomrule
-\end{longtable}
-
-\hypertarget{central-tendency}{%
-\subsubsection{Central Tendency}\label{central-tendency}}
-
-The appropriate measure of central tendency depends on the level of measurement of the variable. To recap:
-
-\begin{longtable}[]{@{}ll@{}}
-\toprule
-Level of measurement & Appropriate measure of central tendency\tabularnewline
-\midrule
-\endhead
-Continuous & arithmetic mean (or average)\tabularnewline
-Ordered & median (or the central observation)\tabularnewline
-Nominal & mode (the most frequent value)\tabularnewline
-\bottomrule
-\end{longtable}
-
-\hypertarget{mean}{%
-\paragraph{Mean}\label{mean}}
-
-We calculate the average grade on our eleven homework assignments in statistics 1. We create our vector of 11 (fake) grades first using the \texttt{c()} function, where \texttt{c} stands for collect or concatenate.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{hw.grades <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{80}\NormalTok{, }\DecValTok{90}\NormalTok{, }\DecValTok{85}\NormalTok{, }\DecValTok{71}\NormalTok{, }\DecValTok{69}\NormalTok{, }\DecValTok{85}\NormalTok{, }\DecValTok{83}\NormalTok{, }\DecValTok{88}\NormalTok{, }\DecValTok{99}\NormalTok{, }\DecValTok{81}\NormalTok{, }\DecValTok{92}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-We now take the sum of the grades.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{sum.hw.grades <-}\StringTok{ }\KeywordTok{sum}\NormalTok{(hw.grades)}
-\end{Highlighting}
-\end{Shaded}
-
-We also take the number of grades
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{number.hw.grades <-}\StringTok{ }\KeywordTok{length}\NormalTok{(hw.grades) }
-\end{Highlighting}
-\end{Shaded}
-
-The mean is the sum of grades over the number of grades.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{sum.hw.grades }\OperatorTok{/}\StringTok{ }\NormalTok{number.hw.grades}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 83.90909
-\end{verbatim}
-
-R provides us with an even easier way to do the same with a function called \href{http://bit.ly/R_mean}{\texttt{mean()}}.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{mean}\NormalTok{(hw.grades)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 83.90909
-\end{verbatim}
-
-\hypertarget{median}{%
-\paragraph{Median}\label{median}}
-
-The median is the appropriate measure of central tendency for ordinal variables. Ordinal means that there is a rank ordering but not equally spaced intervals between values of the variable. Education is a common example. In education, more education is better. But the difference between primary school and secondary school is not the same as the difference between secondary school and an undergraduate degree.
-
-Let's generate a fake example with 100 people. We use numbers to code different levels of education.
-
-\begin{longtable}[]{@{}lll@{}}
-\toprule
-\endhead
-Code & Meaning & Frequency in our data\tabularnewline
-0 & no education & 1\tabularnewline
-1 & primary school & 5\tabularnewline
-2 & secondary school & 55\tabularnewline
-3 & undergraduate degree & 20\tabularnewline
-4 & postgraduate degree & 10\tabularnewline
-5 & doctorate & 9\tabularnewline
-\bottomrule
-\end{longtable}
-
-We introduce a new function to create a vector. The function \texttt{rep()}, replicates elements of a vector. Its arguments are the item \texttt{x} to be replicated and the number of \texttt{times} to replicate. Below, we create the variable education with the frequency of education level indicated above. Note that the arguments \texttt{x} and \texttt{times} do not have to be written out.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{edu <-}\StringTok{ }\KeywordTok{c}\NormalTok{( }\KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{0}\NormalTok{, }\DataTypeTok{times=}\DecValTok{1}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{, }\DataTypeTok{times=}\DecValTok{5}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{2}\NormalTok{, }\DataTypeTok{times=}\DecValTok{55}\NormalTok{),}
-          \KeywordTok{rep}\NormalTok{(}\DataTypeTok{x=}\DecValTok{3}\NormalTok{, }\DataTypeTok{times=}\DecValTok{20}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{4}\NormalTok{,}\DecValTok{10}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{5}\NormalTok{,}\DecValTok{9}\NormalTok{) )}
-\end{Highlighting}
-\end{Shaded}
-
-The median level of education is the level where 50 percent of the observations have a lower or equal level of education and 50 percent have a higher or equal level of education. That means that the median splits the data in half.
-
-We use the \href{http://bit.ly/R_median}{\texttt{median()}} function for finding the median.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{median}\NormalTok{(edu)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 2
-\end{verbatim}
-
-The median level of education is secondary school.
-
-\hypertarget{mode}{%
-\paragraph{Mode}\label{mode}}
-
-The mode is the appropriate measure of central tendency if the level of measurement is nominal. Nominal means that there is no ordering implicit in the values that a variable takes on. We create data from 1000 (fake) voters in the United Kingdom who each express their preference on remaining in or leaving the European Union. The options are leave or stay. Leaving is not greater than staying and vice versa (even though we all order the two options normatively).
-
-\begin{longtable}[]{@{}lll@{}}
-\toprule
-\endhead
-Code & Meaning & Frequency in our data\tabularnewline
-0 & leave & 509\tabularnewline
-1 & stay & 491\tabularnewline
-\bottomrule
-\end{longtable}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{stay <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{509}\NormalTok{), }\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{491}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-The mode is the most common value in the data. There is no mode function in R. The most straightforward way to determine the mode is to use the \href{http://bit.ly/R_table}{\texttt{table()}} function. It returns a frequency table. We can easily see the mode in the table. As your coding skills increase, you will see other ways of recovering the mode from a vector.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{table}\NormalTok{(stay)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-stay
-  0   1 
-509 491 
-\end{verbatim}
-
-The mode is leaving the EU because the number of `leavers' (0) is greater than the number of `remainers' (1).
-
-\hypertarget{dispersion}{%
-\subsubsection{Dispersion}\label{dispersion}}
-
-The appropriate measure of dispersion depends on the level of measurement of the variable we wish to describe.
-
-\begin{longtable}[]{@{}ll@{}}
-\toprule
-Level of measurement & Appropriate measure of dispersion\tabularnewline
-\midrule
-\endhead
-Continuous & variance and/or standard deviation\tabularnewline
-Ordered & range or interquartile range\tabularnewline
-Nominal & proportion in each category\tabularnewline
-\bottomrule
-\end{longtable}
-
-\hypertarget{variance-and-standard-deviation}{%
-\paragraph{Variance and standard deviation}\label{variance-and-standard-deviation}}
-
-Both the variance and the standard deviation tell by how much an average realisation of a variable differs from the mean of that variable. Let's assume that our variable is income in the UK. Let's assume that its mean is 35 000 per year. We also assume that the average deviation from 35 000 is 5 000. If we ask 100 people in the UK at random about their income, we get 100 different answers. If we average the differences betweeen the 100 answers and 35 000, we would get 5 000. Suppose that the average income in France is also 35 000 per year but the average deviation is 10 000 instead. This would imply that income is more equally distributed in the UK than in France.
-
-Dispersion is important to describe data as this example illustrates. Although, mean income in our hypothetical example is the same in France and the UK, the distribution is tighter in the UK. The figure below illustrates our example:
-
-\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-27-1.pdf}
-
-The variance gives us an idea about the variability of data. The formula for the variance in the population is \[ \frac{\sum_{i=1}^n(x_i - \mu_x)^2}{n}\]
-
-The formula for the variance in a sample adjusts for sampling variability, i.e., uncertainty about how well our sample reflects the population by subtracting 1 in the denominator. Subtracting 1 will have next to no effect if n is large but the effect increases the smaller n.~The smaller n, the larger the sample variance. The intuition is, that in smaller samples, we are less certain that our sample reflects the population. We, therefore, adjust variability of the data upwards. The formula is
-
-\[ \frac{\sum_{i=1}^n(x_i - \bar{x})^2}{n-1}\]
-
-Notice the different notation for the mean in the two formulas. We write \(\mu_x\) for the mean of x in the population and \(\bar{x}\) for the mean of x in the sample. Notation is, however, unfortunately not always consistent.
-
-Take a minute to think your way through the formula. There are 4 setps: (1), In the numerator, we subtract the mean of x from some realisation of x. (2), We square the deviations from the mean because we want positive numbers only. (3) We sum the squared deviations. (4) We divide the sum by \((n-1)\). Below we show this for the homework example. In the last row, we add a 5th step. We take the square root in order to return to the orginial units of the homework grades.
-
-\begin{longtable}[]{@{}llll@{}}
-\toprule
-Obs & Var & Dev. from mean & Squared dev. from mean\tabularnewline
-\midrule
-\endhead
-i & grade & \(x_i-\bar{x}\) & \((x_i-\bar{x})^2\)\tabularnewline
-1 & 80 & -3.9090909 & 15.2809917\tabularnewline
-2 & 90 & 6.0909091 & 37.0991736\tabularnewline
-3 & 85 & 1.0909091 & 1.1900826\tabularnewline
-4 & 71 & -12.9090909 & 166.6446281\tabularnewline
-5 & 69 & -14.9090909 & 222.2809917\tabularnewline
-6 & 85 & 1.0909091 & 1.1900826\tabularnewline
-7 & 83 & -0.9090909 & 0.8264463\tabularnewline
-8 & 88 & 4.0909091 & 16.7355372\tabularnewline
-9 & 99 & 15.0909091 & 227.7355372\tabularnewline
-10 & 81 & -2.9090909 & 8.4628099\tabularnewline
-11 & 92 & 8.0909091 & 65.4628099\tabularnewline
-\(\sum_{i=1}^n\) & & & 762.9090909\tabularnewline
-\(\div n-1\) & & & 76.2909091\tabularnewline
-\(\sqrt{}\) & & & 8.7344667\tabularnewline
-\bottomrule
-\end{longtable}
-
-Our first grade (80) is below the mean (83.9090909). The sum is, thus, negative. Our second grade (90) is above the mean, so that the sum is positive. Both are deviations from the mean (think of them as distances). Our sum shall reflect the total sum of distances and distances must be positive. Hence, we square the distances from the mean. Having done this for all eleven observations, we sum the squared distances. Dividing by 10 (with the sample adjustment), gives us the average squared deviation. This is the variance. The units of the variance---squared deviations---are somewhat awkward. We return to this in a moment.
-
-We take the variance in R by using the \href{http://bit.ly/R_var}{\texttt{var()}} function. By default \texttt{var()} takes the sample variance.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{var}\NormalTok{(hw.grades)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 76.29091
-\end{verbatim}
-
-The average squared difference form our mean grade is 76.2909091. But what does that mean? We would like to get rid of the square in our units. That's what the standard deviation does. The standard deviation is the square root over the variance.
-
-\[ \sqrt{\frac{\sum_{i=1}^n(x_i - \bar{x})^2}{n-1}}\]
-
-We get the average deviation from our mean grade (83.9090909) with the \href{http://bit.ly/R_sd}{\texttt{sd()}} function.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{sd}\NormalTok{(hw.grades)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 8.734467
-\end{verbatim}
-
-The standard deviation is much more intuitive than the variance because its units are the same as the units of the variable we are interested in. ``Why teach us about this awful variance then'', you ask. Mathematically, we have to compute the variance before getting the standard deviation. We recommend that you use the standard deviation to describe the variability of your continuous data.
-
-Note: We used the sample variance and sample standard deviation formulas. If the eleven assignments represent the population, we would use the population variance formula. Whether the 11 cases represent a sample or the population depends on what we want to know. If we want learn about all students' assignments or future assignments, the 11 cases are a sample.
-
-\hypertarget{range-and-interquartile-range}{%
-\paragraph{Range and interquartile range}\label{range-and-interquartile-range}}
-
-The proper measure of dispersion of an ordinal variable is the range or the interquartile range. The interquartile range is usually the preferred measure because the range is strongly affected by outlying cases.
-
-Let's take the range first. We get back to our education example. In R, we use the \href{http://bit.ly/R_range}{\texttt{range()}} function to compute the range.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{range}\NormalTok{(edu)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-[1] 0 5
-\end{verbatim}
-
-Our data ranges from no education all the way to those with a doctorate. However, no education is not a common value. Only one person in our sample did not have any education. The interquartile range is the range from the 25th to the 75th percentiles, i.e., it contains the central 50 percent of the distribution.
-
-The 25th percentile is the value of education that 25 percent or fewer people have (when we order education from lowest to highest). We use the \href{http://bit.ly/R_quantile}{\texttt{quantile()}} function in R to get percentiles. The function takes two arguments: \texttt{x} is the data vector and \texttt{probs} is the percentile.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{quantile}\NormalTok{(edu, }\FloatTok{0.25}\NormalTok{) }\CommentTok{# 25th percentile}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-25% 
-  2 
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{quantile}\NormalTok{(edu, }\FloatTok{0.75}\NormalTok{) }\CommentTok{# 75th percentile}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-75% 
-  3 
-\end{verbatim}
-
-Therefore, the interquartile range is from 2, secondary school to 3, undergraduate degree.
-
-\hypertarget{proportion-in-each-category}{%
-\paragraph{Proportion in each category}\label{proportion-in-each-category}}
-
-To describe the distribution of our nominal variable, support for remaining in the European Union, we use the proportions in each category.
-
-Recall, that we looked at the frequency table to determine the mode:
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{table}\NormalTok{(stay)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-stay
-  0   1 
-509 491 
-\end{verbatim}
-
-To get the proportions in each category, we divide the values in the table, i.e., 509 and 491, by the sum of the table, i.e., 1000.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\KeywordTok{table}\NormalTok{(stay) }\OperatorTok{/}\StringTok{ }\KeywordTok{sum}\NormalTok{(}\KeywordTok{table}\NormalTok{(stay))}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-stay
-    0     1 
-0.509 0.491 
-\end{verbatim}
-
-\hypertarget{exercises}{%
-\subsubsection{Exercises}\label{exercises}}
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\tightlist
-\item
-  Create a script and call it assignment01. Save your script.
-\item
-  Download this \href{https://www.rstudio.com/wp-content/uploads/2016/06/r-cheat-sheet.pdf}{cheat-sheet} and go over it. You won't understand most of it right a away. But it will become a useful resource. Look at it often.
-\item
-  Calculate the square root of 1369 using the \texttt{sqrt()} function.
-\item
-  Square the number 13 using the \texttt{\^{}} operator.
-\item
-  What is the result of summing all numbers from 1 to 100?
-\end{enumerate}
-
-We take a sample of yearly income in Berlin. The values that we got are: 19395, 22698, 40587, 25705, 26292, 42150, 29609, 12349, 18131, 20543, 37240, 28598, 29007, 26106, 19441, 42869, 29978, 5333, 32013, 20272, 14321, 22820, 14739, 17711, 18749.
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{5}
-\tightlist
-\item
-  Create the variable \texttt{income} with the values form our Berlin sample in R.
-\item
-  Describe Berlin income using the appropriate measures of central tendency and dispersion.
-\item
-  Compute the average deviation without using the \texttt{sd()} function.
-\end{enumerate}
-
-Take a look at the Sunday Question (who would you vote for if the general election were next Sunday?) by following this link \href{https://www.wahlrecht.de/umfragen/}{Sunday Question Germany}. You should be able to translate the website into English by right clicking in your browser and clicking ``Translate to English.''
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\setcounter{enumi}{8}
-\tightlist
-\item
-  What is the level of measurement of the variable in the Sunday Question?
-\item
-  Take the most recent poll and describe what you see in terms of central tendency and dispersion.
-\item
-  Save your script, which should now include the answers to all the exercises.
-\item
-  Source your script, i.e.~run the entire script without error message. Clean your script if you get error messages.
-\end{enumerate}
-
-\hypertarget{research-design-counterfactuals-forming-hypotheses}{%
-\section{Research Design, Counterfactuals, Forming Hypotheses}\label{research-design-counterfactuals-forming-hypotheses}}
-
-\hypertarget{seminar}{%
-\subsection{Seminar}\label{seminar}}
-
-In today's seminar, we work with data frames (datasets). We will create our own dataset, we subset datasets (access elements, rows and variables). We load our first dataset into R. We also visualise data using the \texttt{plot()} function. Finally, we estimate a treatment effect in R---our first inference.
 
 
 \end{document}

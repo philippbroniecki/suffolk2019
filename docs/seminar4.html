@@ -148,7 +148,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.1" data-path="seminar2.html"><a href="seminar2.html#functions"><i class="fa fa-check"></i><b>2.1.1</b> Functions</a></li>
 <li class="chapter" data-level="2.1.2" data-path="seminar2.html"><a href="seminar2.html#getting-help"><i class="fa fa-check"></i><b>2.1.2</b> Getting Help</a></li>
 <li class="chapter" data-level="2.1.3" data-path="seminar2.html"><a href="seminar2.html#the-assignment-operator"><i class="fa fa-check"></i><b>2.1.3</b> The Assignment Operator</a></li>
-<li class="chapter" data-level="2.1.4" data-path="seminar2.html"><a href="seminar2.html#vecors-and-subsetting"><i class="fa fa-check"></i><b>2.1.4</b> Vecors and subsetting</a></li>
+<li class="chapter" data-level="2.1.4" data-path="seminar2.html"><a href="seminar2.html#vectors-and-subsetting"><i class="fa fa-check"></i><b>2.1.4</b> Vectors and subsetting</a></li>
 <li class="chapter" data-level="2.1.5" data-path="seminar2.html"><a href="seminar2.html#matrices"><i class="fa fa-check"></i><b>2.1.5</b> Matrices</a></li>
 <li class="chapter" data-level="2.1.6" data-path="seminar2.html"><a href="seminar2.html#arrays"><i class="fa fa-check"></i><b>2.1.6</b> Arrays</a></li>
 </ul></li>
@@ -165,7 +165,10 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> R-syntax, data structures and types</a><ul>
 <li class="chapter" data-level="4.1" data-path="seminar4.html"><a href="seminar4.html#seminar-2"><i class="fa fa-check"></i><b>4.1</b> Seminar</a><ul>
-<li class="chapter" data-level="4.1.1" data-path="seminar4.html"><a href="seminar4.html#data-frames"><i class="fa fa-check"></i><b>4.1.1</b> Data frames</a></li>
+<li class="chapter" data-level="4.1.1" data-path="seminar4.html"><a href="seminar4.html#creating-data-frames"><i class="fa fa-check"></i><b>4.1.1</b> Creating data frames</a></li>
+<li class="chapter" data-level="4.1.2" data-path="seminar4.html"><a href="seminar4.html#working-with-data-frames"><i class="fa fa-check"></i><b>4.1.2</b> Working with data frames</a></li>
+<li class="chapter" data-level="4.1.3" data-path="seminar4.html"><a href="seminar4.html#amending-data-frames"><i class="fa fa-check"></i><b>4.1.3</b> Amending data frames</a></li>
+<li class="chapter" data-level="4.1.4" data-path="seminar4.html"><a href="seminar4.html#saving-data-frames"><i class="fa fa-check"></i><b>4.1.4</b> Saving data frames</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -189,16 +192,160 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 4</span> R-syntax, data structures and types</h1>
 <div id="seminar-2" class="section level2">
 <h2><span class="header-section-number">4.1</span> Seminar</h2>
-<div id="data-frames" class="section level3">
-<h3><span class="header-section-number">4.1.1</span> Data frames</h3>
+<div id="creating-data-frames" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Creating data frames</h3>
 <p>A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g. numbers and text).</p>
-<p>We start by creating a dataframe with the <code>data.frame()</code> function. We will give each column a name (a variable name) followed by the <code>=</code> operator and the respective vector of data that we want to assign to that column.</p>
+<p>We start by creating a data frame with the <code>data.frame()</code> function. We will give each column a name (a variable name) followed by the <code>=</code> operator and the respective vector of data that we want to assign to that column.</p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" title="1">england &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
 <a class="sourceLine" id="cb57-2" title="2">  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;South East&quot;</span>, <span class="st">&quot;London&quot;</span>, <span class="st">&quot;North West&quot;</span>, <span class="st">&quot;East of England&quot;</span>, <span class="st">&quot;West Midlands&quot;</span>, <span class="st">&quot;South West&quot;</span>,</a>
 <a class="sourceLine" id="cb57-3" title="3">           <span class="st">&quot;Yorkshire and the Humber&quot;</span>, <span class="st">&quot;East Midlands&quot;</span>, <span class="st">&quot;North East&quot;</span>),</a>
 <a class="sourceLine" id="cb57-4" title="4">  <span class="dt">population =</span> <span class="kw">c</span>(<span class="fl">8.6</span>, <span class="fl">8.2</span>, <span class="fl">7.1</span>, <span class="fl">5.9</span>, <span class="fl">5.6</span>, <span class="fl">5.3</span>, <span class="fl">5.3</span>, <span class="fl">4.5</span>, <span class="fl">2.6</span>),</a>
 <a class="sourceLine" id="cb57-5" title="5">  <span class="dt">earnings =</span> <span class="kw">c</span>(<span class="fl">28.7</span>, <span class="fl">35.1</span>, <span class="fl">25.2</span>, <span class="fl">26.6</span>, <span class="fl">24.9</span>, <span class="fl">25.6</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>)</a>
 <a class="sourceLine" id="cb57-6" title="6">)</a></code></pre></div>
+</div>
+<div id="working-with-data-frames" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Working with data frames</h3>
+<p>we can display the entire dataset in spreadsheet view by clicking on the object name in the environment window.</p>
+<p><img src="img/dataframe_in_spreadsheet_view.png" /></p>
+<p>Alternatively, you can call the object name to display the dataset in the console window. Let’s do so:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb58-1" title="1">england</a></code></pre></div>
+<pre><code>                      name population earnings
+1               South East        8.6     28.7
+2                   London        8.2     35.1
+3               North West        7.1     25.2
+4          East of England        5.9     26.6
+5            West Midlands        5.6     24.9
+6               South West        5.3     25.6
+7 Yorkshire and the Humber        5.3     25.0
+8            East Midlands        4.5     25.0
+9               North East        2.6     25.0</code></pre>
+<p>Often, datasets are too long to be viewed to in the console window. It is a good idea to look at the first couple of rows of a datasets to get an overview of its contents. We use the square brackets <code>[]</code> to view the first five rows and all columns.</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb60-1" title="1">england[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</a></code></pre></div>
+<pre><code>             name population earnings
+1      South East        8.6     28.7
+2          London        8.2     35.1
+3      North West        7.1     25.2
+4 East of England        5.9     26.6
+5   West Midlands        5.6     24.9</code></pre>
+<p>v
+Columns in a dataframe have names. We will often need to know the name of a column/variable to access it. We use the <code>names()</code> function to view all variable names in a dataframe.</p>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb62-1" title="1"><span class="kw">names</span>(england)</a></code></pre></div>
+<pre><code>[1] &quot;name&quot;       &quot;population&quot; &quot;earnings&quot;  </code></pre>
+<p>We can access the earnings variable in multiple ways. First, we can use the <code>$</code> operator. We write the name of the dataset object, followed by the <code>$</code>, followed by the variable name like so:</p>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb64-1" title="1">england<span class="op">$</span>earnings</a></code></pre></div>
+<pre><code>[1] 28.7 35.1 25.2 26.6 24.9 25.6 25.0 25.0 25.0</code></pre>
+<p>We can also use the square brackets to access the earnings column.</p>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb66-1" title="1">england[, <span class="st">&quot;earnings&quot;</span> ]</a></code></pre></div>
+<pre><code>[1] 28.7 35.1 25.2 26.6 24.9 25.6 25.0 25.0 25.0</code></pre>
+<p>The square brackets are sometimes preferred because we could access multiple columns at once like so:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb68-1" title="1">england[, <span class="kw">c</span>(<span class="st">&quot;name&quot;</span>, <span class="st">&quot;earnings&quot;</span>) ]</a></code></pre></div>
+<pre><code>                      name earnings
+1               South East     28.7
+2                   London     35.1
+3               North West     25.2
+4          East of England     26.6
+5            West Midlands     24.9
+6               South West     25.6
+7 Yorkshire and the Humber     25.0
+8            East Midlands     25.0
+9               North East     25.0</code></pre>
+<p>Variables come in different types such as numbers, text, logical (true/false). We need to know the type of a variable because the type affects statistical analysis. We use the <code>str()</code> function to check the type of each variable in our dataset.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb70-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   9 obs. of  3 variables:
+ $ name      : Factor w/ 9 levels &quot;East Midlands&quot;,..: 6 3 5 2 8 7 9 1 4
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25</code></pre>
+<p>The first variable in our dataset is a factor variable. Factors are categorical variables. Categories are mutually exclusive but they do not imply an ordering. For instance, “East of England” is not more or less than “West Midlands”. The variables population and earnings are both numeric variables.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb72-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   9 obs. of  3 variables:
+ $ name      : Factor w/ 9 levels &quot;East Midlands&quot;,..: 6 3 5 2 8 7 9 1 4
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25</code></pre>
+</div>
+<div id="amending-data-frames" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> Amending data frames</h3>
+<p>Amending data sets usually involves adding rows or columns or removing rows or columns. We start by adding a new variable to our dataset which contains the percent of the population on income support.</p>
+<p>To create a new variable we simply assign a new vector to the dataframe object like so:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb74-1" title="1">england<span class="op">$</span>pct_on_support &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>, <span class="fl">5.3</span>, <span class="fl">5.3</span>, <span class="fl">3.5</span>, <span class="fl">5.1</span>, <span class="fl">3.3</span>, <span class="fl">5.2</span>, <span class="fl">4.2</span>, <span class="fl">6.1</span>)</a></code></pre></div>
+<p>We call the dataframe object to view our changes.</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb75-1" title="1">england</a></code></pre></div>
+<pre><code>                      name population earnings pct_on_support
+1               South East        8.6     28.7            3.0
+2                   London        8.2     35.1            5.3
+3               North West        7.1     25.2            5.3
+4          East of England        5.9     26.6            3.5
+5            West Midlands        5.6     24.9            5.1
+6               South West        5.3     25.6            3.3
+7 Yorkshire and the Humber        5.3     25.0            5.2
+8            East Midlands        4.5     25.0            4.2
+9               North East        2.6     25.0            6.1</code></pre>
+<p>We can delete the variable we just created by assigning <code>NULL</code> to it.</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb77-1" title="1">england<span class="op">$</span>pct_on_support &lt;-<span class="st"> </span><span class="ot">NULL</span></a></code></pre></div>
+<p>Let’s view our most recent changes.</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb78-1" title="1">england</a></code></pre></div>
+<pre><code>                      name population earnings
+1               South East        8.6     28.7
+2                   London        8.2     35.1
+3               North West        7.1     25.2
+4          East of England        5.9     26.6
+5            West Midlands        5.6     24.9
+6               South West        5.3     25.6
+7 Yorkshire and the Humber        5.3     25.0
+8            East Midlands        4.5     25.0
+9               North East        2.6     25.0</code></pre>
+<p>Adding a new row to a dataset means adding an observation. Let’s add Brittany to our dataset. We need to fill in a value for each variable. If, we do not know a value, we declare it as missing. Missings are <code>NA</code> for numeric variables and <code>""</code> for character variables. We use the <code>rbind()</code> function (row bind) to add a row to our dataset.</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb80-1" title="1">england &lt;-<span class="st"> </span><span class="kw">rbind</span>(england,  <span class="kw">c</span>(<span class="st">&quot;Brittany&quot;</span>, <span class="fl">4.5</span>, <span class="ot">NA</span>) )</a></code></pre></div>
+<pre><code>Warning in `[&lt;-.factor`(`*tmp*`, ri, value = &quot;Brittany&quot;): invalid factor
+level, NA generated</code></pre>
+<p>Let’s examine our dataframe.</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb82-1" title="1">england</a></code></pre></div>
+<pre><code>                       name population earnings
+1                South East        8.6     28.7
+2                    London        8.2     35.1
+3                North West        7.1     25.2
+4           East of England        5.9     26.6
+5             West Midlands        5.6     24.9
+6                South West        5.3     25.6
+7  Yorkshire and the Humber        5.3       25
+8             East Midlands        4.5       25
+9                North East        2.6       25
+10                     &lt;NA&gt;        4.5     &lt;NA&gt;</code></pre>
+<p>We were not allowed to enter “Brittany” as a value for the name variable. This is because the variable is a factor. While it is possible to add new levels to a factor (categories such as “Midlands” are called levels), it involves a bit more advanced programming. We will solve this problem later in the type coercion section.</p>
+</div>
+<div id="saving-data-frames" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> Saving data frames</h3>
+<p>Datasets can be exported in many different file formats. We recommend exporting files as “.csv” files because csv is a very common file type. Such files can be handled by all statistical packages including Microsoft’s Excel. We need to provide five arguments.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>x</td>
+<td>The name of the object</td>
+</tr>
+<tr class="even">
+<td>file</td>
+<td>The file name</td>
+</tr>
+<tr class="odd">
+<td>sep</td>
+<td>The symbol that separates columns</td>
+</tr>
+<tr class="even">
+<td>col.names</td>
+<td>= TRUE saves the variable names (recommended)</td>
+</tr>
+<tr class="odd">
+<td>row.names</td>
+<td>= FALSE omits the row names (recommended)</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb84-1" title="1"><span class="kw">write.table</span>(<span class="dt">x =</span> england, <span class="dt">file =</span> <span class="st">&quot;england.csv&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>, <span class="dt">col.names =</span> <span class="ot">TRUE</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
 
 </div>
 </div>

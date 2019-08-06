@@ -6,11 +6,11 @@ par(bg = '#fdf6e3')
 
 ## Seminar
 
-### Data frames
+### Creating data frames
 
 A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g. numbers and text).
 
-We start by creating a dataframe with the `data.frame()` function. We will give each column a name (a variable name) followed by the `=` operator and the respective vector of data that we want to assign to that column.
+We start by creating a data frame with the `data.frame()` function. We will give each column a name (a variable name) followed by the `=` operator and the respective vector of data that we want to assign to that column.
 
 ```{r}
 england <- data.frame(
@@ -19,5 +19,121 @@ england <- data.frame(
   population = c(8.6, 8.2, 7.1, 5.9, 5.6, 5.3, 5.3, 4.5, 2.6),
   earnings = c(28.7, 35.1, 25.2, 26.6, 24.9, 25.6, 25, 25, 25)
 )
+```
+
+### Working with data frames
+
+we can display the entire dataset in spreadsheet view by clicking on the object name in the environment window.
+
+![](./img/dataframe_in_spreadsheet_view.png)
+
+Alternatively, you can call the object name to display the dataset in the console window. Let's do so:
+
+```{r}
+england
+```
+
+Often, datasets are too long to be viewed to in the console window. It is a good idea to look at the first couple of rows of a datasets to get an overview of its contents. We use the square brackets `[]` to view the first five rows and all columns.
+
+```{r}
+england[1:5, ]
+```
+v
+Columns in a dataframe have names. We will often need to know the name of a column/variable to access it. We use the `names()` function to view all variable names in a dataframe.
+
+```{r}
+names(england)
+```
+
+We can access the earnings variable in multiple ways. First, we can use the `$` operator. We write the name of the dataset object, followed by the `$`, followed by the variable name like so:
+
+```{r}
+england$earnings
+```
+
+We can also use the square brackets to access the earnings column. 
+
+```{r}
+england[, "earnings" ]
+```
+
+The square brackets are sometimes preferred because we could access multiple columns at once like so:
+
+```{r}
+england[, c("name", "earnings") ]
+```
+
+Variables come in different types such as numbers, text, logical (true/false). We need to know the type of a variable because the type affects statistical analysis. We use the `str()` function to check the type of each variable in our dataset.
+
+```{r}
+str(england)
+```
+
+The first variable in our dataset is a factor variable. Factors are categorical variables. Categories are mutually exclusive but they do not imply an ordering. For instance, "East of England" is not more or less than "West Midlands". The variables population and earnings are both numeric variables.
+
+```{r}
+str(england)
+```
+
+
+### Amending data frames
+
+Amending data sets usually involves adding rows or columns or removing rows or columns. We start by adding a new variable to our dataset which contains the percent of the population on income support.
+
+To create a new variable we simply assign a new vector to the dataframe object like so:
+
+```{r}
+england$pct_on_support <- c(3, 5.3, 5.3, 3.5, 5.1, 3.3, 5.2, 4.2, 6.1)
+```
+
+We call the dataframe object to view our changes.
+
+```{r}
+england
+```
+
+We can delete the variable we just created by assigning `NULL` to it.
+
+```{r}
+england$pct_on_support <- NULL
+```
+
+Let's view our most recent changes.
+
+
+```{r}
+england
+```
+
+
+Adding a new row to a dataset means adding an observation. Let's add Brittany to our dataset. We need to fill in a value for each variable. If, we do not know a value, we declare it as missing. Missings are `NA` for numeric variables and `""` for character variables. We use the `rbind()` function (row bind) to add a row to our dataset.
+
+```{r}
+england <- rbind(england,  c("Brittany", 4.5, NA) )
+```
+
+Let's examine our dataframe.
+
+```{r}
+england
+```
+
+We were not allowed to enter "Brittany" as a value for the name variable. This is because the variable is a factor. While it is possible to add new levels to a factor (categories such as "Midlands" are called levels), it involves a bit more advanced programming. We will solve this problem later in the type coercion section.
+
+
+### Saving data frames
+
+Datasets can be exported in many different file formats. We recommend exporting files as ".csv" files because csv is a very common file type. Such files can be handled by all statistical packages including Microsoft's Excel. We need to provide five arguments.
+
+|Argument         |Description               |
+|-----------------|--------------------------|
+|x                |The name of the object   |
+|file             |The file name     |
+|sep              |The symbol that separates columns   |
+|col.names              |= TRUE saves the variable names (recommended)   |
+|row.names              |= FALSE omits the row names (recommended)|
+
+```{r}
+write.table(x = england, file = "england.csv", sep = ",", col.names = TRUE, row.names = FALSE)
 ```
 

@@ -387,8 +387,8 @@ data1 &\tabularnewline
 \bottomrule
 \end{longtable}
 
-\hypertarget{vecors-and-subsetting}{%
-\subsubsection{Vecors and subsetting}\label{vecors-and-subsetting}}
+\hypertarget{vectors-and-subsetting}{%
+\subsubsection{Vectors and subsetting}\label{vectors-and-subsetting}}
 
 A vector is one dimensional. It can contain one element in which case it is also called a scalar or many elements. We can add and multiply vectors. Think of a vector as a row or column in your excel spreadsheet.
 
@@ -493,9 +493,9 @@ Finally, we combine the \texttt{length()} function with the square brackets to a
 \hypertarget{matrices}{%
 \subsubsection{Matrices}\label{matrices}}
 
-A matrix has two dimensions and stores data of the same type, e.g.~numbers or text but never both. A matrix is always rectengular. Think of it as your excel spreadsheet - essentially, it is a data table.
+A matrix has two dimensions and stores data of the same type, e.g.~numbers or text but never both. A matrix is always rectangular. Think of it as your excel spreadsheet - essentially, it is a data table.
 
-We create a matrix using the \texttt{matrix()} function. We need to provide the follwing arguments:
+We create a matrix using the \texttt{matrix()} function. We need to provide the following arguments:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -561,7 +561,7 @@ To display an entire column, we specify the column we want to display and leave 
 [1] 17 88
 \end{verbatim}
 
-Similarly, to diplay the entire second row, we specify the row coordinate but leave the column coordinate empty.
+Similarly, to display the entire second row, we specify the row coordinate but leave the column coordinate empty.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -668,7 +668,7 @@ Create a new R script and save it as day1.R to your \texttt{suffolk2019} directo
 
 At the beginning of each new script, we want to clear the workspace. The workspace is stored in working memory on our computer. If we do not clear it for a new script, it becomes too full over time. Our computer will slow down and it will become difficult for us to know which objects are stored in working memory.
 
-We check the contents of our workspce like so:
+We check the contents of our workspace like so:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -707,7 +707,7 @@ R can load files coming in many different file formats. To find out how to impor
 \hypertarget{importing-a-dataset-in-.csv-format}{%
 \subsubsection{\texorpdfstring{Importing a dataset in \texttt{.csv} format}{Importing a dataset in .csv format}}\label{importing-a-dataset-in-.csv-format}}
 
-One of the most common file types is \texttt{.csv} which means comma seperated values. Columns are seperated by commas and rows by line breaks.
+One of the most common file types is \texttt{.csv} which means comma separated values. Columns are separated by commas and rows by line breaks.
 
 The dataset's name is ``non\_western\_immigrants.csv''. To load it, we use the \texttt{read.csv()} function.
 
@@ -740,7 +740,7 @@ Once a package is installed, we need to load it using the \texttt{library()} fun
 \end{Highlighting}
 \end{Shaded}
 
-To load the excel file, we can now use the \texttt{read\_excel()} function that is included in the \texttt{readxl} library. We need to provide the follwing arguments to the function:
+To load the excel file, we can now use the \texttt{read\_excel()} function that is included in the \texttt{readxl} library. We need to provide the following arguments to the function:
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -776,9 +776,9 @@ Notice that we usually need to assign the object we load to using the \texttt{\t
 \hypertarget{importing-a-dataset-in-.txt-format.}{%
 \subsubsection{Importing a dataset in .txt format.}\label{importing-a-dataset-in-.txt-format.}}
 
-Loading a dataset that comes in .txt format requires some additional information. The format is a text format and we need to know how the columns are sepearted. Usually it is enough to open the file in a word processor such as notepad to see how this is done. The most common ways to serpate columns is by using commas or tabs but other seperators such as for instance semicolons are sometimes also used.
+Loading a dataset that comes in .txt format requires some additional information. The format is a text format and we need to know how the columns are separated. Usually it is enough to open the file in a word processor such as notepad to see how this is done. The most common ways to separate columns is by using commas or tabs but other separators such as for instance semicolons are sometimes also used.
 
-In our example, columns are seperated by semicolons. We use the \texttt{read.table()} function and provide the following arguments:
+In our example, columns are separated by semicolons. We use the \texttt{read.table()} function and provide the following arguments:
 
 \begin{longtable}[]{@{}ll@{}}
 \toprule
@@ -786,7 +786,7 @@ Argument & Description\tabularnewline
 \midrule
 \endhead
 file & Filename of excel sheet\tabularnewline
-sep & the symbol that seperates columns\tabularnewline
+sep & the symbol that separates columns\tabularnewline
 header & whether the first row contains variable names or not\tabularnewline
 \bottomrule
 \end{longtable}
@@ -803,12 +803,12 @@ header & whether the first row contains variable names or not\tabularnewline
 \hypertarget{seminar-2}{%
 \subsection{Seminar}\label{seminar-2}}
 
-\hypertarget{data-frames}{%
-\subsubsection{Data frames}\label{data-frames}}
+\hypertarget{creating-data-frames}{%
+\subsubsection{Creating data frames}\label{creating-data-frames}}
 
 A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g.~numbers and text).
 
-We start by creating a dataframe with the \texttt{data.frame()} function. We will give each column a name (a variable name) followed by the \texttt{=} operator and the respective vector of data that we want to assign to that column.
+We start by creating a data frame with the \texttt{data.frame()} function. We will give each column a name (a variable name) followed by the \texttt{=} operator and the respective vector of data that we want to assign to that column.
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -818,6 +818,263 @@ We start by creating a dataframe with the \texttt{data.frame()} function. We wil
   \DataTypeTok{population =} \KeywordTok{c}\NormalTok{(}\FloatTok{8.6}\NormalTok{, }\FloatTok{8.2}\NormalTok{, }\FloatTok{7.1}\NormalTok{, }\FloatTok{5.9}\NormalTok{, }\FloatTok{5.6}\NormalTok{, }\FloatTok{5.3}\NormalTok{, }\FloatTok{5.3}\NormalTok{, }\FloatTok{4.5}\NormalTok{, }\FloatTok{2.6}\NormalTok{),}
   \DataTypeTok{earnings =} \KeywordTok{c}\NormalTok{(}\FloatTok{28.7}\NormalTok{, }\FloatTok{35.1}\NormalTok{, }\FloatTok{25.2}\NormalTok{, }\FloatTok{26.6}\NormalTok{, }\FloatTok{24.9}\NormalTok{, }\FloatTok{25.6}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{25}\NormalTok{, }\DecValTok{25}\NormalTok{)}
 \NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{working-with-data-frames}{%
+\subsubsection{Working with data frames}\label{working-with-data-frames}}
+
+we can display the entire dataset in spreadsheet view by clicking on the object name in the environment window.
+
+\includegraphics{./img/dataframe_in_spreadsheet_view.png}
+
+Alternatively, you can call the object name to display the dataset in the console window. Let's do so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                      name population earnings
+1               South East        8.6     28.7
+2                   London        8.2     35.1
+3               North West        7.1     25.2
+4          East of England        5.9     26.6
+5            West Midlands        5.6     24.9
+6               South West        5.3     25.6
+7 Yorkshire and the Humber        5.3     25.0
+8            East Midlands        4.5     25.0
+9               North East        2.6     25.0
+\end{verbatim}
+
+Often, datasets are too long to be viewed to in the console window. It is a good idea to look at the first couple of rows of a datasets to get an overview of its contents. We use the square brackets \texttt{{[}{]}} to view the first five rows and all columns.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england[}\DecValTok{1}\OperatorTok{:}\DecValTok{5}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+             name population earnings
+1      South East        8.6     28.7
+2          London        8.2     35.1
+3      North West        7.1     25.2
+4 East of England        5.9     26.6
+5   West Midlands        5.6     24.9
+\end{verbatim}
+
+v
+Columns in a dataframe have names. We will often need to know the name of a column/variable to access it. We use the \texttt{names()} function to view all variable names in a dataframe.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "name"       "population" "earnings"  
+\end{verbatim}
+
+We can access the earnings variable in multiple ways. First, we can use the \texttt{\$} operator. We write the name of the dataset object, followed by the \texttt{\$}, followed by the variable name like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{earnings}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 28.7 35.1 25.2 26.6 24.9 25.6 25.0 25.0 25.0
+\end{verbatim}
+
+We can also use the square brackets to access the earnings column.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england[, }\StringTok{"earnings"}\NormalTok{ ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 28.7 35.1 25.2 26.6 24.9 25.6 25.0 25.0 25.0
+\end{verbatim}
+
+The square brackets are sometimes preferred because we could access multiple columns at once like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england[, }\KeywordTok{c}\NormalTok{(}\StringTok{"name"}\NormalTok{, }\StringTok{"earnings"}\NormalTok{) ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                      name earnings
+1               South East     28.7
+2                   London     35.1
+3               North West     25.2
+4          East of England     26.6
+5            West Midlands     24.9
+6               South West     25.6
+7 Yorkshire and the Humber     25.0
+8            East Midlands     25.0
+9               North East     25.0
+\end{verbatim}
+
+Variables come in different types such as numbers, text, logical (true/false). We need to know the type of a variable because the type affects statistical analysis. We use the \texttt{str()} function to check the type of each variable in our dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   9 obs. of  3 variables:
+ $ name      : Factor w/ 9 levels "East Midlands",..: 6 3 5 2 8 7 9 1 4
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25
+\end{verbatim}
+
+The first variable in our dataset is a factor variable. Factors are categorical variables. Categories are mutually exclusive but they do not imply an ordering. For instance, ``East of England'' is not more or less than ``West Midlands''. The variables population and earnings are both numeric variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   9 obs. of  3 variables:
+ $ name      : Factor w/ 9 levels "East Midlands",..: 6 3 5 2 8 7 9 1 4
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25
+\end{verbatim}
+
+\hypertarget{amending-data-frames}{%
+\subsubsection{Amending data frames}\label{amending-data-frames}}
+
+Amending data sets usually involves adding rows or columns or removing rows or columns. We start by adding a new variable to our dataset which contains the percent of the population on income support.
+
+To create a new variable we simply assign a new vector to the dataframe object like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{pct_on_support <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\DecValTok{3}\NormalTok{, }\FloatTok{5.3}\NormalTok{, }\FloatTok{5.3}\NormalTok{, }\FloatTok{3.5}\NormalTok{, }\FloatTok{5.1}\NormalTok{, }\FloatTok{3.3}\NormalTok{, }\FloatTok{5.2}\NormalTok{, }\FloatTok{4.2}\NormalTok{, }\FloatTok{6.1}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We call the dataframe object to view our changes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                      name population earnings pct_on_support
+1               South East        8.6     28.7            3.0
+2                   London        8.2     35.1            5.3
+3               North West        7.1     25.2            5.3
+4          East of England        5.9     26.6            3.5
+5            West Midlands        5.6     24.9            5.1
+6               South West        5.3     25.6            3.3
+7 Yorkshire and the Humber        5.3     25.0            5.2
+8            East Midlands        4.5     25.0            4.2
+9               North East        2.6     25.0            6.1
+\end{verbatim}
+
+We can delete the variable we just created by assigning \texttt{NULL} to it.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{pct_on_support <-}\StringTok{ }\OtherTok{NULL}
+\end{Highlighting}
+\end{Shaded}
+
+Let's view our most recent changes.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                      name population earnings
+1               South East        8.6     28.7
+2                   London        8.2     35.1
+3               North West        7.1     25.2
+4          East of England        5.9     26.6
+5            West Midlands        5.6     24.9
+6               South West        5.3     25.6
+7 Yorkshire and the Humber        5.3     25.0
+8            East Midlands        4.5     25.0
+9               North East        2.6     25.0
+\end{verbatim}
+
+Adding a new row to a dataset means adding an observation. Let's add Brittany to our dataset. We need to fill in a value for each variable. If, we do not know a value, we declare it as missing. Missings are \texttt{NA} for numeric variables and \texttt{""} for character variables. We use the \texttt{rbind()} function (row bind) to add a row to our dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(england,  }\KeywordTok{c}\NormalTok{(}\StringTok{"Brittany"}\NormalTok{, }\FloatTok{4.5}\NormalTok{, }\OtherTok{NA}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in `[<-.factor`(`*tmp*`, ri, value = "Brittany"): invalid factor
+level, NA generated
+\end{verbatim}
+
+Let's examine our dataframe.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                       name population earnings
+1                South East        8.6     28.7
+2                    London        8.2     35.1
+3                North West        7.1     25.2
+4           East of England        5.9     26.6
+5             West Midlands        5.6     24.9
+6                South West        5.3     25.6
+7  Yorkshire and the Humber        5.3       25
+8             East Midlands        4.5       25
+9                North East        2.6       25
+10                     <NA>        4.5     <NA>
+\end{verbatim}
+
+We were not allowed to enter ``Brittany'' as a value for the name variable. This is because the variable is a factor. While it is possible to add new levels to a factor (categories such as ``Midlands'' are called levels), it involves a bit more advanced programming. We will solve this problem later in the type coercion section.
+
+\hypertarget{saving-data-frames}{%
+\subsubsection{Saving data frames}\label{saving-data-frames}}
+
+Datasets can be exported in many different file formats. We recommend exporting files as ``.csv'' files because csv is a very common file type. Such files can be handled by all statistical packages including Microsoft's Excel. We need to provide five arguments.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+Argument & Description\tabularnewline
+\midrule
+\endhead
+x & The name of the object\tabularnewline
+file & The file name\tabularnewline
+sep & The symbol that separates columns\tabularnewline
+col.names & = TRUE saves the variable names (recommended)\tabularnewline
+row.names & = FALSE omits the row names (recommended)\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{write.table}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ england, }\DataTypeTok{file =} \StringTok{"england.csv"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{, }\DataTypeTok{col.names =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{row.names =} \OtherTok{FALSE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 

@@ -79,7 +79,7 @@ We called our object `myresult` but we can call it anything as long as we follow
 |my_result        |                          |
 |data1            |                          |
 
-### Vecors and subsetting
+### Vectors and subsetting
 
 A vector is one dimensional. It can contain one element in which case it is also called a scalar or many elements. We can add and multiply vectors. Think of a vector as a row or column in your excel spreadsheet.
 
@@ -134,9 +134,9 @@ vec1[ length(vec1) ]
 
 ### Matrices
 
-A matrix has two dimensions and stores data of the same type, e.g. numbers or text but never both. A matrix is always rectengular. Think of it as your excel spreadsheet - essentially, it is a data table.
+A matrix has two dimensions and stores data of the same type, e.g. numbers or text but never both. A matrix is always rectangular. Think of it as your excel spreadsheet - essentially, it is a data table.
 
-We create a matrix using the `matrix()` function. We need to provide the follwing arguments:
+We create a matrix using the `matrix()` function. We need to provide the following arguments:
 
 ```{r}
 mat1 <- matrix(
@@ -175,7 +175,7 @@ To display an entire column, we specify the column we want to display and leave 
 mat1[ , 2]
 ```
 
-Similarly, to diplay the entire second row, we specify the row coordinate but leave the column coordinate empty.
+Similarly, to display the entire second row, we specify the row coordinate but leave the column coordinate empty.
 
 ```{r}
 mat1[2, ]

@@ -1088,7 +1088,7 @@ We often need to change the type of a variable. This can be necessary to clean d
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{england <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{file =} \StringTok{"england.csv"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\NormalTok{england <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{file =} \StringTok{"england.csv"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{","}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
@@ -1107,9 +1107,10 @@ Let's check our england dataset's variable types.
 \end{Shaded}
 
 \begin{verbatim}
-'data.frame':   10 obs. of  2 variables:
- $ name                     : Factor w/ 10 levels "East Midlands",..: 7 3 6 2 9 8 10 1 5 4
- $ X..population...earnings.: Factor w/ 10 levels "",",\"2.6\",\"25\"",..: 10 9 8 7 6 5 4 3 2 1
+'data.frame':   10 obs. of  3 variables:
+ $ name      : Factor w/ 9 levels "East Midlands",..: 6 3 5 2 8 7 9 1 4 NA
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 4.5
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA
 \end{verbatim}
 
 The variable ``name'' is a factor variable and needs to be converted to a character variable. We coerce the variable into a different type using the \texttt{as.character()} function.
@@ -1129,9 +1130,10 @@ Let's inspect the variable types of our dataset again:
 \end{Shaded}
 
 \begin{verbatim}
-'data.frame':   10 obs. of  2 variables:
- $ name                     : chr  "South East" "London" "North West" "East of England" ...
- $ X..population...earnings.: Factor w/ 10 levels "",",\"2.6\",\"25\"",..: 10 9 8 7 6 5 4 3 2 1
+'data.frame':   10 obs. of  3 variables:
+ $ name      : chr  "South East" "London" "North West" "East of England" ...
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 4.5
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA
 \end{verbatim}
 
 

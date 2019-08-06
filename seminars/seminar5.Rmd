@@ -1,10 +1,45 @@
 # Type coercion
 
-```{r package_options, include=FALSE}
-knitr::opts_knit$set(global.par = TRUE)
-```
-
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')
 ```
+
+## Seminar
+
+We often need to change the type of variable. This can be necessary to clean data or because we add a new level to a factor like in the previous section on amending data frames. We begin be loading the england dataset that we created previously.
+
+```{r}
+england <- read.csv(file = "england.csv", sep = "", header = TRUE)
+```
+
+Recall that we could not add "Brittany" to our dataset like so:
+
+```{r}
+england <- rbind(england, c( "Brittany", 4.5, NA) )
+```
+
+### Coerce a factor to character
+
+Let's check our england dataset's variable types.
+.
+```{r}
+str(england)
+```
+
+The variable "name" is a factor variable and needs to be converted to a character variable. We coerce the variable into a different type using the `as.character()` function.
+
+```{r}
+england$name <- as.character(england$name)
+```
+
+Let's inspect the variable types of our dataset again:
+
+```{r}
+str(england)
+```
+
+
+
+
+
 

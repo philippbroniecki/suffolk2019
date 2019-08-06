@@ -1078,5 +1078,75 @@ row.names & = FALSE omits the row names (recommended)\tabularnewline
 \end{Highlighting}
 \end{Shaded}
 
+\hypertarget{type-coercion}{%
+\section{Type coercion}\label{type-coercion}}
+
+\hypertarget{seminar-3}{%
+\subsection{Seminar}\label{seminar-3}}
+
+We often need to change the type of variable. This can be necessary to clean data or because we add a new level to a factor like in the previous section on amending data frames. We begin be loading the england dataset that we created previously.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\DataTypeTok{file =} \StringTok{"england.csv"}\NormalTok{, }\DataTypeTok{sep =} \StringTok{""}\NormalTok{, }\DataTypeTok{header =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Recall that we could not add ``Brittany'' to our dataset like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england <-}\StringTok{ }\KeywordTok{rbind}\NormalTok{(england, }\KeywordTok{c}\NormalTok{( }\StringTok{"Brittany"}\NormalTok{, }\FloatTok{4.5}\NormalTok{, }\OtherTok{NA}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in `[<-.factor`(`*tmp*`, ri, value = "Brittany"): invalid factor
+level, NA generated
+
+Warning in `[<-.factor`(`*tmp*`, ri, value = "Brittany"): invalid factor
+level, NA generated
+\end{verbatim}
+
+\hypertarget{coerce-a-factor-to-character}{%
+\subsubsection{Coerce a factor to character}\label{coerce-a-factor-to-character}}
+
+Let's check our england dataset's variable types.
+.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   11 obs. of  2 variables:
+ $ name                     : Factor w/ 10 levels "East Midlands",..: 7 3 6 2 9 8 10 1 5 4 ...
+ $ X..population...earnings.: Factor w/ 10 levels "",",\"2.6\",\"25\"",..: 10 9 8 7 6 5 4 3 2 1 ...
+\end{verbatim}
+
+The variable ``name'' is a factor variable and needs to be converted to a character variable. We coerce the variable into a different type using the \texttt{as.character()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{name <-}\StringTok{ }\KeywordTok{as.character}\NormalTok{(england}\OperatorTok{$}\NormalTok{name)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's inspect the variable types of our dataset again:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   11 obs. of  2 variables:
+ $ name                     : chr  "South East" "London" "North West" "East of England" ...
+ $ X..population...earnings.: Factor w/ 10 levels "",",\"2.6\",\"25\"",..: 10 9 8 7 6 5 4 3 2 1 ...
+\end{verbatim}
+
 
 \end{document}

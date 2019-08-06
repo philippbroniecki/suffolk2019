@@ -10,7 +10,7 @@ In this section, we introduce loops and conditional statements. Loops are genera
 
 ### For loops
 
-Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple for loop like so:
+Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple "for loop" like so:
 
 ```{r}
 for (idx in 1:7){
@@ -21,8 +21,69 @@ for (idx in 1:7){
 In the above code, the `for()` function initiates the loop. We loop from 1 through 7 and `idx` takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.
 
 
+We can create nested loops, i.e. loops within loops like so:
+
+```{r}
+# first loop
+for (idx in 1:7){
+  
+  # second loop
+  for (idx2 in 1: 7){
+    
+    if (idx < idx2) print("idx1 is smaller than idx2")
+    else print("idx1 is larger than idx2")
+    
+  } # end of second loop
+} # end of first loop
+```
+
+While this is a toy example, it illustrates how we could do pairwise comparisons between observations in our dataset. We also added an if/else condition using the functions `if()` and `else`. If the if statement is TRUE the first statement is printed and if not the second statement is printed.
 
 
+### Conditions
 
+To illustrate the use of conditions we load the non-western foreingers dataset. 
+
+```{r}
+dat1 <- read.csv("non_western_immigrants.csv")
+```
+
+|Variable Name|Description|
+|--------|-----------------------------------------------------------|
+|IMMBRIT | Out of every 100 people in Britain, how many do you think are immigrants from Non-western countries?|
+|over.estimate | 1 if estimate is higher than 10.7%. |
+|RSex | 1 = male, 2 = female |
+|RAge | Age of respondent |
+|Househld | Number of people living in respondent's household |
+|Cons, Lab, SNP, Ukip, BNP, GP, party.other | Party self-identification|
+|paper | Do you normally read any daily morning newspaper 3+ times/week? |
+|WWWhourspW | How many hours WWW per week? |
+|religious | Do you regard yourself as belonging to any particular religion? |
+|employMonths | How many mnths w. present employer? |
+|urban | Population density, 4 categories (highest density is 4, lowest is 1) |
+|health.good | How is your health in general for someone of your age? (0: bad, 1: fair, 2: fairly good, 3: good) |
+|HHInc | Income bands for household, high number = high HH income |
+
+The variable `over.estimate` is equal to 1 if respondents over estimate the number of non-western immigrants in Britain. We will evaluate whether women are more or less likely to over estimate. First, we use the `mean()` function to assess the overall average value.
+
+```{r}
+mean(dat1$over.estimate)
+```
+
+A mean of 0.72 indicates that 72% of the 1049 respondents in the dataset over estimate the number of non-western immigrants. To assess whether the number is larger among men than women, we need conditional statements. 
+
+We first take the mean of "over.estimate" for men:
+
+```{r}
+mean( dat1$over.estimate[ dat1$RSex==1 ] )
+```
+
+Here, we used square brackets to subset the data. The subset that we evaluate is described by the logical statement `dat1$RSex==1`. The `==` operator is a logical equal that is true if a condition is fulfilled and false otherwise. In this case, it is true if the variable "RSex" is 1 which stands for men.
+
+Take the mean of over.estimate for women on your own.
+
+```{r class.source="collapsible"}
+mean( dat1$over.estimate[ dat1$RSex== 2] )
+```
 
 

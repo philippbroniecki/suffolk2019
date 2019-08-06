@@ -1264,7 +1264,7 @@ In this section, we introduce loops and conditional statements. Loops are genera
 \hypertarget{for-loops}{%
 \subsubsection{For loops}\label{for-loops}}
 
-Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple for loop like so:
+Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple ``for loop'' like so:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1285,6 +1285,206 @@ Loops are useful when we need to carry out similar operations repeatedly. A for 
 \end{verbatim}
 
 In the above code, the \texttt{for()} function initiates the loop. We loop from 1 through 7 and \texttt{idx} takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.
+
+We can create nested loops, i.e.~loops within loops like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# first loop}
+\ControlFlowTok{for}\NormalTok{ (idx }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{)\{}
+  
+  \CommentTok{# second loop}
+  \ControlFlowTok{for}\NormalTok{ (idx2 }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\StringTok{ }\DecValTok{7}\NormalTok{)\{}
+    
+    \ControlFlowTok{if}\NormalTok{ (idx }\OperatorTok{<}\StringTok{ }\NormalTok{idx2) }\KeywordTok{print}\NormalTok{(}\StringTok{"idx1 is smaller than idx2"}\NormalTok{)}
+    \ControlFlowTok{else} \KeywordTok{print}\NormalTok{(}\StringTok{"idx1 is larger than idx2"}\NormalTok{)}
+    
+\NormalTok{  \} }\CommentTok{# end of second loop}
+\NormalTok{\} }\CommentTok{# end of first loop}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "idx1 is larger than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is smaller than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+[1] "idx1 is larger than idx2"
+\end{verbatim}
+
+While this is a toy example, it illustrates how we could do pairwise comparisons between observations in our dataset. We also added an if/else condition using the functions \texttt{if()} and \texttt{else}. If the if statement is TRUE the first statement is printed and if not the second statement is printed.
+
+\hypertarget{conditions}{%
+\subsubsection{Conditions}\label{conditions}}
+
+To illustrate the use of conditions we load the non-western foreingers dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"non_western_immigrants.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+Variable Name\strut
+\end{minipage} & \begin{minipage}[b]{0.83\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+IMMBRIT\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Out of every 100 people in Britain, how many do you think are immigrants from Non-western countries?\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+over.estimate\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+1 if estimate is higher than 10.7\%.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+RSex\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+1 = male, 2 = female\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+RAge\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Age of respondent\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Househld\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Number of people living in respondent's household\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+Cons, Lab, SNP, Ukip, BNP, GP, party.other\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Party self-identification\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+paper\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Do you normally read any daily morning newspaper 3+ times/week?\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+WWWhourspW\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+How many hours WWW per week?\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+religious\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Do you regard yourself as belonging to any particular religion?\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+employMonths\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+How many mnths w. present employer?\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+urban\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Population density, 4 categories (highest density is 4, lowest is 1)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+health.good\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+How is your health in general for someone of your age? (0: bad, 1: fair, 2: fairly good, 3: good)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+HHInc\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+Income bands for household, high number = high HH income\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+The variable \texttt{over.estimate} is equal to 1 if respondents over estimate the number of non-western immigrants in Britain. We will evaluate whether women are more or less likely to over estimate. First, we use the \texttt{mean()} function to assess the overall average value.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7235462
+\end{verbatim}
+
+A mean of 0.72 indicates that 72\% of the 1049 respondents in the dataset over estimate the number of non-western immigrants. To assess whether the number is larger among men than women, we need conditional statements.
+
+We first take the mean of ``over.estimate'' for men:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{( dat1}\OperatorTok{$}\NormalTok{over.estimate[ dat1}\OperatorTok{$}\NormalTok{RSex}\OperatorTok{==}\DecValTok{1}\NormalTok{ ] )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.6527197
+\end{verbatim}
+
+Here, we used square brackets to subset the data. The subset that we evaluate is described by the logical statement \texttt{dat1\$RSex==1}. The \texttt{==} operator is a logical equal that is true if a condition is fulfilled and false otherwise. In this case, it is true if the variable ``RSex'' is 1 which stands for men.
+
+Take the mean of over.estimate for women on your own.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{( dat1}\OperatorTok{$}\NormalTok{over.estimate[ dat1}\OperatorTok{$}\NormalTok{RSex}\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{] )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7828371
+\end{verbatim}
 
 
 \end{document}

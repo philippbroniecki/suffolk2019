@@ -181,6 +181,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="6" data-path="seminar6.html"><a href="seminar6.html"><i class="fa fa-check"></i><b>6</b> Loops and conditions</a><ul>
 <li class="chapter" data-level="6.1" data-path="seminar6.html"><a href="seminar6.html#seminar-4"><i class="fa fa-check"></i><b>6.1</b> Seminar</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="seminar6.html"><a href="seminar6.html#for-loops"><i class="fa fa-check"></i><b>6.1.1</b> For loops</a></li>
+<li class="chapter" data-level="6.1.2" data-path="seminar6.html"><a href="seminar6.html#conditions"><i class="fa fa-check"></i><b>6.1.2</b> Conditions</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -207,7 +208,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>In this section, we introduce loops and conditional statements. Loops are generally useful, when we want to carry out the same operation over and over. Conditions are logical statements that are evaluated and if the statement is true a different operation is carried out than if the statement is false. We may, for instance, be interested in the average crime rate in our sample but only if the respondents are female. To do so, we need conditional statements.</p>
 <div id="for-loops" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> For loops</h3>
-<p>Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple for loop like so:</p>
+<p>Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple “for loop” like so:</p>
 <div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){</a>
 <a class="sourceLine" id="cb104-2" title="2">  <span class="kw">print</span>( idx )</a>
 <a class="sourceLine" id="cb104-3" title="3">}</a></code></pre></div>
@@ -219,6 +220,150 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 [1] 6
 [1] 7</code></pre>
 <p>In the above code, the <code>for()</code> function initiates the loop. We loop from 1 through 7 and <code>idx</code> takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.</p>
+<p>We can create nested loops, i.e. loops within loops like so:</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="co"># first loop</span></a>
+<a class="sourceLine" id="cb106-2" title="2"><span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){</a>
+<a class="sourceLine" id="cb106-3" title="3">  </a>
+<a class="sourceLine" id="cb106-4" title="4">  <span class="co"># second loop</span></a>
+<a class="sourceLine" id="cb106-5" title="5">  <span class="cf">for</span> (idx2 <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="st"> </span><span class="dv">7</span>){</a>
+<a class="sourceLine" id="cb106-6" title="6">    </a>
+<a class="sourceLine" id="cb106-7" title="7">    <span class="cf">if</span> (idx <span class="op">&lt;</span><span class="st"> </span>idx2) <span class="kw">print</span>(<span class="st">&quot;idx1 is smaller than idx2&quot;</span>)</a>
+<a class="sourceLine" id="cb106-8" title="8">    <span class="cf">else</span> <span class="kw">print</span>(<span class="st">&quot;idx1 is larger than idx2&quot;</span>)</a>
+<a class="sourceLine" id="cb106-9" title="9">    </a>
+<a class="sourceLine" id="cb106-10" title="10">  } <span class="co"># end of second loop</span></a>
+<a class="sourceLine" id="cb106-11" title="11">} <span class="co"># end of first loop</span></a></code></pre></div>
+<pre><code>[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is smaller than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;
+[1] &quot;idx1 is larger than idx2&quot;</code></pre>
+<p>While this is a toy example, it illustrates how we could do pairwise comparisons between observations in our dataset. We also added an if/else condition using the functions <code>if()</code> and <code>else</code>. If the if statement is TRUE the first statement is printed and if not the second statement is printed.</p>
+</div>
+<div id="conditions" class="section level3">
+<h3><span class="header-section-number">6.1.2</span> Conditions</h3>
+<p>To illustrate the use of conditions we load the non-western foreingers dataset.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1">dat1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>)</a></code></pre></div>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>IMMBRIT</td>
+<td>Out of every 100 people in Britain, how many do you think are immigrants from Non-western countries?</td>
+</tr>
+<tr class="even">
+<td>over.estimate</td>
+<td>1 if estimate is higher than 10.7%.</td>
+</tr>
+<tr class="odd">
+<td>RSex</td>
+<td>1 = male, 2 = female</td>
+</tr>
+<tr class="even">
+<td>RAge</td>
+<td>Age of respondent</td>
+</tr>
+<tr class="odd">
+<td>Househld</td>
+<td>Number of people living in respondent’s household</td>
+</tr>
+<tr class="even">
+<td>Cons, Lab, SNP, Ukip, BNP, GP, party.other</td>
+<td>Party self-identification</td>
+</tr>
+<tr class="odd">
+<td>paper</td>
+<td>Do you normally read any daily morning newspaper 3+ times/week?</td>
+</tr>
+<tr class="even">
+<td>WWWhourspW</td>
+<td>How many hours WWW per week?</td>
+</tr>
+<tr class="odd">
+<td>religious</td>
+<td>Do you regard yourself as belonging to any particular religion?</td>
+</tr>
+<tr class="even">
+<td>employMonths</td>
+<td>How many mnths w. present employer?</td>
+</tr>
+<tr class="odd">
+<td>urban</td>
+<td>Population density, 4 categories (highest density is 4, lowest is 1)</td>
+</tr>
+<tr class="even">
+<td>health.good</td>
+<td>How is your health in general for someone of your age? (0: bad, 1: fair, 2: fairly good, 3: good)</td>
+</tr>
+<tr class="odd">
+<td>HHInc</td>
+<td>Income bands for household, high number = high HH income</td>
+</tr>
+</tbody>
+</table>
+<p>The variable <code>over.estimate</code> is equal to 1 if respondents over estimate the number of non-western immigrants in Britain. We will evaluate whether women are more or less likely to over estimate. First, we use the <code>mean()</code> function to assess the overall average value.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">mean</span>(dat1<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre><code>[1] 0.7235462</code></pre>
+<p>A mean of 0.72 indicates that 72% of the 1049 respondents in the dataset over estimate the number of non-western immigrants. To assess whether the number is larger among men than women, we need conditional statements.</p>
+<p>We first take the mean of “over.estimate” for men:</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="kw">mean</span>( dat1<span class="op">$</span>over.estimate[ dat1<span class="op">$</span>RSex<span class="op">==</span><span class="dv">1</span> ] )</a></code></pre></div>
+<pre><code>[1] 0.6527197</code></pre>
+<p>Here, we used square brackets to subset the data. The subset that we evaluate is described by the logical statement <code>dat1$RSex==1</code>. The <code>==</code> operator is a logical equal that is true if a condition is fulfilled and false otherwise. In this case, it is true if the variable “RSex” is 1 which stands for men.</p>
+<p>Take the mean of over.estimate for women on your own.</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="kw">mean</span>( dat1<span class="op">$</span>over.estimate[ dat1<span class="op">$</span>RSex<span class="op">==</span><span class="st"> </span><span class="dv">2</span>] )</a></code></pre></div>
+<pre><code>[1] 0.7828371</code></pre>
 
 </div>
 </div>

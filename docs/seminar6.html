@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 1 Introduction to R and RStudio | Suffolk 2019</title>
-  <meta name="description" content="Chapter 1 Introduction to R and RStudio | Suffolk 2019" />
+  <title>Chapter 6 Loops and conditions | Suffolk 2019</title>
+  <meta name="description" content="Chapter 6 Loops and conditions | Suffolk 2019" />
   <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 1 Introduction to R and RStudio | Suffolk 2019" />
+  <meta property="og:title" content="Chapter 6 Loops and conditions | Suffolk 2019" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 1 Introduction to R and RStudio | Suffolk 2019" />
+  <meta name="twitter:title" content="Chapter 6 Loops and conditions | Suffolk 2019" />
   
   
   
@@ -29,8 +29,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="index.html">
-<link rel="next" href="seminar2.html">
+<link rel="prev" href="seminar5.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -200,92 +200,25 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="introduction-to-r-and-rstudio" class="section level1">
-<h1><span class="header-section-number">Chapter 1</span> Introduction to R and RStudio</h1>
-<div id="learning-objectives" class="section level2">
-<h2><span class="header-section-number">1.1</span> Learning objectives</h2>
-<p>In this session, we will have a look at R and RStudio. We will interact with both and use the various components of RStudio.</p>
-<div id="what-is-r" class="section level3">
-<h3><span class="header-section-number">1.1.1</span> What is R?</h3>
-<p>R is an environment for statistical computing and graphics. RStudio is an editor or integrated development environment (IDE) that makes working with R much more comfortable.</p>
-<p>To install R and RStudio on your computer, download both from the following sources:</p>
-<ul>
-<li>Download R from <a href="https://cran.r-project.org">The Comprehensive R Archive Network (CRAN)</a></li>
-<li>Download RStudio from <a href="https://www.rstudio.com">RStudio.com</a></li>
-</ul>
-<p>Keep both R and RStudio up to date. That means go online and check for newer versions. In case there are new versions, download those and re-install.</p>
-</div>
-<div id="rstudio" class="section level3">
-<h3><span class="header-section-number">1.1.2</span> RStudio</h3>
-<p>Let’s get acquainted with R. When you start RStudio for the first time, you’ll see three panes:</p>
-<p><img src="img/rstudio_default.png" /></p>
-</div>
-<div id="console" class="section level3">
-<h3><span class="header-section-number">1.1.3</span> Console</h3>
-<p>The Console in RStudio is the simplest way to interact with R. You can type some code at the Console and when you press ENTER, R will run that code. Depending on what you type, you may see some output in the Console or if you make a mistake, you may get a warning or an error message.</p>
-<p>Let’s familiarize ourselves with the console by using R as a simple calculator:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="dv">2</span> <span class="op">+</span><span class="st"> </span><span class="dv">4</span></a></code></pre></div>
-<pre><code>[1] 6</code></pre>
-<p>Now that we know how to use the <code>+</code> sign for addition, let’s try some other mathematical operations such as subtraction (<code>-</code>), multiplication (<code>*</code>), and division (<code>/</code>).</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="dv">10</span> <span class="op">-</span><span class="st"> </span><span class="dv">4</span></a></code></pre></div>
-<pre><code>[1] 6</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="dv">5</span> <span class="op">*</span><span class="st"> </span><span class="dv">3</span></a></code></pre></div>
-<pre><code>[1] 15</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="dv">7</span> <span class="op">/</span><span class="st"> </span><span class="dv">2</span></a></code></pre></div>
-<pre><code>[1] 3.5</code></pre>
-<table>
-<colgroup>
-<col width="73%" />
-<col width="26%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>You can use the cursor or arrow keys on your keyboard to edit your code at the console:<br>- Use the UP and DOWN keys to re-run something without typing it again<br>- Use the LEFT and RIGHT keys to edit</td>
-<td><img src="img/rstudio_cursorkeys.png" /></td>
-</tr>
-</tbody>
-</table>
-<p>Take a few minutes to play around at the console and try different things out. Don’t worry if you make a mistake, you can’t break anything easily!</p>
-</div>
-<div id="scripts" class="section level3">
-<h3><span class="header-section-number">1.1.4</span> Scripts</h3>
-<p>The Console is great for simple tasks but if you’re working on a project you would mostly likely want to save your work in some sort of a document or a file. Scripts in R are just plain text files that contain R code. You can edit a script just like you would edit a file in any word processing or note-taking application.</p>
-<p>Create a new script using the menu or the toolbar button as shown below.</p>
-<p><img src="img/rstudio_newfile.png" /></p>
-<p>Once you’ve created a script, it is generally a good idea to give it a meaningful name and save it immediately. For our first session save your script as <strong>seminar1.R</strong></p>
-<table>
-<colgroup>
-<col width="55%" />
-<col width="44%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>Familiarize yourself with the script window in RStudio, and especially the two buttons labeled <strong>Run</strong> and <strong>Source</strong></td>
-<td><img src="img/rstudio_script.png" /></td>
-</tr>
-</tbody>
-</table>
-<p>There are a few different ways to run your code from a script.</p>
-<table>
-<colgroup>
-<col width="24%" />
-<col width="75%" />
-</colgroup>
-<tbody>
-<tr class="odd">
-<td>One line at a time</td>
-<td>Place the cursor on the line you want to run and hit CTRL-ENTER or use the <strong>Run</strong> button</td>
-</tr>
-<tr class="even">
-<td>Multiple lines</td>
-<td>Select the lines you want to run and hit CTRL-ENTER or use the <strong>Run</strong> button</td>
-</tr>
-<tr class="odd">
-<td>Entire script</td>
-<td>Use the <strong>Source</strong> button</td>
-</tr>
-</tbody>
-</table>
+<div id="loops-and-conditions" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Loops and conditions</h1>
+<div id="seminar-4" class="section level2">
+<h2><span class="header-section-number">6.1</span> Seminar</h2>
+<p>In this section, we introduce loops and conditional statements. Loops are generally useful, when we want to carry out the same operation over and over. Conditions are logical statements that are evaluated and if the statement is true a different operation is carried out than if the statement is false. We may, for instance, be interested in the average crime rate in our sample but only if the respondents are female. To do so, we need conditional statements.</p>
+<div id="for-loops" class="section level3">
+<h3><span class="header-section-number">6.1.1</span> For loops</h3>
+<p>Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple for loop like so:</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){</a>
+<a class="sourceLine" id="cb104-2" title="2">  <span class="kw">print</span>( idx )</a>
+<a class="sourceLine" id="cb104-3" title="3">}</a></code></pre></div>
+<pre><code>[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7</code></pre>
+<p>In the above code, the <code>for()</code> function initiates the loop. We loop from 1 through 7 and <code>idx</code> takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.</p>
 
 </div>
 </div>
@@ -295,8 +228,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="seminar2.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="seminar5.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

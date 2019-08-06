@@ -1,10 +1,28 @@
 # Loops and conditions
 
-```{r package_options, include=FALSE}
-knitr::opts_knit$set(global.par = TRUE)
-```
-
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')
 ```
+
+## Seminar
+
+In this section, we introduce loops and conditional statements. Loops are generally useful, when we want to carry out the same operation over and over. Conditions are logical statements that are evaluated and if the statement is true a different operation is carried out than if the statement is false. We may, for instance, be interested in the average crime rate in our sample but only if the respondents are female. To do so, we need conditional statements.
+
+### For loops
+
+Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple for loop like so:
+
+```{r}
+for (idx in 1:7){
+  print( idx )
+}
+```
+
+In the above code, the `for()` function initiates the loop. We loop from 1 through 7 and `idx` takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.
+
+
+
+
+
+
 

@@ -34,8 +34,46 @@ Let's inspect the variable types of our dataset again:
 str(england)
 ```
 
+The variable name is now a character variable. We now change the last value of the name variable into Brittany. 
+
+```{r}
+england$name[ length(england$name) ] <- "Brittany"
+```
+
+Let's inspect our change.
+
+```{r}
+england
+```
+
+### Coerce a character variable into a factor variable
+
+We can now easily convert the variable type back from character into a factor with the `as.factor()` function like so:
+
+```{r}
+england$name <- as.factor(england$name)
+str(england)
+```
 
 
+### Coerce a character variable into a numeric variable
 
+In R missing vlues are called `NA` for numeric types and `""` for character types. When we use load third party data, the coding often differs. This can happen, for instance, due to data entry errors.
 
+We simulate a data entry error by changing the population value of Brittany to a character value.
+
+```{r}
+england$population[ length(england$population) ] <- "mistake"
+str(england)
+```
+
+Notice, that the variable population is now a character vector instead of a numeric vector. Whenever numbers and text are mixed, R will automatically treat the vector as a character vector.
+
+We can convert the population variable back into a numeric variable using the `as.numeric()` function. All values that are not recognised as numbers will be changed to `NA`.
+
+```{r}
+england$population <- as.numeric(england$population)
+str(england)
+england
+```
 

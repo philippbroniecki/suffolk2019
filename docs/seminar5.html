@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="seminar4.html">
-
+<link rel="next" href="seminar6.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -174,6 +174,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="5" data-path="seminar5.html"><a href="seminar5.html"><i class="fa fa-check"></i><b>5</b> Type coercion</a><ul>
 <li class="chapter" data-level="5.1" data-path="seminar5.html"><a href="seminar5.html#seminar-3"><i class="fa fa-check"></i><b>5.1</b> Seminar</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="seminar5.html"><a href="seminar5.html#coerce-a-factor-to-character"><i class="fa fa-check"></i><b>5.1.1</b> Coerce a factor to character</a></li>
+<li class="chapter" data-level="5.1.2" data-path="seminar5.html"><a href="seminar5.html#coerce-a-character-variable-into-a-factor-variable"><i class="fa fa-check"></i><b>5.1.2</b> Coerce a character variable into a factor variable</a></li>
+<li class="chapter" data-level="5.1.3" data-path="seminar5.html"><a href="seminar5.html#coerce-a-character-variable-into-a-numeric-variable"><i class="fa fa-check"></i><b>5.1.3</b> Coerce a character variable into a numeric variable</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="seminar6.html"><a href="seminar6.html"><i class="fa fa-check"></i><b>6</b> Loops and conditions</a><ul>
+<li class="chapter" data-level="6.1" data-path="seminar6.html"><a href="seminar6.html#seminar-4"><i class="fa fa-check"></i><b>6.1</b> Seminar</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="seminar6.html"><a href="seminar6.html#for-loops"><i class="fa fa-check"></i><b>6.1.1</b> For loops</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -217,6 +224,63 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
  $ name      : chr  &quot;South East&quot; &quot;London&quot; &quot;North West&quot; &quot;East of England&quot; ...
  $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 4.5
  $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA</code></pre>
+<p>The variable name is now a character variable. We now change the last value of the name variable into Brittany.</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb91-1" title="1">england<span class="op">$</span>name[ <span class="kw">length</span>(england<span class="op">$</span>name) ] &lt;-<span class="st"> &quot;Brittany&quot;</span></a></code></pre></div>
+<p>Let’s inspect our change.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb92-1" title="1">england</a></code></pre></div>
+<pre><code>                       name population earnings
+1                South East        8.6     28.7
+2                    London        8.2     35.1
+3                North West        7.1     25.2
+4           East of England        5.9     26.6
+5             West Midlands        5.6     24.9
+6                South West        5.3     25.6
+7  Yorkshire and the Humber        5.3     25.0
+8             East Midlands        4.5     25.0
+9                North East        2.6     25.0
+10                 Brittany        4.5       NA</code></pre>
+</div>
+<div id="coerce-a-character-variable-into-a-factor-variable" class="section level3">
+<h3><span class="header-section-number">5.1.2</span> Coerce a character variable into a factor variable</h3>
+<p>We can now easily convert the variable type back from character into a factor with the <code>as.factor()</code> function like so:</p>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb94-1" title="1">england<span class="op">$</span>name &lt;-<span class="st"> </span><span class="kw">as.factor</span>(england<span class="op">$</span>name)</a>
+<a class="sourceLine" id="cb94-2" title="2"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   10 obs. of  3 variables:
+ $ name      : Factor w/ 10 levels &quot;Brittany&quot;,&quot;East Midlands&quot;,..: 7 4 6 3 9 8 10 2 5 1
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 4.5
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA</code></pre>
+</div>
+<div id="coerce-a-character-variable-into-a-numeric-variable" class="section level3">
+<h3><span class="header-section-number">5.1.3</span> Coerce a character variable into a numeric variable</h3>
+<p>In R missing vlues are called <code>NA</code> for numeric types and <code>""</code> for character types. When we use load third party data, the coding often differs. This can happen, for instance, due to data entry errors.</p>
+<p>We simulate a data entry error by changing the population value of Brittany to a character value.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb96-1" title="1">england<span class="op">$</span>population[ <span class="kw">length</span>(england<span class="op">$</span>population) ] &lt;-<span class="st"> &quot;mistake&quot;</span></a>
+<a class="sourceLine" id="cb96-2" title="2"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   10 obs. of  3 variables:
+ $ name      : Factor w/ 10 levels &quot;Brittany&quot;,&quot;East Midlands&quot;,..: 7 4 6 3 9 8 10 2 5 1
+ $ population: chr  &quot;8.6&quot; &quot;8.2&quot; &quot;7.1&quot; &quot;5.9&quot; ...
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA</code></pre>
+<p>Notice, that the variable population is now a character vector instead of a numeric vector. Whenever numbers and text are mixed, R will automatically treat the vector as a character vector.</p>
+<p>We can convert the population variable back into a numeric variable using the <code>as.numeric()</code> function. All values that are not recognised as numbers will be changed to <code>NA</code>.</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb98-1" title="1">england<span class="op">$</span>population &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(england<span class="op">$</span>population)</a></code></pre></div>
+<pre><code>Warning: NAs introduced by coercion</code></pre>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb100-1" title="1"><span class="kw">str</span>(england)</a></code></pre></div>
+<pre><code>&#39;data.frame&#39;:   10 obs. of  3 variables:
+ $ name      : Factor w/ 10 levels &quot;Brittany&quot;,&quot;East Midlands&quot;,..: 7 4 6 3 9 8 10 2 5 1
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 NA
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA</code></pre>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb102-1" title="1">england</a></code></pre></div>
+<pre><code>                       name population earnings
+1                South East        8.6     28.7
+2                    London        8.2     35.1
+3                North West        7.1     25.2
+4           East of England        5.9     26.6
+5             West Midlands        5.6     24.9
+6                South West        5.3     25.6
+7  Yorkshire and the Humber        5.3     25.0
+8             East Midlands        4.5     25.0
+9                North East        2.6     25.0
+10                 Brittany         NA       NA</code></pre>
 
 </div>
 </div>
@@ -226,8 +290,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="seminar4.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-
+<a href="seminar4.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="seminar6.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

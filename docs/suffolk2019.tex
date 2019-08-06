@@ -1136,5 +1136,155 @@ Let's inspect the variable types of our dataset again:
  $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA
 \end{verbatim}
 
+The variable name is now a character variable. We now change the last value of the name variable into Brittany.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{name[ }\KeywordTok{length}\NormalTok{(england}\OperatorTok{$}\NormalTok{name) ] <-}\StringTok{ "Brittany"}
+\end{Highlighting}
+\end{Shaded}
+
+Let's inspect our change.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                       name population earnings
+1                South East        8.6     28.7
+2                    London        8.2     35.1
+3                North West        7.1     25.2
+4           East of England        5.9     26.6
+5             West Midlands        5.6     24.9
+6                South West        5.3     25.6
+7  Yorkshire and the Humber        5.3     25.0
+8             East Midlands        4.5     25.0
+9                North East        2.6     25.0
+10                 Brittany        4.5       NA
+\end{verbatim}
+
+\hypertarget{coerce-a-character-variable-into-a-factor-variable}{%
+\subsubsection{Coerce a character variable into a factor variable}\label{coerce-a-character-variable-into-a-factor-variable}}
+
+We can now easily convert the variable type back from character into a factor with the \texttt{as.factor()} function like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{name <-}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(england}\OperatorTok{$}\NormalTok{name)}
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   10 obs. of  3 variables:
+ $ name      : Factor w/ 10 levels "Brittany","East Midlands",..: 7 4 6 3 9 8 10 2 5 1
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 4.5
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA
+\end{verbatim}
+
+\hypertarget{coerce-a-character-variable-into-a-numeric-variable}{%
+\subsubsection{Coerce a character variable into a numeric variable}\label{coerce-a-character-variable-into-a-numeric-variable}}
+
+In R missing vlues are called \texttt{NA} for numeric types and \texttt{""} for character types. When we use load third party data, the coding often differs. This can happen, for instance, due to data entry errors.
+
+We simulate a data entry error by changing the population value of Brittany to a character value.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{population[ }\KeywordTok{length}\NormalTok{(england}\OperatorTok{$}\NormalTok{population) ] <-}\StringTok{ "mistake"}
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   10 obs. of  3 variables:
+ $ name      : Factor w/ 10 levels "Brittany","East Midlands",..: 7 4 6 3 9 8 10 2 5 1
+ $ population: chr  "8.6" "8.2" "7.1" "5.9" ...
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA
+\end{verbatim}
+
+Notice, that the variable population is now a character vector instead of a numeric vector. Whenever numbers and text are mixed, R will automatically treat the vector as a character vector.
+
+We can convert the population variable back into a numeric variable using the \texttt{as.numeric()} function. All values that are not recognised as numbers will be changed to \texttt{NA}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}\OperatorTok{$}\NormalTok{population <-}\StringTok{ }\KeywordTok{as.numeric}\NormalTok{(england}\OperatorTok{$}\NormalTok{population)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning: NAs introduced by coercion
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{str}\NormalTok{(england)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+'data.frame':   10 obs. of  3 variables:
+ $ name      : Factor w/ 10 levels "Brittany","East Midlands",..: 7 4 6 3 9 8 10 2 5 1
+ $ population: num  8.6 8.2 7.1 5.9 5.6 5.3 5.3 4.5 2.6 NA
+ $ earnings  : num  28.7 35.1 25.2 26.6 24.9 25.6 25 25 25 NA
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{england}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                       name population earnings
+1                South East        8.6     28.7
+2                    London        8.2     35.1
+3                North West        7.1     25.2
+4           East of England        5.9     26.6
+5             West Midlands        5.6     24.9
+6                South West        5.3     25.6
+7  Yorkshire and the Humber        5.3     25.0
+8             East Midlands        4.5     25.0
+9                North East        2.6     25.0
+10                 Brittany         NA       NA
+\end{verbatim}
+
+\hypertarget{loops-and-conditions}{%
+\section{Loops and conditions}\label{loops-and-conditions}}
+
+\hypertarget{seminar-4}{%
+\subsection{Seminar}\label{seminar-4}}
+
+In this section, we introduce loops and conditional statements. Loops are generally useful, when we want to carry out the same operation over and over. Conditions are logical statements that are evaluated and if the statement is true a different operation is carried out than if the statement is false. We may, for instance, be interested in the average crime rate in our sample but only if the respondents are female. To do so, we need conditional statements.
+
+\hypertarget{for-loops}{%
+\subsubsection{For loops}\label{for-loops}}
+
+Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple for loop like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\ControlFlowTok{for}\NormalTok{ (idx }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{)\{}
+  \KeywordTok{print}\NormalTok{( idx )}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+[1] 6
+[1] 7
+\end{verbatim}
+
+In the above code, the \texttt{for()} function initiates the loop. We loop from 1 through 7 and \texttt{idx} takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.
+
 
 \end{document}

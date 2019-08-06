@@ -1,0 +1,14 @@
+# Datacamp
+
+```{r, include = FALSE}
+par(bg = '#fdf6e3')
+```
+
+## Develop your skills as a data scientist
+
+Dear all, thanks to Lorenzo, you all have access to datacamp for six months starting on 16 November, 2018. Data camp is a great source for delving deeper into R. You can do courses on data cleaning or you could could get a first glimpse at machine learning courses (you all heard about big data before). Maybe you would like to learn how to scrape data from the web. How to clean it and then use a machine learning classifier and cross-validate out of sample. Data camp is great address for this. Polish your data science skills and increase your employability and its great fun as well. Thanks to datacamp and Lorenzo!
+
+----
+
+<div class="container btn-container">
+  <button type = "button" class = "btn btn-lg btn-primary" onclick="window.open('https://www.datacamp.com/enterprise/statistics-1-with-r');">Data Camp Class Link</button>

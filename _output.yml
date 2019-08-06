@@ -1,0 +1,24 @@
+bookdown::gitbook:
+  css:
+  - lib/bootstrap/3.3.7/css/bootstrap.min.css
+  - css/readthedocs.css
+  - css/custom.css
+  includes:
+    in_header: include/header.html
+  split_by: rmd
+  config:
+    toc:
+      collapse: section
+      scroll_highlight: yes
+      before: null
+      after: null
+    download: pdf
+    sharing:
+      github: no
+      twitter: no
+      facebook: no
+      all: []
+
+bookdown::pdf_book:
+  keep_tex: yes
+  

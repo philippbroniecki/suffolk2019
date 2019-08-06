@@ -1,0 +1,12 @@
+div.noscroll {
+  overflow: hidden;
+}
+
+div.noscroll-x {
+  overflow-x: hidden;
+}
+
+div.noscroll-y {
+  overflow-y: hidden;
+}
+

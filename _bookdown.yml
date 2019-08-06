@@ -1,0 +1,62 @@
+output_dir: "docs"
+book_filename: "suffolk2019.rmd"
+language:
+  ui:
+    chapter_name: "Chapter "
+delete_merged_file: true
+before_chapter_script: ./R/before_chapter.R
+
+rmd_files: [
+  index.Rmd,
+  
+  #dropin_sessions.Rmd,
+  
+  #seminars/seminar1.Rmd, 
+  #solutions/solutions1.Rmd,
+  
+  #seminars/seminar2.Rmd,
+  #solutions/solutions2.Rmd,
+
+  #seminars/seminar3.Rmd,
+  #solutions/solutions3.Rmd,
+
+  #seminars/seminar4.Rmd,
+  #solutions/solutions4.Rmd,
+
+  #seminars/seminar5.Rmd,
+  #solutions/solutions5.Rmd,
+
+  #seminars/seminar6.Rmd,
+  #solutions/solutions6.Rmd,
+
+  #seminars/seminar7.Rmd,
+  #solutions/solutions7.Rmd,
+
+  #seminars/seminar8.Rmd,
+  #solutions/solutions8.Rmd,
+
+  #seminars/seminar9.Rmd,
+  #solutions/solutions9.Rmd,
+  
+  #seminars/seminar10.Rmd,
+  #solutions/solutions9.Rmd,
+  
+  #seminars/seminar11.Rmd,
+  #solutions/solutions11.Rmd,
+  
+  #seminars/seminar12.Rmd,
+  #solutions/solutions12.Rmd,
+
+  #datacamp.Rmd,
+  # optional material
+  #optional.Rmd,
+  
+  # resources
+  #resources.Rmd,
+  
+  # datasets
+  #datasets.Rmd,
+  
+  # FAQs
+  #FAQs.Rmd
+]

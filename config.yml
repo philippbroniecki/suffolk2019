@@ -1,0 +1,6 @@
+name: Suffolk 2019
+description: Introduction to Quantitative Methods
+
+config_file: ~/.suffolk2019
+working_dir: ~/suffolk2019
+

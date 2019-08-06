@@ -155,7 +155,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="seminar3.html"><a href="seminar3.html"><i class="fa fa-check"></i><b>3</b> Data import (from csv, txt, and excel)</a><ul>
 <li class="chapter" data-level="3.1" data-path="seminar3.html"><a href="seminar3.html#seminar-1"><i class="fa fa-check"></i><b>3.1</b> Seminar</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="seminar3.html"><a href="seminar3.html#bla-bla-blahhhh"><i class="fa fa-check"></i><b>3.1.1</b> bla bla blahhhh</a></li>
+<li class="chapter" data-level="3.1.1" data-path="seminar3.html"><a href="seminar3.html#setting-up"><i class="fa fa-check"></i><b>3.1.1</b> Setting up</a></li>
+<li class="chapter" data-level="3.1.2" data-path="seminar3.html"><a href="seminar3.html#setting-up-1"><i class="fa fa-check"></i><b>3.1.2</b> setting up</a></li>
+<li class="chapter" data-level="3.1.3" data-path="seminar3.html"><a href="seminar3.html#importing-a-data-set-in-.csv-format"><i class="fa fa-check"></i><b>3.1.3</b> Importing a data set in <code>.csv</code> format</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> R-syntax, data structures and types</a><ul>
@@ -184,9 +186,34 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 3</span> Data import (from csv, txt, and excel)</h1>
 <div id="seminar-1" class="section level2">
 <h2><span class="header-section-number">3.1</span> Seminar</h2>
-<div id="bla-bla-blahhhh" class="section level3">
-<h3><span class="header-section-number">3.1.1</span> bla bla blahhhh</h3>
-<p>buladfdsfdsaf</p>
+<p>In this section, we will load data in csv, txt, excel and R format. We will learn how to check and set our working directory.</p>
+<div id="setting-up" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Setting up</h3>
+<p>We set our working directory. R operates in specific directory (folder) on our computer. We create a folder on where we save our scripts. We name the folder <code>suffolk2019</code>. Let’s create the folder on our computers now (in finder on Mac and explorer on Windows).</p>
+<p>Now, we set our working directory to the folder, we just created like so:</p>
+<p><img src="img/setwdir.PNG" /></p>
+<p>Create a new R script and save it as day1.R to your <code>suffolk2019</code> directory.</p>
+<p>At the beginning of each new script, we want to clear the workspace. The workspace is stored in working memory on our computer. If we do not clear it for a new script, it becomes too full over time. Our computer will slow down and it will become difficult for us to know which objects are stored in working memory.</p>
+<p>We check the contents of our workspce like so:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1"><span class="co"># check workspace</span></a>
+<a class="sourceLine" id="cb48-2" title="2"><span class="kw">ls</span>()</a></code></pre></div>
+<p>To remove a specific object, we use the <code>rm()</code> function which stands for remove. Within the round brackets, we put the name of the object we want to remove. We could remove the object <code>a</code> like so:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" title="1"><span class="co"># delete variable &#39;a&#39; from workspace</span></a>
+<a class="sourceLine" id="cb49-2" title="2"><span class="kw">rm</span>(a)</a></code></pre></div>
+<p>At the beginning of each script, we should always clear the entire workspace. We can do so in the following way:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb50-1" title="1"><span class="co"># delete everything from workspace</span></a>
+<a class="sourceLine" id="cb50-2" title="2"><span class="kw">rm</span>( <span class="dt">list =</span> <span class="kw">ls</span>() )</a></code></pre></div>
+<p>You can also clear text from the console window. To do so press Crtl+l on Winowds or Command+l on Mac.</p>
+</div>
+<div id="setting-up-1" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> setting up</h3>
+<p>Data comes in different file formats such as <code>.txt</code>, <code>.csv</code>, <code>.xlsx</code>, <code>.RData</code>, <code>.dta</code> and many more. To know the file type of a file right click on it and view preferences (in Windows explorer or Mac finder).</p>
+</div>
+<div id="importing-a-data-set-in-.csv-format" class="section level3">
+<h3><span class="header-section-number">3.1.3</span> Importing a data set in <code>.csv</code> format</h3>
+<p>One of the most common file types is <code>.csv</code> which means comma seperated values. Columns are seperated by commas and rows by line breaks.</p>
+<p>The dataset’s name is “non_western_immigrants.csv”. To load it, we use the <code>read.csv()</code> function.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" title="1">dat1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>)</a></code></pre></div>
 
 </div>
 </div>

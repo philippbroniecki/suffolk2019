@@ -155,7 +155,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="3" data-path="seminar3.html"><a href="seminar3.html"><i class="fa fa-check"></i><b>3</b> Data import (from csv, txt, and excel)</a><ul>
 <li class="chapter" data-level="3.1" data-path="seminar3.html"><a href="seminar3.html#seminar-1"><i class="fa fa-check"></i><b>3.1</b> Seminar</a><ul>
-<li class="chapter" data-level="3.1.1" data-path="seminar3.html"><a href="seminar3.html#bla-bla-blahhhh"><i class="fa fa-check"></i><b>3.1.1</b> bla bla blahhhh</a></li>
+<li class="chapter" data-level="3.1.1" data-path="seminar3.html"><a href="seminar3.html#setting-up"><i class="fa fa-check"></i><b>3.1.1</b> Setting up</a></li>
+<li class="chapter" data-level="3.1.2" data-path="seminar3.html"><a href="seminar3.html#setting-up-1"><i class="fa fa-check"></i><b>3.1.2</b> setting up</a></li>
+<li class="chapter" data-level="3.1.3" data-path="seminar3.html"><a href="seminar3.html#importing-a-data-set-in-.csv-format"><i class="fa fa-check"></i><b>3.1.3</b> Importing a data set in <code>.csv</code> format</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> R-syntax, data structures and types</a><ul>
@@ -188,12 +190,12 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">4.1.1</span> Data frames</h3>
 <p>A data frame is an object that holds data in a tabular format similar to how spreadsheets work. Variables are generally kept in columns and observations are in rows. Data frames are similar to matrices but they can store vectors of different types (e.g. numbers and text).</p>
 <p>We start by creating a dataframe with the <code>data.frame()</code> function. We will give each column a name (a variable name) followed by the <code>=</code> operator and the respective vector of data that we want to assign to that column.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb48-1" title="1">england &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
-<a class="sourceLine" id="cb48-2" title="2">  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;South East&quot;</span>, <span class="st">&quot;London&quot;</span>, <span class="st">&quot;North West&quot;</span>, <span class="st">&quot;East of England&quot;</span>, <span class="st">&quot;West Midlands&quot;</span>, <span class="st">&quot;South West&quot;</span>,</a>
-<a class="sourceLine" id="cb48-3" title="3">           <span class="st">&quot;Yorkshire and the Humber&quot;</span>, <span class="st">&quot;East Midlands&quot;</span>, <span class="st">&quot;North East&quot;</span>),</a>
-<a class="sourceLine" id="cb48-4" title="4">  <span class="dt">population =</span> <span class="kw">c</span>(<span class="fl">8.6</span>, <span class="fl">8.2</span>, <span class="fl">7.1</span>, <span class="fl">5.9</span>, <span class="fl">5.6</span>, <span class="fl">5.3</span>, <span class="fl">5.3</span>, <span class="fl">4.5</span>, <span class="fl">2.6</span>),</a>
-<a class="sourceLine" id="cb48-5" title="5">  <span class="dt">earnings =</span> <span class="kw">c</span>(<span class="fl">28.7</span>, <span class="fl">35.1</span>, <span class="fl">25.2</span>, <span class="fl">26.6</span>, <span class="fl">24.9</span>, <span class="fl">25.6</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>)</a>
-<a class="sourceLine" id="cb48-6" title="6">)</a></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb52-1" title="1">england &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb52-2" title="2">  <span class="dt">name =</span> <span class="kw">c</span>(<span class="st">&quot;South East&quot;</span>, <span class="st">&quot;London&quot;</span>, <span class="st">&quot;North West&quot;</span>, <span class="st">&quot;East of England&quot;</span>, <span class="st">&quot;West Midlands&quot;</span>, <span class="st">&quot;South West&quot;</span>,</a>
+<a class="sourceLine" id="cb52-3" title="3">           <span class="st">&quot;Yorkshire and the Humber&quot;</span>, <span class="st">&quot;East Midlands&quot;</span>, <span class="st">&quot;North East&quot;</span>),</a>
+<a class="sourceLine" id="cb52-4" title="4">  <span class="dt">population =</span> <span class="kw">c</span>(<span class="fl">8.6</span>, <span class="fl">8.2</span>, <span class="fl">7.1</span>, <span class="fl">5.9</span>, <span class="fl">5.6</span>, <span class="fl">5.3</span>, <span class="fl">5.3</span>, <span class="fl">4.5</span>, <span class="fl">2.6</span>),</a>
+<a class="sourceLine" id="cb52-5" title="5">  <span class="dt">earnings =</span> <span class="kw">c</span>(<span class="fl">28.7</span>, <span class="fl">35.1</span>, <span class="fl">25.2</span>, <span class="fl">26.6</span>, <span class="fl">24.9</span>, <span class="fl">25.6</span>, <span class="dv">25</span>, <span class="dv">25</span>, <span class="dv">25</span>)</a>
+<a class="sourceLine" id="cb52-6" title="6">)</a></code></pre></div>
 
 </div>
 </div>

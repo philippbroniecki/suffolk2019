@@ -653,10 +653,67 @@ Access the second column of the third layer on your own.
 \hypertarget{seminar-1}{%
 \subsection{Seminar}\label{seminar-1}}
 
-\hypertarget{bla-bla-blahhhh}{%
-\subsubsection{bla bla blahhhh}\label{bla-bla-blahhhh}}
+In this section, we will load data in csv, txt, excel and R format. We will learn how to check and set our working directory.
 
-buladfdsfdsaf
+\hypertarget{setting-up}{%
+\subsubsection{Setting up}\label{setting-up}}
+
+We set our working directory. R operates in specific directory (folder) on our computer. We create a folder on where we save our scripts. We name the folder \texttt{suffolk2019}. Let's create the folder on our computers now (in finder on Mac and explorer on Windows).
+
+Now, we set our working directory to the folder, we just created like so:
+
+\includegraphics{./img/setwdir.png}
+
+Create a new R script and save it as day1.R to your \texttt{suffolk2019} directory.
+
+At the beginning of each new script, we want to clear the workspace. The workspace is stored in working memory on our computer. If we do not clear it for a new script, it becomes too full over time. Our computer will slow down and it will become difficult for us to know which objects are stored in working memory.
+
+We check the contents of our workspce like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# check workspace}
+\KeywordTok{ls}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+To remove a specific object, we use the \texttt{rm()} function which stands for remove. Within the round brackets, we put the name of the object we want to remove. We could remove the object \texttt{a} like so:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# delete variable 'a' from workspace}
+\KeywordTok{rm}\NormalTok{(a)}
+\end{Highlighting}
+\end{Shaded}
+
+At the beginning of each script, we should always clear the entire workspace. We can do so in the following way:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# delete everything from workspace}
+\KeywordTok{rm}\NormalTok{( }\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{() )}
+\end{Highlighting}
+\end{Shaded}
+
+You can also clear text from the console window. To do so press Crtl+l on Winowds or Command+l on Mac.
+
+\hypertarget{setting-up-1}{%
+\subsubsection{setting up}\label{setting-up-1}}
+
+Data comes in different file formats such as \texttt{.txt}, \texttt{.csv}, \texttt{.xlsx}, \texttt{.RData}, \texttt{.dta} and many more. To know the file type of a file right click on it and view preferences (in Windows explorer or Mac finder).
+
+\hypertarget{importing-a-data-set-in-.csv-format}{%
+\subsubsection{\texorpdfstring{Importing a data set in \texttt{.csv} format}{Importing a data set in .csv format}}\label{importing-a-data-set-in-.csv-format}}
+
+One of the most common file types is \texttt{.csv} which means comma seperated values. Columns are seperated by commas and rows by line breaks.
+
+The dataset's name is ``non\_western\_immigrants.csv''. To load it, we use the \texttt{read.csv()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dat1 <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"non_western_immigrants.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
 \hypertarget{r-syntax-data-structures-and-types-1}{%
 \section{R-syntax, data structures and types}\label{r-syntax-data-structures-and-types-1}}

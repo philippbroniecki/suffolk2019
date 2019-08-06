@@ -373,6 +373,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Categorical variables such as “RSex” are usually coded 0/1 and the variable name usually refers to the category that is 1. “RSex” is a bad variable name because it is not clear whehter the values 1 and 2 refer to males or females.</p>
 <p>We will create a new variable called “female” that is equal to 1 if the respondent is female and 0 otherwise. We do so using the <code>ifelse()</code> function. The function first evaluates a logical condition and subsequently carries out one operation if the statement is true (yes) and another if the statement is false (no).</p>
 <div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">dat1<span class="op">$</span>female &lt;-<span class="st"> </span><span class="kw">ifelse</span>( dat1<span class="op">$</span>RSex <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span> )</a></code></pre></div>
+<p>Let’s check whetehr we correctly converted the variable using the <code>table()</code> function which produces a frequency table.</p>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1"><span class="kw">table</span>(dat1<span class="op">$</span>RSex)</a></code></pre></div>
+<pre><code>
+  1   2 
+478 571 </code></pre>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="kw">table</span>(dat1<span class="op">$</span>female)</a></code></pre></div>
+<pre><code>
+  0   1 
+478 571 </code></pre>
 
 </div>
 </div>

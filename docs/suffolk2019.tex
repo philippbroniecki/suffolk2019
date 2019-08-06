@@ -1503,5 +1503,31 @@ We will create a new variable called ``female'' that is equal to 1 if the respon
 \end{Highlighting}
 \end{Shaded}
 
+Let's check whetehr we correctly converted the variable using the \texttt{table()} function which produces a frequency table.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{RSex)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+  1   2 
+478 571 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{table}\NormalTok{(dat1}\OperatorTok{$}\NormalTok{female)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+  0   1 
+478 571 
+\end{verbatim}
+
 
 \end{document}

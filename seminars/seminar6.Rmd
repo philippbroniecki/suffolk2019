@@ -100,3 +100,11 @@ We will create a new variable called "female" that is equal to 1 if the responde
 dat1$female <- ifelse( dat1$RSex == 2, yes = 1, no = 0 )
 ```
 
+Let's check whetehr we correctly converted the variable using the `table()` function which produces a frequency table.
+
+```{r}
+table(dat1$RSex)
+table(dat1$female)
+```
+
+

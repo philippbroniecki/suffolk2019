@@ -1850,8 +1850,8 @@ We start rolling the dice, using R's random number generator and the \texttt{run
 \end{Shaded}
 
 \begin{verbatim}
- [1] 5.003771 5.963848 4.416190 1.199711 1.440736 5.113341 1.560475
- [8] 6.931000 5.825024 4.167665
+ [1] 2.521300 3.467514 1.369289 2.423361 4.019759 4.134584 4.994683
+ [8] 6.917358 1.677068 4.005559
 \end{verbatim}
 
 We have indeed drawn 10 numbers but they are not integers as we would like---we want to simulate a die, so the values should be 1, 2, 3, 4, 5 or 6. We will return to this in a moment but for now let's return to the randomness. Let's draw 10 numbers again:
@@ -1867,8 +1867,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 5.003771 5.963848 4.416190 1.199711 1.440736 5.113341 1.560475
- [8] 6.931000 5.825024 4.167665
+ [1] 2.521300 3.467514 1.369289 2.423361 4.019759 4.134584 4.994683
+ [8] 6.917358 1.677068 4.005559
 \end{verbatim}
 
 \begin{Shaded}
@@ -1879,8 +1879,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 6.356251 3.879745 2.395542 6.550580 1.270877 5.240263 3.223825
- [8] 4.902181 3.663969 6.147260
+ [1] 1.037233 1.183132 5.857390 2.648824 1.740200 2.385746 6.568719
+ [8] 6.750616 1.130504 6.938775
 \end{verbatim}
 
 The numbers of the first and second roll differ because we have drawn values at random. To make our results replicate and to ensure that everyone in the seminar works with the same numbers, we set R's random number generator with the \texttt{set.seed()} function. As argument we plug in some arbitrary value (it does not matter which but using a different one will lead to a different quasi-random draw).
@@ -2357,7 +2357,456 @@ The interpretation of the correlation coefficient is that there is a positive re
 \hypertarget{seminar-7}{%
 \subsection{Seminar}\label{seminar-7}}
 
-Will be uploaded tomorrow
+In this section, we will cover regression models. We will first introduce the bivariate linear regression model. We will then move to linear models with multiple independent variables. Next, we discuss counfounders as threats to our inference. Finally, we will introduce the logistic regression model.
+
+First, however, we install a new pacakge called \texttt{texreg} which makes it easy to produce publication quality output from our regression models. We'll discuss this package in more detail as we go along. For now let's install the package with the \texttt{install.packages("texreg")} function and then load it using \texttt{library(texreg)}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{install.packages}\NormalTok{(}\StringTok{"texreg"}\NormalTok{)}
+\KeywordTok{library}\NormalTok{(texreg)}
+\end{Highlighting}
+\end{Shaded}
+
+We will use a dataset collected by the US census bureau that contains several socioeconomic indicators.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{communities <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"communities.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+The dataset includes 38 variables but we're only interested in a handful at the moment.
+
+\begin{tabular}{l|l}
+\hline
+Variable & Description\\
+\hline
+PctUnemployed & proportion of citizens in each community who are unemployed\\
+\hline
+PctNotHSGrad & proportion of citizens in each community who failed to finish high-school\\
+\hline
+population & proportion of adult population living in cities\\
+\hline
+\end{tabular}
+
+\begin{verbatim}
+  PctUnemployed PctNotHSGrad population
+1          0.27         0.18       0.19
+2          0.27         0.24       0.00
+3          0.36         0.43       0.00
+4          0.33         0.25       0.04
+5          0.12         0.30       0.01
+6          0.10         0.12       0.02
+\end{verbatim}
+
+If we summarize these variables with the \texttt{summary()} function, we will see that they are both measured as proportions (they vary between 0 and 1):
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(communities}\OperatorTok{$}\NormalTok{PctUnemployed)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2200  0.3200  0.3635  0.4800  1.0000 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(communities}\OperatorTok{$}\NormalTok{PctNotHSGrad)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2300  0.3600  0.3833  0.5100  1.0000 
+\end{verbatim}
+
+It will be a little easier to interpret the regression output if we convert these to percentages rather than proportions. We can do this with the following lines of code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{communities}\OperatorTok{$}\NormalTok{PctUnemployed <-}\StringTok{ }\NormalTok{communities}\OperatorTok{$}\NormalTok{PctUnemployed }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\NormalTok{communities}\OperatorTok{$}\NormalTok{PctNotHSGrad <-}\StringTok{ }\NormalTok{communities}\OperatorTok{$}\NormalTok{PctNotHSGrad }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\end{Highlighting}
+\end{Shaded}
+
+We can begin by drawing a scatterplot with the percentage of unemployed people on the y-axis and the percentage of adults without high-school education on the x-axis.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ communities}\OperatorTok{$}\NormalTok{PctNotHSGrad,}
+  \DataTypeTok{y =}\NormalTok{ communities}\OperatorTok{$}\NormalTok{PctUnemployed,}
+  \DataTypeTok{xlab =} \StringTok{"Adults without high school education (%)"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Unemployment (%)"}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"LightSkyBlue"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-130-1.pdf}
+
+From looking at the plot, what is the association between the unemployment rate and lack of high-school level education?
+
+In order to answer that question empirically, we will run a linear regression using the \href{http://bit.ly/R_lm}{\texttt{lm()}} function in R. The \href{http://bit.ly/R_lm}{\texttt{lm()}} function needs to know a) the relationship we're trying to model and b) the dataset for our observations. The two arguments we need to provide to the \href{http://bit.ly/R_lm}{\texttt{lm()}} function are described below.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+Argument\strut
+\end{minipage} & \begin{minipage}[b]{0.83\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+\texttt{formula}\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+The \texttt{formula} describes the relationship between the dependent and independent variables, for example \texttt{dependent.variable\ \textasciitilde{}\ independent.variable} In our case, we'd like to model the relationship using the formula: \texttt{PctUnemployed\ \textasciitilde{}\ PctNotHSGrad}\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+\texttt{data}\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+This is simply the name of the dataset that contains the variable of interest. In our case, this is the merged dataset called \texttt{communities}.\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+For more information on how the \texttt{lm()} function works, type help(lm) in R.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model1 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PctUnemployed }\OperatorTok{~}\StringTok{ }\NormalTok{PctNotHSGrad, }\DataTypeTok{data =}\NormalTok{ communities)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{interpreting-regression-output}{%
+\subsubsection{Interpreting Regression Output}\label{interpreting-regression-output}}
+
+The \href{http://bit.ly/R_lm}{\texttt{lm()}} function has modeled the relationship between \texttt{PctUnemployed} and \texttt{PctNotHSGrad} and we've saved it in an object called \texttt{model1}. Let's use the \href{http://bit.ly/R_summary}{\texttt{summary()}} function to see what this linear model looks like.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(model1)}
+\end{Highlighting}
+\end{Shaded}
+
+The output from \href{http://bit.ly/R_summary}{\texttt{summary()}} might seem overwhelming at first so let's break it down one item at a time.
+
+\includegraphics[width=7.29167in,height=\textheight]{img/lm-annotated-1.png}
+
+\begin{longtable}[]{@{}lll@{}}
+\toprule
+\begin{minipage}[b]{0.07\columnwidth}\raggedright
+\#\strut
+\end{minipage} & \begin{minipage}[b]{0.21\columnwidth}\raggedright
+Item\strut
+\end{minipage} & \begin{minipage}[b]{0.63\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{1}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\emph{formula}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+The \emph{formula} describes the relationship between the dependent and independent variables\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{2}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\emph{residuals}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+The differences between the observed values and the predicted values are called \emph{residuals}.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{3}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\emph{coefficients}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+The \emph{coefficients} for all the \emph{independent} variables and the intercept. Using the \emph{coefficients} we can write down the relationship between the \emph{dependent} and the \emph{independent} variables as: \texttt{PctUnemployed} = 7.8952023 + ( 0.7423853 * \texttt{PctNotHSGrad} ) This tells us that for each unit increase in the variable \texttt{PctNotHSGrad}, the \texttt{PctUnemployed} increases by 0.7423853.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{4}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\emph{standard error}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+The \emph{standard error} estimates the standard deviation of the sampling distribution of the coefficients in our model. We can think of the \emph{standard error} as the measure of precision for the estimated coefficients.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{5}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\emph{t-statistic}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+The \emph{t-statistic} is obtained by dividing the \emph{coefficients} by the \emph{standard error}.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{6}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\emph{p-value}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+The \emph{p-value} for each of the coefficients in the model. Recall that according to the null hypotheses, the value of the coefficient of interest is zero. The \emph{p-value} tells us whether can can reject the null hypotheses or not.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.07\columnwidth}\raggedright
+\textbf{7}\strut
+\end{minipage} & \begin{minipage}[t]{0.21\columnwidth}\raggedright
+\(R^2\) and \emph{adj-\(R^2\)}\strut
+\end{minipage} & \begin{minipage}[t]{0.63\columnwidth}\raggedright
+tell us how much of the variance in our model is accounted for by the \emph{independent} variable. The \emph{adjusted \(R^2\)} is always smaller than \emph{\(R^2\)} as it takes into account the number of \emph{independent} variables and degrees of freedom.\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+Now let's add a regression line to the scatter plot using the \href{http://bit.ly/R_abline}{\texttt{abline()}} function.
+
+First we run the same \href{http://bit.ly/R_plot}{\texttt{plot()}} function as before, then we overlay a line with \href{http://bit.ly/R_abline}{\texttt{abline()}}:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ communities}\OperatorTok{$}\NormalTok{PctNotHSGrad,}
+  \DataTypeTok{y =}\NormalTok{ communities}\OperatorTok{$}\NormalTok{PctUnemployed,}
+  \DataTypeTok{xlab =} \StringTok{"Adults without high school education (%)"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Unemployment (%)"}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"LightSkyBlue"}
+\NormalTok{)}
+
+\KeywordTok{abline}\NormalTok{(model1, }\DataTypeTok{lwd =} \DecValTok{3}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-133-1.pdf}
+
+We can see by looking at the regression line that it matches the coefficients we estimated above. For example, when \texttt{PctNotHSGrad} is equal to zero (i.e.~where the line intersects the Y-axis), the predicted value for \texttt{PctUnemployed} seems to be above 0 but below 10. This is good, as the \emph{intercept} coefficient we estimated in the regression was 7.8952023.
+
+Similarly, the coefficient for the variable \texttt{PctNotHSGrad} was estimated to be 0.7423853, which implies that a one point increase in the percentage of citizens with no high-school education is associated with about 0.7423853 of a point increase in the percentage of citizens who are unemployed. The line in the plot seems to reflect this: it is upward sloping, so that higher levels of the no high-school variable are associated with higher levels of unemployment, but the relationship is not quite 1-to-1. That is, for each additional percentage point of citzens without high school education, the percentage of citizens who are unemployed increases by a little less than one point.
+
+While the \href{http://bit.ly/R_summary}{\texttt{summary()}} function provides a slew of information about a fitted regression model, we often need to present our findings in easy to read tables similar to what you see in journal publications. The \texttt{texreg} package we loaded earlier allows us to do just that.
+
+Let's take a look at how to display the output of a regression model on the screen using the \href{http://bit.ly/R_texreg}{\texttt{screenreg()}} function from \texttt{texreg}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{screenreg}\NormalTok{(model1)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+=========================
+              Model 1    
+-------------------------
+(Intercept)      7.90 ***
+                (0.65)   
+PctNotHSGrad     0.74 ***
+                (0.01)   
+-------------------------
+R^2              0.55    
+Adj. R^2         0.55    
+Num. obs.     1994       
+RMSE            13.52    
+=========================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+Here, the output includes some of the most salient details we need for interpretation. We can see the coefficient for the \texttt{PctNotHSGrad} variable, and the estimated coefficient for the intercept. Below these numbers, in brackets, we can see the standard errors. The table also reports the \(R^2\), the adjusted \(R^2\), the number of observations (\(n\)) and the root-mean-squared-error (\(RMSE\)).
+
+One thing to note is that the table does not include either t-statistics or p-values for the estimated coefficents. Instead, the table employs a common device of using stars to denote whether a variable is statistically significant at a given alpha level.
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{***} indicates that the coefficient is significant at the 99.9\% confidence level (alpha = 0.001)
+\item
+  \texttt{**} indicates that the coefficient is significant at the 99\% confidence level (alpha = 0.01)
+\item
+  \texttt{*} indicates that the coefficient is significant at the 95\% confidence level (alpha = 0.05)
+\end{itemize}
+
+Returning to our example, are there other variables that might affect the unemployment rate in our dataset? For example, is the unemployment rate higher in rural areas? To answer this question, we can swap \texttt{PctNotHSGrad} for a different independent variable. Let's use the variable \texttt{population}, which measures the proportion of adults who live in cities (rather than rural areas). Again, we can transform this proportion to a percentage with the following code:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{communities}\OperatorTok{$}\NormalTok{population <-}\StringTok{ }\NormalTok{communities}\OperatorTok{$}\NormalTok{population }\OperatorTok{*}\StringTok{ }\DecValTok{100}
+\end{Highlighting}
+\end{Shaded}
+
+Let's fit a linear model using \texttt{population} as the independent variable:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model2 <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(PctUnemployed }\OperatorTok{~}\StringTok{ }\NormalTok{population, }\DataTypeTok{data =}\NormalTok{ communities)}
+\KeywordTok{summary}\NormalTok{(model2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+lm(formula = PctUnemployed ~ population, data = communities)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-35.252 -14.715  -3.946  11.054  64.980 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 35.02042    0.49206  71.171  < 2e-16 ***
+population   0.23139    0.03532   6.552  7.2e-11 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 20.01 on 1992 degrees of freedom
+Multiple R-squared:  0.0211,    Adjusted R-squared:  0.02061 
+F-statistic: 42.93 on 1 and 1992 DF,  p-value: 7.201e-11
+\end{verbatim}
+
+We can show regression line from the \texttt{model2} just like we did with our first model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ communities}\OperatorTok{$}\NormalTok{population,}
+  \DataTypeTok{y =}\NormalTok{ communities}\OperatorTok{$}\NormalTok{PctUnemployed,}
+  \DataTypeTok{xlab =} \StringTok{"Adults living in cities (%)"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Unemployment (%)"}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"LightSkyBlue"}
+\NormalTok{)}
+
+\KeywordTok{abline}\NormalTok{(model2, }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-137-1.pdf}
+
+So we now have two models! Often, we will want to compare two estimated models side-by-side. We might want to say how the coefficients for the independent variables we included differ in \texttt{model1} and \texttt{model2}, for example. Or we may want to ask: Does \texttt{model2} offer a better fit than \texttt{model1}?
+
+It is often useful to print the salient details from the estimated models side-by-side. We can do this by using the \href{http://bit.ly/R_texreg}{\texttt{screenreg()}} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{screenreg}\NormalTok{(}\KeywordTok{list}\NormalTok{(model1, model2))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+======================================
+              Model 1      Model 2    
+--------------------------------------
+(Intercept)      7.90 ***    35.02 ***
+                (0.65)       (0.49)   
+PctNotHSGrad     0.74 ***             
+                (0.01)                
+population                    0.23 ***
+                             (0.04)   
+--------------------------------------
+R^2              0.55         0.02    
+Adj. R^2         0.55         0.02    
+Num. obs.     1994         1994       
+RMSE            13.52        20.01    
+======================================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+What does this table tell us?
+
+\begin{itemize}
+\tightlist
+\item
+  The first column replicates the results from our first model. We can see that a one point increase in the percentage of citizens without high-school education is associated with an increase of 0.7423853 percentage points of unemployment, on average.
+\item
+  The second column gives us the results from the second model. Here, a one point increase in the percentage of citizens who live in cities is associated with an increase of 0.2313906 percentage points of unemployment, on average
+\item
+  We can also compare the \(R^2\) values from the two models. The \(R^2\) for \texttt{model1} is 0.5529732 and for \texttt{model2} is 0.0210968. This suggests that the model with \texttt{PctNotHSGrad} as the explanatory variable explains about 55.2973193\% of the variation in unemployment. The model with \texttt{population} as the explanatory variable, on the other hand, explains just 2.1096753\% of the variation in unemployment.
+\end{itemize}
+
+Finally, and this is something that might help with your coursework, let's save the same output as a Microsoft Word document using \href{http://bit.ly/R_texreg}{\texttt{htmlreg()}}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{htmlreg}\NormalTok{(}\KeywordTok{list}\NormalTok{(model1, model2), }\DataTypeTok{file =} \StringTok{"regression_model.doc"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+If you're using a Mac, you might want to save the file as \texttt{.html} if the Word document isn't formatted correctly.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{htmlreg}\NormalTok{(}\KeywordTok{list}\NormalTok{(model1, model2), }\DataTypeTok{file =} \StringTok{"regression_model.html"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{fitted-values}{%
+\subsubsection{Fitted values}\label{fitted-values}}
+
+Once we have estimated a regression model, we can use that model to produce fitted values. Fitted values represent our ``best guess'' for the value of our dependent variable for a specific value of our independent variable.
+
+Let's calculate the fitted values manually and then we'll show you how to do it in R. The fitted value formula is:
+
+\[\hat{Y}_{i} = \hat{\beta}_0 + \hat{\beta}_1 * X_i\]
+
+Let's say that, on the basis of \texttt{model1} we would like to know what the unemployment rate is likely to be for a community where the percentage of adults without a high-school education is equal to 10\%. We can substitute in the relevant coefficients from \texttt{model1} and the value for our X variable (\texttt{10} in this case), and we get:
+
+\[\hat{Y}_{i} = 7.9 + 0.74 * 10 = 15.3\]
+
+To calculate fitted values in R, we use the \texttt{predict()} function.
+
+The predict function takes two main arguments.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.11\columnwidth}\raggedright
+Argument\strut
+\end{minipage} & \begin{minipage}[b]{0.83\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+\texttt{object}\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+The \texttt{object} is the model object that we would like to use to produce fitted values. Here, we would like to base the analysis on \texttt{model1} and so specify \texttt{object\ =\ model1} here.\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.11\columnwidth}\raggedright
+\texttt{newdata}\strut
+\end{minipage} & \begin{minipage}[t]{0.83\columnwidth}\raggedright
+This is an optional argument which we use to specify the values of our independent variable(s) that we would like fitted values for. If we leave this argument empty, R will automatically calculate fitted values for all of the observations in the data that we used to estimate the original model. If we include this argument, we need to provide a \texttt{data.frame} which has a variable with the same name as the independent variable in our model. Here, we specify \texttt{newdata\ =\ data.frame(PctNotHSGrad\ =\ 10)}, as we would like the fitted value for a community where 10\% of adults did not complete high-school.\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{predict}\NormalTok{(model1, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{PctNotHSGrad =} \DecValTok{10}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+       1 
+15.31906 
+\end{verbatim}
+
+This is the same as the result we obtained when we calculated the fitted value manually. The good thing about the \texttt{predict()} function, however, is that we will be able to use it for \emph{all} the models we study on this course, and it can be useful for calculating many different fitted values.
+
+\hypertarget{additional-resources}{%
+\subsubsection{Additional Resources}\label{additional-resources}}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{http://altaf.shinyapps.io/linear-regression}{Linear Regression - Interactive App}
+\end{itemize}
 
 \hypertarget{prediction-and-assessing-prediction-accuracy}{%
 \section{Prediction and assessing prediction accuracy}\label{prediction-and-assessing-prediction-accuracy}}

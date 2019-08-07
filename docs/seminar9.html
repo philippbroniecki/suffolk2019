@@ -201,7 +201,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="seminar9.html"><a href="seminar9.html"><i class="fa fa-check"></i><b>9</b> Regression</a><ul>
-<li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a></li>
+<li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="seminar9.html"><a href="seminar9.html#interpreting-regression-output"><i class="fa fa-check"></i><b>9.1.1</b> Interpreting Regression Output</a></li>
+<li class="chapter" data-level="9.1.2" data-path="seminar9.html"><a href="seminar9.html#fitted-values"><i class="fa fa-check"></i><b>9.1.2</b> Fitted values</a></li>
+<li class="chapter" data-level="9.1.3" data-path="seminar9.html"><a href="seminar9.html#additional-resources"><i class="fa fa-check"></i><b>9.1.3</b> Additional Resources</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="seminar10.html"><a href="seminar10.html"><i class="fa fa-check"></i><b>10</b> Prediction and assessing prediction accuracy</a><ul>
 <li class="chapter" data-level="10.1" data-path="seminar10.html"><a href="seminar10.html#seminar-8"><i class="fa fa-check"></i><b>10.1</b> Seminar</a></li>
@@ -227,8 +231,297 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 9</span> Regression</h1>
 <div id="seminar-7" class="section level2">
 <h2><span class="header-section-number">9.1</span> Seminar</h2>
-<p>Will be uploaded tomorrow</p>
+<p>In this section, we will cover regression models. We will first introduce the bivariate linear regression model. We will then move to linear models with multiple independent variables. Next, we discuss counfounders as threats to our inference. Finally, we will introduce the logistic regression model.</p>
+<p>First, however, we install a new pacakge called <code>texreg</code> which makes it easy to produce publication quality output from our regression models. We’ll discuss this package in more detail as we go along. For now let’s install the package with the <code>install.packages("texreg")</code> function and then load it using <code>library(texreg)</code>.</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;texreg&quot;</span>)</a>
+<a class="sourceLine" id="cb186-2" title="2"><span class="kw">library</span>(texreg)</a></code></pre></div>
+<p>We will use a dataset collected by the US census bureau that contains several socioeconomic indicators.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" title="1">communities &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;communities.csv&quot;</span>)</a></code></pre></div>
+<p>The dataset includes 38 variables but we’re only interested in a handful at the moment.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">PctUnemployed</td>
+<td align="left">proportion of citizens in each community who are unemployed</td>
+</tr>
+<tr class="even">
+<td align="left">PctNotHSGrad</td>
+<td align="left">proportion of citizens in each community who failed to finish high-school</td>
+</tr>
+<tr class="odd">
+<td align="left">population</td>
+<td align="left">proportion of adult population living in cities</td>
+</tr>
+</tbody>
+</table>
+<pre><code>  PctUnemployed PctNotHSGrad population
+1          0.27         0.18       0.19
+2          0.27         0.24       0.00
+3          0.36         0.43       0.00
+4          0.33         0.25       0.04
+5          0.12         0.30       0.01
+6          0.10         0.12       0.02</code></pre>
+<p>If we summarize these variables with the <code>summary()</code> function, we will see that they are both measured as proportions (they vary between 0 and 1):</p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb189-1" title="1"><span class="kw">summary</span>(communities<span class="op">$</span>PctUnemployed)</a></code></pre></div>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2200  0.3200  0.3635  0.4800  1.0000 </code></pre>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" title="1"><span class="kw">summary</span>(communities<span class="op">$</span>PctNotHSGrad)</a></code></pre></div>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+ 0.0000  0.2300  0.3600  0.3833  0.5100  1.0000 </code></pre>
+<p>It will be a little easier to interpret the regression output if we convert these to percentages rather than proportions. We can do this with the following lines of code:</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" title="1">communities<span class="op">$</span>PctUnemployed &lt;-<span class="st"> </span>communities<span class="op">$</span>PctUnemployed <span class="op">*</span><span class="st"> </span><span class="dv">100</span></a>
+<a class="sourceLine" id="cb193-2" title="2">communities<span class="op">$</span>PctNotHSGrad &lt;-<span class="st"> </span>communities<span class="op">$</span>PctNotHSGrad <span class="op">*</span><span class="st"> </span><span class="dv">100</span></a></code></pre></div>
+<p>We can begin by drawing a scatterplot with the percentage of unemployed people on the y-axis and the percentage of adults without high-school education on the x-axis.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb194-2" title="2">  <span class="dt">x =</span> communities<span class="op">$</span>PctNotHSGrad,</a>
+<a class="sourceLine" id="cb194-3" title="3">  <span class="dt">y =</span> communities<span class="op">$</span>PctUnemployed,</a>
+<a class="sourceLine" id="cb194-4" title="4">  <span class="dt">xlab =</span> <span class="st">&quot;Adults without high school education (%)&quot;</span>,</a>
+<a class="sourceLine" id="cb194-5" title="5">  <span class="dt">ylab =</span> <span class="st">&quot;Unemployment (%)&quot;</span>,</a>
+<a class="sourceLine" id="cb194-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb194-7" title="7">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb194-8" title="8">  <span class="dt">col =</span> <span class="st">&quot;LightSkyBlue&quot;</span></a>
+<a class="sourceLine" id="cb194-9" title="9">)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-130-1.png" width="672" /></p>
+<p>From looking at the plot, what is the association between the unemployment rate and lack of high-school level education?</p>
+<p>In order to answer that question empirically, we will run a linear regression using the <a href="http://bit.ly/R_lm"><code>lm()</code></a> function in R. The <a href="http://bit.ly/R_lm"><code>lm()</code></a> function needs to know a) the relationship we’re trying to model and b) the dataset for our observations. The two arguments we need to provide to the <a href="http://bit.ly/R_lm"><code>lm()</code></a> function are described below.</p>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>formula</code></td>
+<td>The <code>formula</code> describes the relationship between the dependent and independent variables, for example <code>dependent.variable ~ independent.variable</code> <br> In our case, we’d like to model the relationship using the formula: <code>PctUnemployed ~ PctNotHSGrad</code></td>
+</tr>
+<tr class="even">
+<td><code>data</code></td>
+<td>This is simply the name of the dataset that contains the variable of interest. In our case, this is the merged dataset called <code>communities</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>For more information on how the <code>lm()</code> function works, type help(lm) in R.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" title="1">model1 &lt;-<span class="st"> </span><span class="kw">lm</span>(PctUnemployed <span class="op">~</span><span class="st"> </span>PctNotHSGrad, <span class="dt">data =</span> communities)</a></code></pre></div>
+<div id="interpreting-regression-output" class="section level3">
+<h3><span class="header-section-number">9.1.1</span> Interpreting Regression Output</h3>
+<p>The <a href="http://bit.ly/R_lm"><code>lm()</code></a> function has modeled the relationship between <code>PctUnemployed</code> and <code>PctNotHSGrad</code> and we’ve saved it in an object called <code>model1</code>. Let’s use the <a href="http://bit.ly/R_summary"><code>summary()</code></a> function to see what this linear model looks like.</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" title="1"><span class="kw">summary</span>(model1)</a></code></pre></div>
+<p>The output from <a href="http://bit.ly/R_summary"><code>summary()</code></a> might seem overwhelming at first so let’s break it down one item at a time.</p>
+<p><img src="img/lm-annotated-1.png" width="700" /></p>
+<table>
+<colgroup>
+<col width="7%" />
+<col width="23%" />
+<col width="69%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>1</strong></td>
+<td><em>formula</em></td>
+<td>The <em>formula</em> describes the relationship between the dependent and independent variables</td>
+</tr>
+<tr class="even">
+<td><strong>2</strong></td>
+<td><em>residuals</em></td>
+<td>The differences between the observed values and the predicted values are called <em>residuals</em>.</td>
+</tr>
+<tr class="odd">
+<td><strong>3</strong></td>
+<td><em>coefficients</em></td>
+<td>The <em>coefficients</em> for all the <em>independent</em> variables and the intercept. Using the <em>coefficients</em> we can write down the relationship between the <em>dependent</em> and the <em>independent</em> variables as: <br><br><code>PctUnemployed</code> = 7.8952023 + ( 0.7423853 * <code>PctNotHSGrad</code> ) <br><br>This tells us that for each unit increase in the variable <code>PctNotHSGrad</code>, the <code>PctUnemployed</code> increases by 0.7423853.</td>
+</tr>
+<tr class="even">
+<td><strong>4</strong></td>
+<td><em>standard error</em></td>
+<td>The <em>standard error</em> estimates the standard deviation of the sampling distribution of the coefficients in our model. We can think of the <em>standard error</em> as the measure of precision for the estimated coefficients.</td>
+</tr>
+<tr class="odd">
+<td><strong>5</strong></td>
+<td><em>t-statistic</em></td>
+<td>The <em>t-statistic</em> is obtained by dividing the <em>coefficients</em> by the <em>standard error</em>.</td>
+</tr>
+<tr class="even">
+<td><strong>6</strong></td>
+<td><em>p-value</em></td>
+<td>The <em>p-value</em> for each of the coefficients in the model. Recall that according to the null hypotheses, the value of the coefficient of interest is zero. The <em>p-value</em> tells us whether can can reject the null hypotheses or not.</td>
+</tr>
+<tr class="odd">
+<td><strong>7</strong></td>
+<td><span class="math inline">\(R^2\)</span> and <em>adj-<span class="math inline">\(R^2\)</span></em></td>
+<td>tell us how much of the variance in our model is accounted for by the <em>independent</em> variable. The <em>adjusted <span class="math inline">\(R^2\)</span></em> is always smaller than <em><span class="math inline">\(R^2\)</span></em> as it takes into account the number of <em>independent</em> variables and degrees of freedom.</td>
+</tr>
+</tbody>
+</table>
+<p>Now let’s add a regression line to the scatter plot using the <a href="http://bit.ly/R_abline"><code>abline()</code></a> function.</p>
+<p>First we run the same <a href="http://bit.ly/R_plot"><code>plot()</code></a> function as before, then we overlay a line with <a href="http://bit.ly/R_abline"><code>abline()</code></a>:</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb197-2" title="2">  <span class="dt">x =</span> communities<span class="op">$</span>PctNotHSGrad,</a>
+<a class="sourceLine" id="cb197-3" title="3">  <span class="dt">y =</span> communities<span class="op">$</span>PctUnemployed,</a>
+<a class="sourceLine" id="cb197-4" title="4">  <span class="dt">xlab =</span> <span class="st">&quot;Adults without high school education (%)&quot;</span>,</a>
+<a class="sourceLine" id="cb197-5" title="5">  <span class="dt">ylab =</span> <span class="st">&quot;Unemployment (%)&quot;</span>,</a>
+<a class="sourceLine" id="cb197-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb197-7" title="7">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb197-8" title="8">  <span class="dt">col =</span> <span class="st">&quot;LightSkyBlue&quot;</span></a>
+<a class="sourceLine" id="cb197-9" title="9">)</a>
+<a class="sourceLine" id="cb197-10" title="10"></a>
+<a class="sourceLine" id="cb197-11" title="11"><span class="kw">abline</span>(model1, <span class="dt">lwd =</span> <span class="dv">3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-133-1.png" width="672" /></p>
+<p>We can see by looking at the regression line that it matches the coefficients we estimated above. For example, when <code>PctNotHSGrad</code> is equal to zero (i.e. where the line intersects the Y-axis), the predicted value for <code>PctUnemployed</code> seems to be above 0 but below 10. This is good, as the <em>intercept</em> coefficient we estimated in the regression was 7.8952023.</p>
+<p>Similarly, the coefficient for the variable <code>PctNotHSGrad</code> was estimated to be 0.7423853, which implies that a one point increase in the percentage of citizens with no high-school education is associated with about 0.7423853 of a point increase in the percentage of citizens who are unemployed. The line in the plot seems to reflect this: it is upward sloping, so that higher levels of the no high-school variable are associated with higher levels of unemployment, but the relationship is not quite 1-to-1. That is, for each additional percentage point of citzens without high school education, the percentage of citizens who are unemployed increases by a little less than one point.</p>
+<p>While the <a href="http://bit.ly/R_summary"><code>summary()</code></a> function provides a slew of information about a fitted regression model, we often need to present our findings in easy to read tables similar to what you see in journal publications. The <code>texreg</code> package we loaded earlier allows us to do just that.</p>
+<p>Let’s take a look at how to display the output of a regression model on the screen using the <a href="http://bit.ly/R_texreg"><code>screenreg()</code></a> function from <code>texreg</code>.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1"><span class="kw">screenreg</span>(model1)</a></code></pre></div>
+<pre><code>
+=========================
+              Model 1    
+-------------------------
+(Intercept)      7.90 ***
+                (0.65)   
+PctNotHSGrad     0.74 ***
+                (0.01)   
+-------------------------
+R^2              0.55    
+Adj. R^2         0.55    
+Num. obs.     1994       
+RMSE            13.52    
+=========================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>Here, the output includes some of the most salient details we need for interpretation. We can see the coefficient for the <code>PctNotHSGrad</code> variable, and the estimated coefficient for the intercept. Below these numbers, in brackets, we can see the standard errors. The table also reports the <span class="math inline">\(R^2\)</span>, the adjusted <span class="math inline">\(R^2\)</span>, the number of observations (<span class="math inline">\(n\)</span>) and the root-mean-squared-error (<span class="math inline">\(RMSE\)</span>).</p>
+<p>One thing to note is that the table does not include either t-statistics or p-values for the estimated coefficents. Instead, the table employs a common device of using stars to denote whether a variable is statistically significant at a given alpha level.</p>
+<ul>
+<li><code>***</code> indicates that the coefficient is significant at the 99.9% confidence level (alpha = 0.001)</li>
+<li><code>**</code> indicates that the coefficient is significant at the 99% confidence level (alpha = 0.01)</li>
+<li><code>*</code> indicates that the coefficient is significant at the 95% confidence level (alpha = 0.05)</li>
+</ul>
+<p>Returning to our example, are there other variables that might affect the unemployment rate in our dataset? For example, is the unemployment rate higher in rural areas? To answer this question, we can swap <code>PctNotHSGrad</code> for a different independent variable. Let’s use the variable <code>population</code>, which measures the proportion of adults who live in cities (rather than rural areas). Again, we can transform this proportion to a percentage with the following code:</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" title="1">communities<span class="op">$</span>population &lt;-<span class="st"> </span>communities<span class="op">$</span>population <span class="op">*</span><span class="st"> </span><span class="dv">100</span></a></code></pre></div>
+<p>Let’s fit a linear model using <code>population</code> as the independent variable:</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1">model2 &lt;-<span class="st"> </span><span class="kw">lm</span>(PctUnemployed <span class="op">~</span><span class="st"> </span>population, <span class="dt">data =</span> communities)</a>
+<a class="sourceLine" id="cb201-2" title="2"><span class="kw">summary</span>(model2)</a></code></pre></div>
+<pre><code>
+Call:
+lm(formula = PctUnemployed ~ population, data = communities)
 
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-35.252 -14.715  -3.946  11.054  64.980 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) 35.02042    0.49206  71.171  &lt; 2e-16 ***
+population   0.23139    0.03532   6.552  7.2e-11 ***
+---
+Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+
+Residual standard error: 20.01 on 1992 degrees of freedom
+Multiple R-squared:  0.0211,    Adjusted R-squared:  0.02061 
+F-statistic: 42.93 on 1 and 1992 DF,  p-value: 7.201e-11</code></pre>
+<p>We can show regression line from the <code>model2</code> just like we did with our first model.</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb203-2" title="2">  <span class="dt">x =</span> communities<span class="op">$</span>population,</a>
+<a class="sourceLine" id="cb203-3" title="3">  <span class="dt">y =</span> communities<span class="op">$</span>PctUnemployed,</a>
+<a class="sourceLine" id="cb203-4" title="4">  <span class="dt">xlab =</span> <span class="st">&quot;Adults living in cities (%)&quot;</span>,</a>
+<a class="sourceLine" id="cb203-5" title="5">  <span class="dt">ylab =</span> <span class="st">&quot;Unemployment (%)&quot;</span>,</a>
+<a class="sourceLine" id="cb203-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb203-7" title="7">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb203-8" title="8">  <span class="dt">col =</span> <span class="st">&quot;LightSkyBlue&quot;</span></a>
+<a class="sourceLine" id="cb203-9" title="9">)</a>
+<a class="sourceLine" id="cb203-10" title="10"></a>
+<a class="sourceLine" id="cb203-11" title="11"><span class="kw">abline</span>(model2, <span class="dt">lwd =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-137-1.png" width="672" /></p>
+<p>So we now have two models! Often, we will want to compare two estimated models side-by-side. We might want to say how the coefficients for the independent variables we included differ in <code>model1</code> and <code>model2</code>, for example. Or we may want to ask: Does <code>model2</code> offer a better fit than <code>model1</code>?</p>
+<p>It is often useful to print the salient details from the estimated models side-by-side. We can do this by using the <a href="http://bit.ly/R_texreg"><code>screenreg()</code></a> function.</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" title="1"><span class="kw">screenreg</span>(<span class="kw">list</span>(model1, model2))</a></code></pre></div>
+<pre><code>
+======================================
+              Model 1      Model 2    
+--------------------------------------
+(Intercept)      7.90 ***    35.02 ***
+                (0.65)       (0.49)   
+PctNotHSGrad     0.74 ***             
+                (0.01)                
+population                    0.23 ***
+                             (0.04)   
+--------------------------------------
+R^2              0.55         0.02    
+Adj. R^2         0.55         0.02    
+Num. obs.     1994         1994       
+RMSE            13.52        20.01    
+======================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>What does this table tell us?</p>
+<ul>
+<li>The first column replicates the results from our first model. We can see that a one point increase in the percentage of citizens without high-school education is associated with an increase of 0.7423853 percentage points of unemployment, on average.</li>
+<li>The second column gives us the results from the second model. Here, a one point increase in the percentage of citizens who live in cities is associated with an increase of 0.2313906 percentage points of unemployment, on average</li>
+<li>We can also compare the <span class="math inline">\(R^2\)</span> values from the two models. The <span class="math inline">\(R^2\)</span> for <code>model1</code> is 0.5529732 and for <code>model2</code> is 0.0210968. This suggests that the model with <code>PctNotHSGrad</code> as the explanatory variable explains about 55.2973193% of the variation in unemployment. The model with <code>population</code> as the explanatory variable, on the other hand, explains just 2.1096753% of the variation in unemployment.</li>
+</ul>
+<p>Finally, and this is something that might help with your coursework, let’s save the same output as a Microsoft Word document using <a href="http://bit.ly/R_texreg"><code>htmlreg()</code></a>.</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" title="1"><span class="kw">htmlreg</span>(<span class="kw">list</span>(model1, model2), <span class="dt">file =</span> <span class="st">&quot;regression_model.doc&quot;</span>)</a></code></pre></div>
+<p>If you’re using a Mac, you might want to save the file as <code>.html</code> if the Word document isn’t formatted correctly.</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1"><span class="kw">htmlreg</span>(<span class="kw">list</span>(model1, model2), <span class="dt">file =</span> <span class="st">&quot;regression_model.html&quot;</span>)</a></code></pre></div>
+</div>
+<div id="fitted-values" class="section level3">
+<h3><span class="header-section-number">9.1.2</span> Fitted values</h3>
+<p>Once we have estimated a regression model, we can use that model to produce fitted values. Fitted values represent our “best guess” for the value of our dependent variable for a specific value of our independent variable.</p>
+<p>Let’s calculate the fitted values manually and then we’ll show you how to do it in R. The fitted value formula is:</p>
+<p><span class="math display">\[\hat{Y}_{i} = \hat{\beta}_0 + \hat{\beta}_1 * X_i\]</span></p>
+<p>Let’s say that, on the basis of <code>model1</code> we would like to know what the unemployment rate is likely to be for a community where the percentage of adults without a high-school education is equal to 10%. We can substitute in the relevant coefficients from <code>model1</code> and the value for our X variable (<code>10</code> in this case), and we get:</p>
+<p><span class="math display">\[\hat{Y}_{i} = 7.9 + 0.74 * 10 = 15.3\]</span></p>
+<p>To calculate fitted values in R, we use the <code>predict()</code> function.</p>
+<p>The predict function takes two main arguments.</p>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>object</code></td>
+<td>The <code>object</code> is the model object that we would like to use to produce fitted values. Here, we would like to base the analysis on <code>model1</code> and so specify <code>object = model1</code> here.</td>
+</tr>
+<tr class="even">
+<td><code>newdata</code></td>
+<td>This is an optional argument which we use to specify the values of our independent variable(s) that we would like fitted values for. If we leave this argument empty, R will automatically calculate fitted values for all of the observations in the data that we used to estimate the original model. If we include this argument, we need to provide a <code>data.frame</code> which has a variable with the same name as the independent variable in our model. Here, we specify <code>newdata = data.frame(PctNotHSGrad = 10)</code>, as we would like the fitted value for a community where 10% of adults did not complete high-school.</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1"><span class="kw">predict</span>(model1, <span class="dt">newdata =</span> <span class="kw">data.frame</span>(<span class="dt">PctNotHSGrad =</span> <span class="dv">10</span>))</a></code></pre></div>
+<pre><code>       1 
+15.31906 </code></pre>
+<p>This is the same as the result we obtained when we calculated the fitted value manually. The good thing about the <code>predict()</code> function, however, is that we will be able to use it for <em>all</em> the models we study on this course, and it can be useful for calculating many different fitted values.</p>
+</div>
+<div id="additional-resources" class="section level3">
+<h3><span class="header-section-number">9.1.3</span> Additional Resources</h3>
+<ul>
+<li><a href="http://altaf.shinyapps.io/linear-regression">Linear Regression - Interactive App</a></li>
+</ul>
+
+</div>
 </div>
 </div>
             </section>

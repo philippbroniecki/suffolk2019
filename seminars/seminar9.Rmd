@@ -6,4 +6,229 @@ par(bg = '#fdf6e3')
 
 ## Seminar
 
-Will be uploaded tomorrow
+In this section, we will cover regression models. We will first introduce the bivariate linear regression model. We will then move to linear models with multiple independent variables. Next, we discuss counfounders as threats to our inference. Finally, we will introduce the logistic regression model.
+
+First, however, we install a new pacakge called `texreg` which makes it easy to produce publication quality output from our regression models. We’ll discuss this package in more detail as we go along. For now let’s install the package with the `install.packages("texreg")` function and then load it using `library(texreg)`.
+
+```{r, include = FALSE}
+library(texreg)
+```
+
+```{r, eval = FALSE}
+install.packages("texreg")
+library(texreg)
+```
+
+We will use a dataset collected by the US census bureau that contains several socioeconomic indicators.
+
+```{r}
+communities <- read.csv("communities.csv")
+```
+
+The dataset includes `r ncol(communities)` variables but we're only interested in a handful at the moment.
+
+```{r echo = FALSE}
+codebook <- tibble::tribble(
+  ~Variable,       ~Description,
+  "PctUnemployed", "proportion of citizens in each community who are unemployed",
+  "PctNotHSGrad",  "proportion of citizens in each community who failed to finish high-school",
+  "population",    "proportion of adult population living in cities"
+)
+knitr::kable(codebook)
+```
+
+
+```{r echo = FALSE}
+head(dplyr::select(communities, PctUnemployed, PctNotHSGrad, population))
+```
+
+
+If we summarize these variables with the `summary()` function, we will see that they are both measured as proportions (they vary between 0 and 1):
+
+```{r}
+summary(communities$PctUnemployed)
+summary(communities$PctNotHSGrad)
+```
+
+It will be a little easier to interpret the regression output if we convert these to percentages rather than proportions. We can do this with the following lines of code:
+
+```{r}
+communities$PctUnemployed <- communities$PctUnemployed * 100
+communities$PctNotHSGrad <- communities$PctNotHSGrad * 100
+```
+
+We can begin by drawing a scatterplot with the percentage of unemployed people on the y-axis and the percentage of adults without high-school education on the x-axis. 
+
+```{r}
+plot(
+  x = communities$PctNotHSGrad,
+  y = communities$PctUnemployed,
+  xlab = "Adults without high school education (%)",
+  ylab = "Unemployment (%)",
+  frame.plot = FALSE,
+  pch = 20,
+  col = "LightSkyBlue"
+)
+```
+
+From looking at the plot, what is the association between the unemployment rate and lack of high-school level education?
+
+In order to answer that question empirically, we will run a linear regression using the [`lm()`](http://bit.ly/R_lm) function in R. The [`lm()`](http://bit.ly/R_lm) function needs to know a) the relationship we're trying to model and b) the dataset for our observations. The two arguments we need to provide to the [`lm()`](http://bit.ly/R_lm) function are described below.
+
+|Argument|Description|
+|--------|-----------------------------------------------------------|
+|`formula`|The `formula` describes the relationship between the dependent and independent variables, for example `dependent.variable ~ independent.variable` <br> In our case, we'd like to model the relationship using the formula: `PctUnemployed ~ PctNotHSGrad` |
+|`data`|This is simply the name of the dataset that contains the variable of interest. In our case, this is the merged dataset called `communities`.|
+
+For more information on how the `lm()` function works, type help(lm) in R.
+
+```{r}
+model1 <- lm(PctUnemployed ~ PctNotHSGrad, data = communities)
+```
+
+### Interpreting Regression Output
+
+The [`lm()`](http://bit.ly/R_lm) function has modeled the relationship between `PctUnemployed` and `PctNotHSGrad` and we've saved it in an object called `model1`. Let's use the [`summary()`](http://bit.ly/R_summary) function to see what this linear model looks like.
+
+```{r eval = FALSE}
+summary(model1)
+```
+
+The output from [`summary()`](http://bit.ly/R_summary) might seem overwhelming at first so let's break it down one item at a time.
+
+![](img/lm-annotated-1.png){width=700px}
+
+|#    |    Item        | Description|
+|-----|----------------|------------------------------------------------|
+|**1**|*formula*       | The *formula* describes the relationship between the dependent and independent variables|
+|**2**|*residuals*     | The differences between the observed values and the predicted values are called *residuals*.|
+|**3**|*coefficients*  | The *coefficients* for all the *independent* variables and the intercept. Using the *coefficients* we can write down the relationship between the *dependent* and the *independent* variables as: <br><br>`PctUnemployed` = `r coef(model1)[1]` + ( `r coef(model1)[2]` * `PctNotHSGrad` ) <br><br>This tells us that for each unit increase in the variable `PctNotHSGrad`, the `PctUnemployed` increases by `r coef(model1)[2]`.|
+|**4**|*standard error*| The *standard error* estimates the standard deviation of the sampling distribution of the coefficients in our model. We can think of the *standard error* as the measure of precision for the estimated coefficients.|
+|**5**|*t-statistic*   | The *t-statistic* is obtained by dividing the *coefficients* by the *standard error*.|
+|**6**|*p-value*       | The *p-value* for each of the coefficients in the model. Recall that according to the null hypotheses, the value of the coefficient of interest is zero. The *p-value* tells us whether can can reject the null hypotheses or not.|
+|**7**|$R^2$ and *adj-$R^2$*| tell us how much of the variance in our model is accounted for by the *independent* variable. The *adjusted $R^2$* is always smaller than *$R^2$* as it takes into account the number of *independent* variables and degrees of freedom.|
+
+Now let's add a regression line to the scatter plot using the [`abline()`](http://bit.ly/R_abline) function.
+
+First we run the same [`plot()`](http://bit.ly/R_plot) function as before, then we overlay a line with [`abline()`](http://bit.ly/R_abline):
+
+```{r}
+plot(
+  x = communities$PctNotHSGrad,
+  y = communities$PctUnemployed,
+  xlab = "Adults without high school education (%)",
+  ylab = "Unemployment (%)",
+  frame.plot = FALSE,
+  pch = 20,
+  col = "LightSkyBlue"
+)
+
+abline(model1, lwd = 3, col = "red")
+```
+
+We can see by looking at the regression line that it matches the coefficients we estimated above. For example, when `PctNotHSGrad` is equal to zero (i.e. where the line intersects the Y-axis), the predicted value for `PctUnemployed` seems to be above 0 but below 10. This is good, as the *intercept* coefficient we estimated in the regression was `r coef(model1)[['(Intercept)']]`.
+
+Similarly, the coefficient for the variable `PctNotHSGrad` was estimated to be `r coef(model1)[['PctNotHSGrad']]`, which implies that a one point increase in the percentage of citizens with no high-school education is associated with about `r coef(model1)[['PctNotHSGrad']]` of a point increase in the percentage of citizens who are unemployed. The line in the plot seems to reflect this: it is upward sloping, so that higher levels of the no high-school variable are associated with higher levels of unemployment, but the relationship is not quite 1-to-1. That is, for each additional percentage point of citzens without high school education, the percentage of citizens who are unemployed increases by a little less than one point.
+
+While the [`summary()`](http://bit.ly/R_summary) function provides a slew of information about a fitted regression model, we often need to present our findings in easy to read tables similar to what you see in journal publications. The `texreg` package we loaded earlier allows us to do just that. 
+
+Let's take a look at how to display the output of a regression model on the screen using the [`screenreg()`](http://bit.ly/R_texreg) function from `texreg`. 
+
+```{r}
+screenreg(model1)
+```
+
+Here, the output includes some of the most salient details we need for interpretation. We can see the coefficient for the `PctNotHSGrad` variable, and the estimated coefficient for the intercept. Below these numbers, in brackets, we can see the standard errors. The table also reports the $R^2$, the adjusted $R^2$, the number of observations ($n$) and the root-mean-squared-error ($RMSE$). 
+
+One thing to note is that the table does not include either t-statistics or p-values for the estimated coefficents. Instead, the table employs a common device of using stars to denote whether a variable is statistically significant at a given alpha level. 
+
+  - `***` indicates that the coefficient is significant at the 99.9% confidence level (alpha = 0.001)
+  - `**` indicates that the coefficient is significant at the 99% confidence level (alpha = 0.01)
+  - `*` indicates that the coefficient is significant at the 95% confidence level (alpha = 0.05)
+  
+  Returning to our example, are there other variables that might affect the unemployment rate in our dataset? For example, is the unemployment rate higher in rural areas? To answer this question, we can swap `PctNotHSGrad` for a different independent variable. Let's use the variable `population`, which measures the proportion of adults who live in cities (rather than rural areas). Again, we can transform this proportion to a percentage with the following code:
+
+```{r}
+communities$population <- communities$population * 100
+```
+
+Let's fit a linear model using `population` as the independent variable:
+
+```{r}
+model2 <- lm(PctUnemployed ~ population, data = communities)
+summary(model2)
+```
+
+We can show regression line from the `model2` just like we did with our first model.
+
+```{r}
+plot(
+  x = communities$population,
+  y = communities$PctUnemployed,
+  xlab = "Adults living in cities (%)",
+  ylab = "Unemployment (%)",
+  frame.plot = FALSE,
+  pch = 20,
+  col = "LightSkyBlue"
+)
+
+abline(model2, lwd = 2, col = "red")
+```
+
+So we now have two models! Often, we will want to compare two estimated models side-by-side. We might want to say how the coefficients for the independent variables we included differ in `model1` and `model2`, for example. Or we may want to ask: Does `model2` offer a better fit than `model1`?
+
+It is often useful to print the salient details from the estimated models side-by-side. We can do this by using the [`screenreg()`](http://bit.ly/R_texreg) function. 
+
+```{r}
+screenreg(list(model1, model2))
+```
+
+What does this table tell us?
+
+  - The first column replicates the results from our first model. We can see that a one point increase in the percentage of citizens without high-school education is associated with an increase of `r coef(model1)[['PctNotHSGrad']]` percentage points of unemployment, on average.
+  - The second column gives us the results from the second model. Here, a one point increase in the percentage of citizens who live in cities is associated with an increase of `r coef(model2)[['population']]` percentage points of unemployment, on average
+  - We can also compare the $R^2$ values from the two models. The $R^2$ for `model1` is `r summary(model1)$r.squared` and for `model2` is `r summary(model2)$r.squared`. This suggests that the model with `PctNotHSGrad` as the explanatory variable explains about `r summary(model1)$r.squared*100`% of the variation in unemployment. The model with `population` as the explanatory variable, on the other hand, explains just `r summary(model2)$r.squared*100`% of the variation in unemployment.
+
+Finally, and this is something that might help with your coursework, let's save the same output as a Microsoft Word document using [`htmlreg()`](http://bit.ly/R_texreg).
+
+```{r message = FALSE}
+htmlreg(list(model1, model2), file = "regression_model.doc")
+```
+
+If you're using a Mac, you might want to save the file as `.html` if the Word document isn't formatted correctly.
+
+```{r message = FALSE}
+htmlreg(list(model1, model2), file = "regression_model.html")
+```
+
+### Fitted values
+
+Once we have estimated a regression model, we can use that model to produce fitted values. Fitted values represent our "best guess" for the value of our dependent variable for a specific value of our independent variable.
+
+Let's calculate the fitted values manually and then we'll show you how to do it in R. The fitted value formula is:
+
+$$\hat{Y}_{i} = \hat{\beta}_0 + \hat{\beta}_1 * X_i$$
+
+Let's say that, on the basis of `model1` we would like to know what the unemployment rate is likely to be for a community where the percentage of adults without a high-school education is equal to 10%. We can substitute in the relevant coefficients from `model1` and the value for our X variable (`10` in this case), and we get:
+
+$$\hat{Y}_{i} = 7.9 + 0.74 * 10 = 15.3$$
+
+To calculate fitted values in R, we use the `predict()` function. 
+
+The predict function takes two main arguments.
+
+|Argument|Description|
+|--------|-----------------------------------------------------------|
+|`object`|The `object` is the model object that we would like to use to produce fitted values. Here, we would like to base the analysis on `model1` and so specify `object = model1` here. |
+|`newdata`|This is an optional argument which we use to specify the values of our independent variable(s) that we would like fitted values for. If we leave this argument empty, R will automatically calculate fitted values for all of the observations in the data that we used to estimate the original model. If we include this argument, we need to provide a `data.frame` which has a variable with the same name as the independent variable in our model. Here, we specify `newdata = data.frame(PctNotHSGrad = 10)`, as we would like the fitted value for a community where 10% of adults did not complete high-school.|
+
+```{r}
+predict(model1, newdata = data.frame(PctNotHSGrad = 10))
+```
+
+This is the same as the result we obtained when we calculated the fitted value manually. The good thing about the `predict()` function, however, is that we will be able to use it for *all* the models we study on this course, and it can be useful for calculating many different fitted values.
+
+### Additional Resources
+
+- [Linear Regression - Interactive App](http://altaf.shinyapps.io/linear-regression)
+

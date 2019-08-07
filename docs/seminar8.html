@@ -201,7 +201,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="seminar9.html"><a href="seminar9.html"><i class="fa fa-check"></i><b>9</b> Regression</a><ul>
-<li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a></li>
+<li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="seminar9.html"><a href="seminar9.html#interpreting-regression-output"><i class="fa fa-check"></i><b>9.1.1</b> Interpreting Regression Output</a></li>
+<li class="chapter" data-level="9.1.2" data-path="seminar9.html"><a href="seminar9.html#fitted-values"><i class="fa fa-check"></i><b>9.1.2</b> Fitted values</a></li>
+<li class="chapter" data-level="9.1.3" data-path="seminar9.html"><a href="seminar9.html#additional-resources"><i class="fa fa-check"></i><b>9.1.3</b> Additional Resources</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="seminar10.html"><a href="seminar10.html"><i class="fa fa-check"></i><b>10</b> Prediction and assessing prediction accuracy</a><ul>
 <li class="chapter" data-level="10.1" data-path="seminar10.html"><a href="seminar10.html#seminar-8"><i class="fa fa-check"></i><b>10.1</b> Seminar</a></li>
@@ -236,20 +240,20 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1"><span class="co"># random draw of 10 values from a uniform distribution</span></a>
 <a class="sourceLine" id="cb139-2" title="2">dice &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
 <a class="sourceLine" id="cb139-3" title="3">dice</a></code></pre></div>
-<pre><code> [1] 6.272162 4.109319 4.076152 4.739230 3.356122 2.573666 1.190409
- [8] 3.852794 6.091411 5.864314</code></pre>
+<pre><code> [1] 6.642749 1.826857 6.321467 2.019451 5.483744 2.252608 6.144267
+ [8] 5.927726 5.535877 6.885202</code></pre>
 <p>We have indeed drawn 10 numbers but they are not integers as we would like—we want to simulate a die, so the values should be 1, 2, 3, 4, 5 or 6. We will return to this in a moment but for now let’s return to the randomness. Let’s draw 10 numbers again:</p>
 <div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1"><span class="co"># random draw of 10 values from a uniform distribution</span></a>
 <a class="sourceLine" id="cb141-2" title="2">dice2 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
 <a class="sourceLine" id="cb141-3" title="3"></a>
 <a class="sourceLine" id="cb141-4" title="4"><span class="co"># first draw</span></a>
 <a class="sourceLine" id="cb141-5" title="5">dice</a></code></pre></div>
-<pre><code> [1] 6.272162 4.109319 4.076152 4.739230 3.356122 2.573666 1.190409
- [8] 3.852794 6.091411 5.864314</code></pre>
+<pre><code> [1] 6.642749 1.826857 6.321467 2.019451 5.483744 2.252608 6.144267
+ [8] 5.927726 5.535877 6.885202</code></pre>
 <div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" title="1"><span class="co"># second draw</span></a>
 <a class="sourceLine" id="cb143-2" title="2">dice2</a></code></pre></div>
-<pre><code> [1] 6.864539 6.826716 4.305051 1.636680 2.793040 3.612373 5.236071
- [8] 5.024083 1.595036 6.429435</code></pre>
+<pre><code> [1] 5.830164 1.822787 4.366332 4.381930 3.512037 5.581533 1.617297
+ [8] 2.147837 4.040674 2.905047</code></pre>
 <p>The numbers of the first and second roll differ because we have drawn values at random. To make our results replicate and to ensure that everyone in the seminar works with the same numbers, we set R’s random number generator with the <code>set.seed()</code> function. As argument we plug in some arbitrary value (it does not matter which but using a different one will lead to a different quasi-random draw).</p>
 <div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1"><span class="co"># set random number generator</span></a>
 <a class="sourceLine" id="cb145-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>

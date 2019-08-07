@@ -34,7 +34,7 @@ knitr::kable(tibble::tribble(
 Let's load the dataset.
 
 ```{r}
-dat1 <- read.csv("non_western_immigrants.csv")
+dat1 <- read.csv("non_western_immigrants.csv", stringsAsFactors = FALSE)
 ```
 
 We can look at the variable names in our data with the [`names()`](http://bit.ly/R_names) function. 
@@ -79,6 +79,7 @@ Notice how the lower whisker is much shorter than the upper one. The distributio
 plot(
   density(dat1$IMMBRIT),
   bty = "n",
+  lwd = 1.5,
   main = "Perception of Immigration from Non-Western Countries",
   xlab = "Subjective number of immigrants per 100 British"
   )
@@ -89,7 +90,7 @@ We can also plot histograms using the `hist()` function.
 
 ```{r}
 # histogram
-hist( dat1$employMonths, main = "histogram")
+hist( dat1$employMonths, main = "histogram", col = "darkgray")
 ```
 
 It is plausible that perception of immigration from Non-Western countries is related to party affiliation. In our dataset, we have a some party affiliation dummies (binary variables). We can use square brackets to subset our data such that we produce a boxplot only for members of the Conservative Party. We first create the binary variables *Cons* and *Lab* for (Conservatives and Labour respectively) using the `ifelse()` function.

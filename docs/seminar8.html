@@ -163,7 +163,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.6" data-path="seminar3.html"><a href="seminar3.html#importing-a-dataset-in-.txt-format."><i class="fa fa-check"></i><b>3.1.6</b> Importing a dataset in .txt format.</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> R-syntax, data structures and types</a><ul>
+<li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> Creating, amending, exporting data frames</a><ul>
 <li class="chapter" data-level="4.1" data-path="seminar4.html"><a href="seminar4.html#seminar-2"><i class="fa fa-check"></i><b>4.1</b> Seminar</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="seminar4.html"><a href="seminar4.html#creating-data-frames"><i class="fa fa-check"></i><b>4.1.1</b> Creating data frames</a></li>
 <li class="chapter" data-level="4.1.2" data-path="seminar4.html"><a href="seminar4.html#working-with-data-frames"><i class="fa fa-check"></i><b>4.1.2</b> Working with data frames</a></li>
@@ -191,7 +191,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="8" data-path="seminar8.html"><a href="seminar8.html"><i class="fa fa-check"></i><b>8</b> Correlations and differences in means</a><ul>
-<li class="chapter" data-level="8.1" data-path="seminar8.html"><a href="seminar8.html#seminar-6"><i class="fa fa-check"></i><b>8.1</b> Seminar</a></li>
+<li class="chapter" data-level="8.1" data-path="seminar8.html"><a href="seminar8.html#seminar-6"><i class="fa fa-check"></i><b>8.1</b> Seminar</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="seminar8.html"><a href="seminar8.html#sample-variance-and-sample-standard-deviation"><i class="fa fa-check"></i><b>8.1.1</b> Sample Variance and Sample Standard Deviation</a></li>
+<li class="chapter" data-level="8.1.2" data-path="seminar8.html"><a href="seminar8.html#t-test-for-the-sample-mean"><i class="fa fa-check"></i><b>8.1.2</b> T test for the sample mean</a></li>
+<li class="chapter" data-level="8.1.3" data-path="seminar8.html"><a href="seminar8.html#loading-real-data"><i class="fa fa-check"></i><b>8.1.3</b> Loading real data</a></li>
+<li class="chapter" data-level="8.1.4" data-path="seminar8.html"><a href="seminar8.html#t-test-one-sample-hypothesis-test-with-real-data"><i class="fa fa-check"></i><b>8.1.4</b> T-test (one-sample hypothesis test) with real data</a></li>
+<li class="chapter" data-level="8.1.5" data-path="seminar8.html"><a href="seminar8.html#t-test-difference-in-means"><i class="fa fa-check"></i><b>8.1.5</b> T-test (difference in means)</a></li>
+<li class="chapter" data-level="8.1.6" data-path="seminar8.html"><a href="seminar8.html#relationships-between-continuous-variables"><i class="fa fa-check"></i><b>8.1.6</b> Relationships between continuous variables</a></li>
+</ul></li>
 </ul></li>
 <li class="chapter" data-level="9" data-path="seminar9.html"><a href="seminar9.html"><i class="fa fa-check"></i><b>9</b> Regression</a><ul>
 <li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a></li>
@@ -220,8 +227,306 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h1><span class="header-section-number">Chapter 8</span> Correlations and differences in means</h1>
 <div id="seminar-6" class="section level2">
 <h2><span class="header-section-number">8.1</span> Seminar</h2>
-<p>Will be uploaded tomorrow</p>
+<p>In this session, we will cover bi-variate relationships, that is relationships between two variables. For relationships between two continuous variables, we will look at correlations and plots and for relationships between a continuous dependent variable and a binary independent variable, we will look at differences in means.</p>
+<div id="sample-variance-and-sample-standard-deviation" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> Sample Variance and Sample Standard Deviation</h3>
+<p>The sample variance and sample standard deviation inform us about the degree of variability of our data. Suppose, we were to roll the dice 10 times. We could then compute the mean value that we roll. The sample standard deviation measures by how much an average roll of the dice will deviate from the mean value.</p>
+<p>We start rolling the dice, using R’s random number generator and the <code>runif()</code> function. The function randomly draws numbers from a uniform distribution. In a uniform distribution each value has the same probability of being drawn. All six sides of a die should be equally likely if the die is fair. Hence, the uniform distribution.</p>
+<p><code>runif()</code> takes three arguments. <code>n</code> is the number of values to be drawn. <code>min</code> is the minimum value and <code>max</code> is the maximum value.</p>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1"><span class="co"># random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb139-2" title="2">dice &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb139-3" title="3">dice</a></code></pre></div>
+<pre><code> [1] 6.272162 4.109319 4.076152 4.739230 3.356122 2.573666 1.190409
+ [8] 3.852794 6.091411 5.864314</code></pre>
+<p>We have indeed drawn 10 numbers but they are not integers as we would like—we want to simulate a die, so the values should be 1, 2, 3, 4, 5 or 6. We will return to this in a moment but for now let’s return to the randomness. Let’s draw 10 numbers again:</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1"><span class="co"># random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb141-2" title="2">dice2 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb141-3" title="3"></a>
+<a class="sourceLine" id="cb141-4" title="4"><span class="co"># first draw</span></a>
+<a class="sourceLine" id="cb141-5" title="5">dice</a></code></pre></div>
+<pre><code> [1] 6.272162 4.109319 4.076152 4.739230 3.356122 2.573666 1.190409
+ [8] 3.852794 6.091411 5.864314</code></pre>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" title="1"><span class="co"># second draw</span></a>
+<a class="sourceLine" id="cb143-2" title="2">dice2</a></code></pre></div>
+<pre><code> [1] 6.864539 6.826716 4.305051 1.636680 2.793040 3.612373 5.236071
+ [8] 5.024083 1.595036 6.429435</code></pre>
+<p>The numbers of the first and second roll differ because we have drawn values at random. To make our results replicate and to ensure that everyone in the seminar works with the same numbers, we set R’s random number generator with the <code>set.seed()</code> function. As argument we plug in some arbitrary value (it does not matter which but using a different one will lead to a different quasi-random draw).</p>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1"><span class="co"># set random number generator</span></a>
+<a class="sourceLine" id="cb145-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb145-3" title="3"></a>
+<a class="sourceLine" id="cb145-4" title="4"><span class="co"># random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb145-5" title="5">dice &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb145-6" title="6">dice</a></code></pre></div>
+<pre><code> [1] 2.725465 5.729831 3.453862 6.298104 6.642804 1.273339 4.168633
+ [8] 6.354514 4.308610 3.739688</code></pre>
+<p>You should all have the same values. If not, run <code>set.seed()</code> again and then do the random draw once. If you do it more than once, the numbers will change. Let’s see how this works:</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1"><span class="co"># set random number generator</span></a>
+<a class="sourceLine" id="cb147-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb147-3" title="3"></a>
+<a class="sourceLine" id="cb147-4" title="4"><span class="co"># 1st random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb147-5" title="5">dice &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb147-6" title="6">dice</a></code></pre></div>
+<pre><code> [1] 2.725465 5.729831 3.453862 6.298104 6.642804 1.273339 4.168633
+ [8] 6.354514 4.308610 3.739688</code></pre>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1"><span class="co"># 2nd random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb149-2" title="2">dice2 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb149-3" title="3">dice2</a></code></pre></div>
+<pre><code> [1] 6.741000 3.720005 5.065424 4.435800 1.617548 6.398950 2.476526
+ [8] 1.252357 2.967524 6.727022</code></pre>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1"><span class="co"># reset random number generator</span></a>
+<a class="sourceLine" id="cb151-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb151-3" title="3"></a>
+<a class="sourceLine" id="cb151-4" title="4"><span class="co"># 3rd random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb151-5" title="5">dice3 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb151-6" title="6">dice3</a></code></pre></div>
+<pre><code> [1] 2.725465 5.729831 3.453862 6.298104 6.642804 1.273339 4.168633
+ [8] 6.354514 4.308610 3.739688</code></pre>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1"><span class="co"># 4th random draw of 10 values from a uniform distribution</span></a>
+<a class="sourceLine" id="cb153-2" title="2">dice4 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dt">n =</span> <span class="dv">10</span>, <span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb153-3" title="3">dice4</a></code></pre></div>
+<pre><code> [1] 6.741000 3.720005 5.065424 4.435800 1.617548 6.398950 2.476526
+ [8] 1.252357 2.967524 6.727022</code></pre>
+<p>As you can see, the the draws from <strong>dice</strong> and <strong>dice3</strong> are the same and the draws from <strong>dice2</strong> and <strong>dice4</strong> are the same as well. Let’s make the values integers with the <code>as.integer()</code> function which simply cuts off all decimal places.</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1"><span class="co"># reset random number generator</span></a>
+<a class="sourceLine" id="cb155-2" title="2"><span class="kw">set.seed</span>(<span class="dv">123</span>)</a>
+<a class="sourceLine" id="cb155-3" title="3"><span class="co"># random draw of 10 numbers from a uniform distribution with minimum 1 and maximum 7</span></a>
+<a class="sourceLine" id="cb155-4" title="4">dice &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>, <span class="dv">1</span>, <span class="dv">7</span>)</a>
+<a class="sourceLine" id="cb155-5" title="5"><span class="co"># cut off decimals places</span></a>
+<a class="sourceLine" id="cb155-6" title="6">dice &lt;-<span class="st"> </span><span class="kw">as.integer</span>(dice)</a>
+<a class="sourceLine" id="cb155-7" title="7">dice</a></code></pre></div>
+<pre><code> [1] 2 5 3 6 6 1 4 6 4 3</code></pre>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1"><span class="co"># frequency of dice rolls</span></a>
+<a class="sourceLine" id="cb157-2" title="2"><span class="kw">table</span>(dice)</a></code></pre></div>
+<pre><code>dice
+1 2 3 4 5 6 
+1 1 2 2 1 3 </code></pre>
+<p>We have rolled a six relatively often. All sides should be equally likely but due to sampling variability, we have rolled the six most often. The expected value of a die is 3.5. That is: <span class="math display">\[ 1 \times \frac{1}{6} + 2 \times \frac{1}{6} + 3 \times \frac{1}{6} + 4 \times \frac{1}{6} + 5 \times \frac{1}{6} + 6 \times \frac{1}{6} = 3.5\]</span></p>
+<p>We compute the mean in our sample and the standard deviation. Let’s start with the mean. Do so yourself.</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" title="1">dice.mean &lt;-<span class="st"> </span><span class="kw">mean</span>(dice)</a>
+<a class="sourceLine" id="cb159-2" title="2">dice.mean</a></code></pre></div>
+<pre><code>[1] 4</code></pre>
+<p>The sample standard deviation tells by how much an average roll of the dice differs from the estimated sample mean. Estimate the sample standard deviation on your own using the <code>sd()</code> function.</p>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" title="1">std.dev &lt;-<span class="st"> </span><span class="kw">sd</span>(dice)</a>
+<a class="sourceLine" id="cb161-2" title="2">std.dev</a></code></pre></div>
+<pre><code>[1] 1.763834</code></pre>
+<p>An average deviation from the sample mean is 1.76.</p>
+</div>
+<div id="t-test-for-the-sample-mean" class="section level3">
+<h3><span class="header-section-number">8.1.2</span> T test for the sample mean</h3>
+<p>Our estimate of the mean is 4. The expected value is 3.5. Is this evidence that the die is loaded? The null hypothesis is that the die is fair. The alternative hypothesis is that the die is loaded. Run a t test using the <code>t.test()</code> function. The syntax of the function is:</p>
+<pre><code>t.test(formula, mu, alt, conf)</code></pre>
+<p>Lets have a look at the arguments.</p>
+<table>
+<colgroup>
+<col width="14%" />
+<col width="85%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Arguments</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>formula</code></td>
+<td>The formula describes the relationship between the dependent and independent variables, for example: <br>• <code>dependent.variable ~ independent.variable</code>. We will do this in the t-test for the difference in means. Here, we have only one estimated mean. So, we write: <br>• <code>variable.name</code></td>
+</tr>
+<tr class="even">
+<td><code>mu</code></td>
+<td>Here, we set the null hypothesis. The null hypothesis is that the true population mean is 10000. Thus, we set <code>mu = 10000</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>alt</code></td>
+<td>There are two alternatives to the null hypothesis that the difference in means is zero. The difference could either be smaller or it could be larger than zero. To test against both alternatives, we set <code>alt = "two.sided"</code>.</td>
+</tr>
+<tr class="even">
+<td><code>conf</code></td>
+<td>Here, we set the level of confidence that we want in rejecting the null hypothesis. Common confidence intervals are: 95%, 99%, and 99.9%.</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1"><span class="kw">t.test</span>(dice, <span class="dt">mu =</span> <span class="fl">3.5</span>, <span class="dt">conf.level =</span> <span class="fl">.95</span>, <span class="dt">alt =</span> <span class="st">&quot;two.sided&quot;</span>)</a></code></pre></div>
+<pre><code>
+    One Sample t-test
 
+data:  dice
+t = 0.89642, df = 9, p-value = 0.3934
+alternative hypothesis: true mean is not equal to 3.5
+95 percent confidence interval:
+ 2.738229 5.261771
+sample estimates:
+mean of x 
+        4 </code></pre>
+</div>
+<div id="loading-real-data" class="section level3">
+<h3><span class="header-section-number">8.1.3</span> Loading real data</h3>
+<p>We will load a new dataset from the Quality of Government Institute. The dataset is called <em>QoG2012.csv</em>. The codebook follows.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">h_j</td>
+<td align="left">1 if Free Judiciary</td>
+</tr>
+<tr class="even">
+<td align="left">wdi_gdpc</td>
+<td align="left">Per capita wealth in US dollars</td>
+</tr>
+<tr class="odd">
+<td align="left">undp_hdi</td>
+<td align="left">Human development index (higher values = higher quality of life)</td>
+</tr>
+<tr class="even">
+<td align="left">wbgi_cce</td>
+<td align="left">Control of corruption index (higher values = more control of corruption)</td>
+</tr>
+<tr class="odd">
+<td align="left">wbgi_pse</td>
+<td align="left">Political stability index (higher values = more stable)</td>
+</tr>
+<tr class="even">
+<td align="left">former_col</td>
+<td align="left">1 = country was a colony once</td>
+</tr>
+<tr class="odd">
+<td align="left">lp_lat_abst</td>
+<td align="left">Latitude of country’s captial divided by 90</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1">world.data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;QoG2012.csv&quot;</span>)</a></code></pre></div>
+<p>Go ahead and load the csv dataset yourself.</p>
+</div>
+<div id="t-test-one-sample-hypothesis-test-with-real-data" class="section level3">
+<h3><span class="header-section-number">8.1.4</span> T-test (one-sample hypothesis test) with real data</h3>
+<p>A knowledgeable friend declares that worldwide wealth stands at exactly 10 000 US dollars per capita today. We would like to know whether she is right and tease her relentlessly if she isn’t.</p>
+<p>So, first we take the mean of the wealth variable <code>wdi_gdpc</code>.</p>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb167-1" title="1"><span class="kw">mean</span>(world.data<span class="op">$</span>wdi_gdpc)</a></code></pre></div>
+<pre><code>[1] NA</code></pre>
+<p>R returns <code>NA</code> because for some countries we have no reliable information on their per capita wealth. <code>NA</code> means that the data is missing. We can tell the <code>mean()</code> function to estimate the mean only for those countries we have data for, we will, therefore, ignore the countries we do not have information for.</p>
+<p>We do so by setting the argument <code>na.rm</code> to TRUE like so: <code>mean(dataset_name$var_name, na.rm = TRUE)</code>.</p>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb169-1" title="1">wealth.mean &lt;-<span class="st"> </span><span class="kw">mean</span>(world.data<span class="op">$</span>wdi_gdpc, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb169-2" title="2">wealth.mean</a></code></pre></div>
+<pre><code>[1] 10184.09</code></pre>
+<p>Wow, our friend is quite close. Substantially, the difference of our friends claim to our estimate is small but we could still find that the difference is statistically significant (it’s a noticeable systematic difference).</p>
+<p>Because we do not have information on all countries, our 10184.09 is an estimate and the true population mean – the population here would be all countries in the world – may be 10000 as our friend claims. We test this statistically.</p>
+<p>In statistics jargon: we would like to test whether our estimate is statistically different from the 10000 figure (the null hypothesis) suggested by our friend. Put differently, we would like to know the probability that we estimate 10184.09 if the true mean of all countries is 10000. This probability is called the p value. Think of the p value of the probability that the relationship that we see, immerged by chance alone. If the p value is low, we can be reasonably confident that the observed relationship did not imerge by chance alone.</p>
+<p>We usually compare our p value to a threshold value. That threshold value is called the alpha level and it is the tolerance for false positives. If the p value is less than this value, we speak of a statisically significant relationship. Otherwise, a relationship is insignificant which means we are not confident enought that result is not due to chance.</p>
+<p>We must specify our alpha level before we carry out analysis. The acceptable alpha level depends on the quantity of data that you have and how accurartely data is measured. Essentially, the acceptable value is arbitaray. In social sciences the usual threshold value 0.5.</p>
+<p>If the p value is less than 0.5, a relationship is significant in our eyes.</p>
+<p>We now test whether our estimate is systematically different from the proprosed 10000 figure or not. We do this using the the t-test function <code>t.test()</code>.</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" title="1"><span class="kw">t.test</span>(world.data<span class="op">$</span>wdi_gdpc, <span class="dt">mu =</span> <span class="dv">10000</span>, <span class="dt">alt =</span> <span class="st">&quot;two.sided&quot;</span>) </a></code></pre></div>
+<pre><code>
+    One Sample t-test
+
+data:  world.data$wdi_gdpc
+t = 0.19951, df = 177, p-value = 0.8421
+alternative hypothesis: true mean is not equal to 10000
+95 percent confidence interval:
+  8363.113 12005.069
+sample estimates:
+mean of x 
+ 10184.09 </code></pre>
+<p>The results are similar. Therefore, we can conclude that we are unable to reject the null hypothesis suggested by our friend that the population mean is equal to <code>10000</code>. In statistics jargon, we fail to reject the null hypothesis.</p>
+<p>Let’s move on to a t-test to test the difference between two estimated means.</p>
+</div>
+<div id="t-test-difference-in-means" class="section level3">
+<h3><span class="header-section-number">8.1.5</span> T-test (difference in means)</h3>
+<p>We are interested in whether there is a difference in income between countries that have an independent judiciary and countries that do not have an independent judiciary. Put more formally, we are interested in the difference between two conditional means. Recall that a conditional mean is the mean in a subpopulation such as the mean of income given that the country was a victim of colonialization (conditional mean 1).</p>
+<p>The t-test is the appropriate test-statistic. Our interval-level dependent variable is <code>wdi_gdpc</code> which is GDP per capita taken from the World Development Indicators of the World Bank. Our binary independent variable is <code>h_j</code>.</p>
+<p>Let’s check the summary statistics of our dependent variable GDP per captia using the <a href="https://www.rdocumentation.org/packages/base/versions/3.4.1/topics/summary"><code>summary()</code></a>. It returns several descriptive statistics as well as the number of NA observations (missing values). Missing values mean that we have no information on the correct value of the variable for an observation. Missing values may be missing for many different reasons. We need to be aware of missings because we cannot calculate with missings.</p>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb173-1" title="1"><span class="kw">summary</span>(world.data<span class="op">$</span>wdi_gdpc)</a></code></pre></div>
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA&#39;s 
+  226.2  1768.0  5326.1 10184.1 12976.5 63686.7      16 </code></pre>
+<p>We use the <code>which()</code> function to identify the row-numbers of the countries in our dataset that have free judiciaries. The code below returns the row index numbers of countries with free judiciaires.</p>
+<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb175-1" title="1"><span class="kw">which</span>(world.data<span class="op">$</span>h_j <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)</a></code></pre></div>
+<pre><code> [1]   9  10  15  16  20  25  31  36  38  43  44  46  47  48  49  55  57
+[18]  59  60  65  75  76  77  79  81  82  83  86  88  91  92  97 101 102
+[35] 113 114 116 119 122 124 125 128 138 139 143 156 157 158 159 163 167
+[52] 168 169 171 174 177 180 181 182 183 184 185 186 194</code></pre>
+<p>Now, all we need is to index the dataset like we did yesterday. We access the variable that we want (<code>wdi_gdpc</code>) with the dollar sign and the rows in square brackets. The code below returns the per capita wealth of the countries with a free judiciary.</p>
+<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb177-1" title="1"><span class="kw">mean</span>( world.data<span class="op">$</span>wdi_gdpc[<span class="kw">which</span>(world.data<span class="op">$</span>h_j <span class="op">==</span><span class="st"> </span><span class="dv">1</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>[1] 17826.59</code></pre>
+<p>Now, go ahead and find the mean per capita wealth of countries with controlled judiciaries yourself.</p>
+<div class="sourceCode" id="cb179"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb179-1" title="1"><span class="kw">mean</span>( world.data<span class="op">$</span>wdi_gdpc[<span class="kw">which</span>(world.data<span class="op">$</span>h_j <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>[1] 5884.882</code></pre>
+<p>There is a numeric difference. However, we know that samples are subject to sampling variability. We therefore need to quantify the uncertainty that results from variable samples. To assess whether we can be reasonably sure that the difference between the estimates of wealth is not due to a strage sample but an actual difference in the population, we carry out the t test.</p>
+<div class="sourceCode" id="cb181"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb181-1" title="1"><span class="kw">t.test</span>(world.data<span class="op">$</span>wdi_gdpc[world.data<span class="op">$</span>h_j <span class="op">==</span><span class="st"> </span><span class="dv">1</span>], world.data<span class="op">$</span>wdi_gdpc[world.data<span class="op">$</span>h_j <span class="op">==</span><span class="st"> </span><span class="dv">0</span>],</a>
+<a class="sourceLine" id="cb181-2" title="2">       <span class="dt">mu =</span> <span class="dv">0</span>, <span class="dt">alt =</span> <span class="st">&quot;two.sided&quot;</span>, <span class="dt">conf =</span> <span class="fl">0.95</span>)</a></code></pre></div>
+<pre><code>
+    Welch Two Sample t-test
+
+data:  world.data$wdi_gdpc[world.data$h_j == 1] and world.data$wdi_gdpc[world.data$h_j == 0]
+t = 6.0094, df = 98.261, p-value = 3.165e-08
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+  7998.36 15885.06
+sample estimates:
+mean of x mean of y 
+17826.591  5884.882 </code></pre>
+<p>Let’s interpret the results we get from <code>t.test()</code>. The first argument is the vector of wealth values conditional on a free independent judiciary. The second argument is the vector of wealth values conditional on an independent judiciary. The variable of interest is wealth - we call this the dependent variable. We call it dependent because it depends or is conditional on the value of another variable which is the judiciary. We call the conditioning variable, the independent variable.</p>
+<p>In our example the question is: Do countries with independent judiciaries have different mean income levels than countries without independent judiciaries?</p>
+<p>In the following line you see the t-value, the degrees of freedom and the p-value. Knowing the t-value and the degrees of freedom you can check in a table on t distributions how likely you were to observe this data, if the null-hypothesis was true. The p-value gives you this probability directly. For example, a p-value of 0.02 would mean that the probability of seeing this data given that there is no difference in incomes between countries with and without independent judiciaries <em>in the population</em>, is 2%. Here the p-value is much smaller than this: 3.165e-08 = 0.00000003156!</p>
+<p>In the next line you see the 95% confidence interval because we specified <code>conf=0.95</code>. If you were to take 100 samples and in each you checked the means of the two groups, 95 times the difference in means would be within the interval you see there.</p>
+<p>At the very bottom you see the means of the dependent variable by the two groups of the independent variable. These are the means that we estimated above. In our example, you see the mean income levels in countries were the executive has some control over the judiciary, and in countries were the judiciary is independent.</p>
+</div>
+<div id="relationships-between-continuous-variables" class="section level3">
+<h3><span class="header-section-number">8.1.6</span> Relationships between continuous variables</h3>
+<p>The best way to get a sense for the relationship beetween two continuous variables is to do a scatter plot. The human development index measures the quality of life and the World Bank Control of Corruption Index is a measure for the quality if institutions. We want to evaluate whether the two variables are related at all. Here, we could form the hypothesis that better insitutions improve the quality of life of citizens.</p>
+<p>To investigate this relationship, we construct a scatterplot.</p>
+<div class="sourceCode" id="cb183"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb183-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb183-2" title="2">  <span class="dt">x =</span> world.data<span class="op">$</span>wbgi_cce,</a>
+<a class="sourceLine" id="cb183-3" title="3">  <span class="dt">y =</span> world.data<span class="op">$</span>undp_hdi,</a>
+<a class="sourceLine" id="cb183-4" title="4">  <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">3</span>),</a>
+<a class="sourceLine" id="cb183-5" title="5">  <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb183-6" title="6">  <span class="dt">frame =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb183-7" title="7">  <span class="dt">xlab =</span> <span class="st">&quot;World Bank Control of Corruption Index&quot;</span>,</a>
+<a class="sourceLine" id="cb183-8" title="8">  <span class="dt">ylab =</span> <span class="st">&quot;UNDP Human Development Index&quot;</span>,</a>
+<a class="sourceLine" id="cb183-9" title="9">  <span class="dt">main =</span> <span class="st">&quot;Relationship b/w Quality of Institutions and Quality of Life&quot;</span>,</a>
+<a class="sourceLine" id="cb183-10" title="10">  <span class="dt">pch =</span> <span class="dv">16</span>,</a>
+<a class="sourceLine" id="cb183-11" title="11">  <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span></a>
+<a class="sourceLine" id="cb183-12" title="12">)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-119-1.png" width="672" /></p>
+<p>The plot will give you a good idea whether about whether these two variables are related or not. Sometimes, the correleation coefficient is reported. The correlation coefficient is a measure of <strong>linear</strong> association. It can take values between -1 and +1. Where -1 is a perfect negative relationship, 0 is a no relationship and +1 is a perfect positive relationship.</p>
+<p>While the correlation coefficient is widely used as a summary statistic. Its weakness is that it is a measure of linear association only. That means, there could be a curvilinear realtionship which we miss (for instance a u-shaped relationship). visual inspection using a scatterplot is usually better than estimating the correlation coefficient.</p>
+<p>We estimate the correlation coefficient in the following:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" title="1"><span class="kw">cor</span>(<span class="dt">y =</span> world.data<span class="op">$</span>undp_hdi, <span class="dt">x =</span> world.data<span class="op">$</span>wbgi_cce, <span class="dt">use =</span> <span class="st">&quot;complete.obs&quot;</span>)</a></code></pre></div>
+<pre><code>[1] 0.6821114</code></pre>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="88%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td>The x variable that you want to correlate.</td>
+</tr>
+<tr class="even">
+<td><code>y</code></td>
+<td>The y variable that you want to correlate.</td>
+</tr>
+<tr class="odd">
+<td><code>use</code></td>
+<td>How R should handle missing values. <code>use="complete.obs"</code> will use only those rows where neither <code>x</code> nor <code>y</code> is missing.</td>
+</tr>
+</tbody>
+</table>
+<p>The interpretation of the correlation coefficient is that there is a positive relationship. There is really no threshold value beyond or below which a correlation coefficient is large or small. This depends entirely on the context in this is where your domain knowledge would come in.</p>
+
+</div>
 </div>
 </div>
             </section>
@@ -276,6 +581,19 @@ gitbook.start({
 });
 </script>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 </body>
 
 </html>

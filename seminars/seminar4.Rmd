@@ -1,4 +1,4 @@
-# R-syntax, data structures and types
+# Creating, amending, exporting data frames
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')

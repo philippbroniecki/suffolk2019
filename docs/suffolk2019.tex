@@ -1850,8 +1850,8 @@ We start rolling the dice, using R's random number generator and the \texttt{run
 \end{Shaded}
 
 \begin{verbatim}
- [1] 1.741844 5.771283 6.189035 6.244724 4.858865 4.935539 2.975421
- [8] 1.173231 4.266911 6.031508
+ [1] 1.109883 6.321325 2.876502 2.125217 6.041873 6.137893 4.048980
+ [8] 3.923783 1.428766 4.938259
 \end{verbatim}
 
 We have indeed drawn 10 numbers but they are not integers as we would like---we want to simulate a die, so the values should be 1, 2, 3, 4, 5 or 6. We will return to this in a moment but for now let's return to the randomness. Let's draw 10 numbers again:
@@ -1867,8 +1867,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 1.741844 5.771283 6.189035 6.244724 4.858865 4.935539 2.975421
- [8] 1.173231 4.266911 6.031508
+ [1] 1.109883 6.321325 2.876502 2.125217 6.041873 6.137893 4.048980
+ [8] 3.923783 1.428766 4.938259
 \end{verbatim}
 
 \begin{Shaded}
@@ -1879,8 +1879,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 3.835428 6.910071 4.906824 4.243408 2.678436 3.478764 1.262931
- [8] 6.636945 4.675963 6.356551
+ [1] 5.840975 4.784617 5.182077 6.602005 2.663387 4.268067 2.328778
+ [8] 6.522150 5.753821 1.007542
 \end{verbatim}
 
 The numbers of the first and second roll differ because we have drawn values at random. To make our results replicate and to ensure that everyone in the seminar works with the same numbers, we set R's random number generator with the \texttt{set.seed()} function. As argument we plug in some arbitrary value (it does not matter which but using a different one will lead to a different quasi-random draw).
@@ -3855,7 +3855,572 @@ The blue line shows the log-transformed model. It clearly fits the data best.
 \hypertarget{seminar-8}{%
 \subsection{Seminar}\label{seminar-8}}
 
-Will be uploaded tomorrow
+In this seminar we will cover classification, and assess model accuracy out-of-sample.
+
+The non-western foreingers data is about the subjective perception of immigrants from non-western countries. The perception of immigrants from a context that is not similar to the one's own ,is often used as a proxy for racism. Whether this is a fair measure or not is debatable but let's examine the data from a survey carried out in Britain.
+
+Let's check the codebook of our data.
+
+\begin{tabular}{l|l}
+\hline
+Variable & Description\\
+\hline
+IMMBRIT & Out of every 100 people in Britain, how many do you think are immigrants from non-western countries?\\
+\hline
+over.estimate & 1 if estimate is higher than 10.7\%.\\
+\hline
+RSex & 1 = male, 2 = female\\
+\hline
+RAge & Age of respondent\\
+\hline
+Househld & Number of people living in respondent's household\\
+\hline
+party identification & 1 = Conservatives, 2 = Labour, 3 = SNP, 4 = Greens, 5 = Ukip, 6 = BNP, 7 = other\\
+\hline
+paper & Do you normally read any daily morning newspaper 3+ times/week?\\
+\hline
+WWWhourspW & How many hours WWW per week?\\
+\hline
+religious & Do you regard yourself as belonging to any particular religion?\\
+\hline
+employMonths & How many mnths w. present employer?\\
+\hline
+urban & Population density, 4 categories (highest density is 4, lowest is 1)\\
+\hline
+health.good & How is your health in general for someone of your age? (0: bad, 1: fair, 2: fairly good, 3: good)\\
+\hline
+HHInc & Income bands for household, high number = high HH income\\
+\hline
+\end{tabular}
+
+Let's load the dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"non_western_immigrants.csv"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Declaring categorical variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# data manipulation}
+\NormalTok{df}\OperatorTok{$}\NormalTok{RSex <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(df}\OperatorTok{$}\NormalTok{RSex, }\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Male"}\NormalTok{, }\StringTok{"Female"}\NormalTok{))}
+\NormalTok{df}\OperatorTok{$}\NormalTok{health.good <-}\StringTok{ }\KeywordTok{factor}\NormalTok{(df}\OperatorTok{$}\NormalTok{health.good, }\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"bad"}\NormalTok{, }\StringTok{"fair"}\NormalTok{, }\StringTok{"fairly good"}\NormalTok{, }\StringTok{"good"}\NormalTok{) )}
+\end{Highlighting}
+\end{Shaded}
+
+We want to predict whether respondents over-estimate immigration from non-western contexts. We begin by normalizing our variables. Then we look at the distribution of the dependent variable. We check how well we could predict misperception of immigration in our sample without a statistical model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# create a copy of the original IMMBRIT variable (needed for classification with lm)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{IMMBRIT_original_scale <-}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{IMMBRIT}
+
+\CommentTok{# our function for normalization}
+\NormalTok{our.norm <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{return}\NormalTok{((x }\OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(x)) }\OperatorTok{/}\StringTok{ }\KeywordTok{sd}\NormalTok{(x))}
+\NormalTok{\}}
+
+\CommentTok{# continuous variables}
+\NormalTok{c.vars <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"IMMBRIT"}\NormalTok{, }\StringTok{"RAge"}\NormalTok{, }\StringTok{"Househld"}\NormalTok{, }\StringTok{"HHInc"}\NormalTok{, }\StringTok{"employMonths"}\NormalTok{, }\StringTok{"WWWhourspW"}\NormalTok{)}
+
+\CommentTok{# normalize}
+\NormalTok{df[, c.vars] <-}\StringTok{ }\KeywordTok{apply}\NormalTok{( df[, c.vars], }\DecValTok{2}\NormalTok{, our.norm )}
+
+\CommentTok{# predict whether poeple overestimate rate of immigrants (i.e. more than 10.7%)}
+\KeywordTok{table}\NormalTok{(df}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+  0   1 
+290 759 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# probability of misperception of immigration in the sample}
+\KeywordTok{mean}\NormalTok{(df}\OperatorTok{$}\NormalTok{over.estimate)  }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7235462
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# naive guess}
+\KeywordTok{median}\NormalTok{(df}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1
+\end{verbatim}
+
+Create dummy variables from our categorical variables.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{df}\OperatorTok{$}\NormalTok{Cons <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{Lab <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{SNP <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{3}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{GP <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{BNP <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{6}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{Ukip <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{5}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{party.other <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{party_self }\OperatorTok{==}\StringTok{ }\DecValTok{7}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{rural <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{urban }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{partly.rural <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{urban }\OperatorTok{==}\StringTok{ }\DecValTok{2}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\NormalTok{df}\OperatorTok{$}\NormalTok{urban <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{(df}\OperatorTok{$}\NormalTok{urban }\OperatorTok{==}\StringTok{ }\DecValTok{4}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Now, we fit a logistic regression.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# run logistic regression}
+\NormalTok{m.log <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(over.estimate }\OperatorTok{~}\StringTok{ }\NormalTok{RSex }\OperatorTok{+}\StringTok{ }\NormalTok{RAge }\OperatorTok{+}\StringTok{ }\NormalTok{Househld }\OperatorTok{+}\StringTok{ }\NormalTok{Lab }\OperatorTok{+}\StringTok{ }\NormalTok{SNP }\OperatorTok{+}\StringTok{ }\NormalTok{Ukip }\OperatorTok{+}\StringTok{ }\NormalTok{BNP }\OperatorTok{+}\StringTok{ }
+\StringTok{               }\NormalTok{GP }\OperatorTok{+}\StringTok{ }\NormalTok{party.other }\OperatorTok{+}\StringTok{ }\NormalTok{paper }\OperatorTok{+}\StringTok{ }\NormalTok{WWWhourspW }\OperatorTok{+}\StringTok{  }\NormalTok{religious }\OperatorTok{+}\StringTok{ }
+\StringTok{               }\NormalTok{employMonths }\OperatorTok{+}\StringTok{ }\NormalTok{rural }\OperatorTok{+}\StringTok{ }\NormalTok{partly.rural }\OperatorTok{+}\StringTok{ }\NormalTok{urban }\OperatorTok{+}\StringTok{ }
+\StringTok{               }\NormalTok{health.good }\OperatorTok{+}\StringTok{ }\NormalTok{HHInc, }\DataTypeTok{data =}\NormalTok{ df,}
+             \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{))}
+\KeywordTok{summary}\NormalTok{(m.log)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+Call:
+glm(formula = over.estimate ~ RSex + RAge + Househld + Lab + 
+    SNP + Ukip + BNP + GP + party.other + paper + WWWhourspW + 
+    religious + employMonths + rural + partly.rural + urban + 
+    health.good + HHInc, family = binomial(link = "logit"), data = df)
+
+Deviance Residuals: 
+    Min       1Q   Median       3Q      Max  
+-2.2342  -1.1328   0.6142   0.8262   1.3815  
+
+Coefficients:
+                       Estimate Std. Error z value Pr(>|z|)    
+(Intercept)             0.72437    0.36094   2.007   0.0448 *  
+RSexFemale              0.64030    0.15057   4.253 2.11e-05 ***
+RAge                    0.01031    0.09073   0.114   0.9095    
+Househld                0.02794    0.08121   0.344   0.7308    
+Lab                    -0.31577    0.19964  -1.582   0.1137    
+SNP                     1.85513    1.05603   1.757   0.0790 .  
+Ukip                    0.05604    0.44846   0.125   0.9005    
+BNP                     0.92131    0.57305   1.608   0.1079    
+GP                     -0.51315    0.46574  -1.102   0.2706    
+party.other             0.12542    0.18760   0.669   0.5038    
+paper                   0.14855    0.15210   0.977   0.3287    
+WWWhourspW             -0.02598    0.08008  -0.324   0.7457    
+religious               0.05139    0.15274   0.336   0.7365    
+employMonths            0.01899    0.07122   0.267   0.7897    
+rural                  -0.35097    0.21007  -1.671   0.0948 .  
+partly.rural           -0.37978    0.19413  -1.956   0.0504 .  
+urban                   0.12732    0.21202   0.601   0.5482    
+health.goodfair        -0.09534    0.33856  -0.282   0.7782    
+health.goodfairly good  0.11669    0.31240   0.374   0.7087    
+health.goodgood         0.02744    0.31895   0.086   0.9314    
+HHInc                  -0.48513    0.08447  -5.743 9.30e-09 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 1236.9  on 1048  degrees of freedom
+Residual deviance: 1143.3  on 1028  degrees of freedom
+AIC: 1185.3
+
+Number of Fisher Scoring iterations: 5
+\end{verbatim}
+
+There are also two other ways to look at the estimated parameters of our model. We can just call the coefficients or we can exploit that they are an object within the summary object of the model object.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# extract coeffiecients only}
+\KeywordTok{coef}\NormalTok{(m.log)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+           (Intercept)             RSexFemale                   RAge 
+            0.72437209             0.64029593             0.01031349 
+              Househld                    Lab                    SNP 
+            0.02793778            -0.31577137             1.85513031 
+                  Ukip                    BNP                     GP 
+            0.05604390             0.92131027            -0.51314845 
+           party.other                  paper             WWWhourspW 
+            0.12542127             0.14855174            -0.02597660 
+             religious           employMonths                  rural 
+            0.05138795             0.01898927            -0.35096655 
+          partly.rural                  urban        health.goodfair 
+           -0.37977789             0.12731654            -0.09534035 
+health.goodfairly good        health.goodgood                  HHInc 
+            0.11669492             0.02743714            -0.48513120 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# only estimates table of summary}
+\KeywordTok{summary}\NormalTok{(m.log)}\OperatorTok{$}\NormalTok{coef}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+                          Estimate Std. Error     z value     Pr(>|z|)
+(Intercept)             0.72437209 0.36093823  2.00691428 4.475879e-02
+RSexFemale              0.64029593 0.15056566  4.25260266 2.113003e-05
+RAge                    0.01031349 0.09072502  0.11367858 9.094926e-01
+Househld                0.02793778 0.08120874  0.34402436 7.308280e-01
+Lab                    -0.31577137 0.19963619 -1.58173411 1.137103e-01
+SNP                     1.85513031 1.05602885  1.75670419 7.896824e-02
+Ukip                    0.05604390 0.44846178  0.12496918 9.005480e-01
+BNP                     0.92131027 0.57304844  1.60773542 1.078931e-01
+GP                     -0.51314845 0.46574170 -1.10178763 2.705540e-01
+party.other             0.12542127 0.18760248  0.66854805 5.037838e-01
+paper                   0.14855174 0.15210121  0.97666373 3.287357e-01
+WWWhourspW             -0.02597660 0.08008122 -0.32437813 7.456518e-01
+religious               0.05138795 0.15273851  0.33644397 7.365361e-01
+employMonths            0.01898927 0.07121623  0.26664249 7.897444e-01
+rural                  -0.35096655 0.21006747 -1.67073251 9.477452e-02
+partly.rural           -0.37977789 0.19413416 -1.95626517 5.043393e-02
+urban                   0.12731654 0.21201600  0.60050437 5.481701e-01
+health.goodfair        -0.09534035 0.33855835 -0.28160685 7.782450e-01
+health.goodfairly good  0.11669492 0.31239717  0.37354666 7.087416e-01
+health.goodgood         0.02743714 0.31895327  0.08602245 9.314486e-01
+HHInc                  -0.48513120 0.08447377 -5.74298026 9.302457e-09
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# display p-values only}
+\KeywordTok{summary}\NormalTok{(m.log)}\OperatorTok{$}\NormalTok{coef[, }\DecValTok{4}\NormalTok{]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+           (Intercept)             RSexFemale                   RAge 
+          4.475879e-02           2.113003e-05           9.094926e-01 
+              Househld                    Lab                    SNP 
+          7.308280e-01           1.137103e-01           7.896824e-02 
+                  Ukip                    BNP                     GP 
+          9.005480e-01           1.078931e-01           2.705540e-01 
+           party.other                  paper             WWWhourspW 
+          5.037838e-01           3.287357e-01           7.456518e-01 
+             religious           employMonths                  rural 
+          7.365361e-01           7.897444e-01           9.477452e-02 
+          partly.rural                  urban        health.goodfair 
+          5.043393e-02           5.481701e-01           7.782450e-01 
+health.goodfairly good        health.goodgood                  HHInc 
+          7.087416e-01           9.314486e-01           9.302457e-09 
+\end{verbatim}
+
+The parameters may be of interest if inference is our goal. But if we are just interested in classification we would like to make predictions. This can be done directly by using the predict() function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# predict probabilities}
+\NormalTok{pred.probs <-}\StringTok{ }\KeywordTok{predict}\NormalTok{( m.log, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)}
+\NormalTok{pred.probs[}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{] }\CommentTok{# predictions for the first 10 respondents}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+        1         2         3         4         5         6         7 
+0.5213789 0.9181186 0.8412570 0.8244665 0.8349719 0.6931744 0.9370885 
+        8         9        10 
+0.6815346 0.9090575 0.6897961 
+\end{verbatim}
+
+To see how good our classification model is we need to compare the classification with the actual outcomes. We first create an object \texttt{exp.out} which will be either \texttt{0} or \texttt{1}. In a second step, we cross-tab it with the true outcomes and this allows us to see how well the classification model is doing.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# predict whether respondent over-estimates or not}
+\NormalTok{exp.out <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{( pred.probs }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{# confusion matrix (table of predictions and true outcomes)}
+\KeywordTok{table}\NormalTok{(}\DataTypeTok{prediction =}\NormalTok{ exp.out, }\DataTypeTok{truth =}\NormalTok{ df}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          truth
+prediction   0   1
+         0  41  40
+         1 249 719
+\end{verbatim}
+
+The diagonal elements are the correct classifications and the off-diagonal ones are wrong. We can compute the share of correct classified observations as a ratio.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# percent correctly classified}
+\NormalTok{(}\DecValTok{41} \OperatorTok{+}\StringTok{ }\DecValTok{719}\NormalTok{) }\OperatorTok{/}\StringTok{ }\DecValTok{1049}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7244995
+\end{verbatim}
+
+We can also write code that will estimate the percentage correctly classified for different values.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# more generally}
+\KeywordTok{mean}\NormalTok{( exp.out }\OperatorTok{==}\StringTok{ }\NormalTok{df}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.7244995
+\end{verbatim}
+
+This is the performance on the training data and we expect the test error to be higher than this. To get at a better indication of the model's classification error we can split the dataset into a training set and a test set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# set the random number generator}
+\KeywordTok{set.seed}\NormalTok{(}\DecValTok{12}\NormalTok{)}
+
+\CommentTok{# random draw of 80% of the observation (row numbers) to train the model}
+\NormalTok{train.ids <-}\StringTok{ }\KeywordTok{sample}\NormalTok{(}\KeywordTok{nrow}\NormalTok{(df), }\DataTypeTok{size =} \KeywordTok{as.integer}\NormalTok{( (}\KeywordTok{nrow}\NormalTok{(df)}\OperatorTok{*}\NormalTok{.}\DecValTok{80}\NormalTok{) ), }\DataTypeTok{replace =} \OtherTok{FALSE}\NormalTok{)}
+
+\CommentTok{# the validation data }
+\NormalTok{df.test <-}\StringTok{ }\NormalTok{df[ }\OperatorTok{-}\NormalTok{train.ids, ]}
+\KeywordTok{dim}\NormalTok{(df.test)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 210  23
+\end{verbatim}
+
+Now we fit the model using the training data only and then test its performance on the test data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# re-fit the model on the raining data}
+\NormalTok{m.log <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(over.estimate }\OperatorTok{~}\StringTok{ }\NormalTok{RSex }\OperatorTok{+}\StringTok{ }\NormalTok{RAge }\OperatorTok{+}\StringTok{ }\NormalTok{Househld }\OperatorTok{+}\StringTok{ }\NormalTok{Lab }\OperatorTok{+}\StringTok{ }\NormalTok{SNP }\OperatorTok{+}\StringTok{ }\NormalTok{Ukip }\OperatorTok{+}\StringTok{ }\NormalTok{BNP }\OperatorTok{+}\StringTok{ }
+\StringTok{               }\NormalTok{GP }\OperatorTok{+}\StringTok{ }\NormalTok{party.other }\OperatorTok{+}\StringTok{ }\NormalTok{paper }\OperatorTok{+}\StringTok{ }\NormalTok{WWWhourspW }\OperatorTok{+}\StringTok{  }\NormalTok{religious }\OperatorTok{+}\StringTok{ }
+\StringTok{               }\NormalTok{employMonths }\OperatorTok{+}\StringTok{ }\NormalTok{rural }\OperatorTok{+}\StringTok{ }\NormalTok{partly.rural }\OperatorTok{+}\StringTok{ }\NormalTok{urban }\OperatorTok{+}\StringTok{ }\NormalTok{health.good }\OperatorTok{+}\StringTok{ }
+\StringTok{               }\NormalTok{HHInc, }\DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{subset =}\NormalTok{ train.ids, }
+             \DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{))}
+
+\CommentTok{# predict probabilities of over-estimating but for the unseen data}
+\NormalTok{pred.probs <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(m.log, }\DataTypeTok{newdata =}\NormalTok{ df.test, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)}
+
+\CommentTok{# classify predictions as over-estimating or not}
+\NormalTok{exp.out <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{( pred.probs }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{# confusion matrix of predictions against truth}
+\KeywordTok{table}\NormalTok{( }\DataTypeTok{prediction =}\NormalTok{ exp.out, }\DataTypeTok{truth =}\NormalTok{ df.test}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          truth
+prediction   0   1
+         0   5   7
+         1  65 133
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# percent correctly classified}
+\KeywordTok{mean}\NormalTok{( exp.out }\OperatorTok{==}\StringTok{ }\NormalTok{df.test}\OperatorTok{$}\NormalTok{over.estimate )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.6571429
+\end{verbatim}
+
+We see that the classification accuracy is too high in the training dataset. The accuracy on the test dataset provides a good estimate of the model's abbility to correctly identify observations.
+
+Let's try to improve the classification model by relying on the best predictors.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# try to improve the prediction model by relying on "good" predictors}
+\NormalTok{m.log <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(over.estimate }\OperatorTok{~}\StringTok{ }\NormalTok{RSex }\OperatorTok{+}\StringTok{ }\NormalTok{rural }\OperatorTok{+}\StringTok{ }\NormalTok{partly.rural }\OperatorTok{+}\StringTok{ }\NormalTok{urban }\OperatorTok{+}\StringTok{ }\NormalTok{HHInc, }
+             \DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{subset =}\NormalTok{ train.ids, }\DataTypeTok{family =} \KeywordTok{binomial}\NormalTok{(}\DataTypeTok{link =} \StringTok{"logit"}\NormalTok{))}
+\NormalTok{pred.probs <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(m.log, }\DataTypeTok{newdata =}\NormalTok{ df.test, }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)}
+\NormalTok{exp.out <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{( pred.probs }\OperatorTok{>}\StringTok{ }\FloatTok{0.5}\NormalTok{, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+\KeywordTok{table}\NormalTok{( }\DataTypeTok{prediction =}\NormalTok{ exp.out, }\DataTypeTok{truth =}\NormalTok{ df.test}\OperatorTok{$}\NormalTok{over.estimate )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          truth
+prediction   0   1
+         0   6   4
+         1  64 136
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mean}\NormalTok{( exp.out }\OperatorTok{==}\StringTok{ }\NormalTok{df.test}\OperatorTok{$}\NormalTok{over.estimate )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.6761905
+\end{verbatim}
+
+We see that the classification model's accurcy increases when we only rely the strongest predictors.
+
+You can also make predictions for specific settings:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# prediction for a specific setting}
+\KeywordTok{predict}\NormalTok{(m.log, }\DataTypeTok{newdata =} \KeywordTok{data.frame}\NormalTok{( }\DataTypeTok{RSex =} \KeywordTok{c}\NormalTok{(}\StringTok{"Male"}\NormalTok{, }\StringTok{"Female"}\NormalTok{),}
+                                     \DataTypeTok{rural =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+                                     \DataTypeTok{partly.rural =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+                                     \DataTypeTok{urban =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{0}\NormalTok{),}
+                                     \DataTypeTok{HHInc =} \KeywordTok{c}\NormalTok{(}\DecValTok{9}\NormalTok{, }\DecValTok{9}\NormalTok{)), }\DataTypeTok{type =} \StringTok{"response"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+         1          2 
+0.02372597 0.04504885 
+\end{verbatim}
+
+\hypertarget{model-the-underlying-continuous-process}{%
+\subsubsection{Model the Underlying Continuous Process}\label{model-the-underlying-continuous-process}}
+
+Lastly, we can try to model the underlying process and classify afterwards. By doing that, the depdendent variable provides more information. In effect we turn our classification problem into a regression problem.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# fit the linear model on the numer of immigrants per 100 Brits}
+\NormalTok{m.lm <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(IMMBRIT }\OperatorTok{~}\StringTok{ }\NormalTok{RSex }\OperatorTok{+}\StringTok{ }\NormalTok{rural }\OperatorTok{+}\StringTok{ }\NormalTok{partly.rural }\OperatorTok{+}\StringTok{ }\NormalTok{urban }\OperatorTok{+}\StringTok{ }\NormalTok{HHInc, }
+            \DataTypeTok{data =}\NormalTok{ df, }\DataTypeTok{subset =}\NormalTok{ train.ids)}
+
+\CommentTok{# predict}
+\NormalTok{y_hat <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(m.lm, }\DataTypeTok{newdata =}\NormalTok{ df.test)}
+
+\CommentTok{# threshold for classfication}
+\NormalTok{threshold <-}\StringTok{ }\NormalTok{(}\FloatTok{10.7} \OperatorTok{-}\StringTok{ }\KeywordTok{mean}\NormalTok{(df}\OperatorTok{$}\NormalTok{IMMBRIT_original_scale)) }\OperatorTok{/}\StringTok{ }\KeywordTok{sd}\NormalTok{(df}\OperatorTok{$}\NormalTok{IMMBRIT_original_scale)}
+
+\CommentTok{# now we do the classfication }
+\NormalTok{exp.out <-}\StringTok{ }\KeywordTok{ifelse}\NormalTok{( y_hat }\OperatorTok{>}\StringTok{ }\NormalTok{threshold, }\DataTypeTok{yes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{no =} \DecValTok{0}\NormalTok{)}
+
+\CommentTok{# confusion matrix}
+\KeywordTok{table}\NormalTok{( }\DataTypeTok{prediction =}\NormalTok{ exp.out, }\DataTypeTok{truth =}\NormalTok{ df.test}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+          truth
+prediction   0   1
+         1  70 140
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# percent correctly classified}
+\KeywordTok{mean}\NormalTok{( exp.out }\OperatorTok{==}\StringTok{ }\NormalTok{df.test}\OperatorTok{$}\NormalTok{over.estimate)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 0.6666667
+\end{verbatim}
+
+We do worse by treating this as a regression problem rather than a classification problem.
+
+\hypertarget{leave-one-out-cross-validation}{%
+\subsubsection{Leave-One-Out-Cross-Validation}\label{leave-one-out-cross-validation}}
+
+The \texttt{glm()} function offers a generalization of the linear model while allowing for different link functions and error distributions other than gaussian. By default, \texttt{glm()} simply fits a linear model identical to the one estimated with \texttt{lm()}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# linear regression fitted with glm() and lm()}
+\NormalTok{glm.fit <-}\StringTok{ }\KeywordTok{glm}\NormalTok{( IMMBRIT }\OperatorTok{~}\StringTok{ }\NormalTok{RAge, }\DataTypeTok{data =}\NormalTok{ df)}
+\NormalTok{lm.fit <-}\StringTok{ }\KeywordTok{lm}\NormalTok{( IMMBRIT }\OperatorTok{~}\StringTok{ }\NormalTok{RAge, }\DataTypeTok{data =}\NormalTok{ df)}
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{glm()} function can be used with \texttt{cv.glm()} to estimate k-fold cross-validation prediction error.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# use cv.glm() for k-fold corss-validation on glm}
+\KeywordTok{library}\NormalTok{(boot)}
+\NormalTok{cv.err <-}\StringTok{ }\KeywordTok{cv.glm}\NormalTok{(df, glm.fit)}
+\CommentTok{# cross-validation error}
+\NormalTok{cv.err}\OperatorTok{$}\NormalTok{delta}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1.001291 1.001289
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# the number of folds}
+\NormalTok{cv.err}\OperatorTok{$}\NormalTok{K}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1049
+\end{verbatim}
+
+The returned value from \texttt{cv.glm()} contains a delta vector of components - the raw cross-validation estimate and the adjusted cross-validation estimate respectively. We are interested in the raw cross-validation error.
+
+NOTE: if we do not provide the option \textbf{K} in \texttt{cv.glm()} we automatically perfrom LOOCV.
+
+We can repeat this process in a \texttt{for()} loop to compare the cross-validation error of higher-order polynomials. The following example estimates the polynomial fit of the order 1 through 7 and stores the result in a cv.error vector.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# container for cv errors}
+\NormalTok{cv.error <-}\StringTok{ }\OtherTok{NA}
+
+\CommentTok{# loop over age raised to the power 1...7}
+\ControlFlowTok{for}\NormalTok{ (i }\ControlFlowTok{in} \DecValTok{1}\OperatorTok{:}\DecValTok{7}\NormalTok{)\{}
+\NormalTok{  glm.fit <-}\StringTok{ }\KeywordTok{glm}\NormalTok{( IMMBRIT }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(RAge, i), }\DataTypeTok{data =}\NormalTok{ df )}
+\NormalTok{  cv.error[i] <-}\StringTok{ }\KeywordTok{cv.glm}\NormalTok{(df, glm.fit)}\OperatorTok{$}\NormalTok{delta[}\DecValTok{1}\NormalTok{]}
+\NormalTok{\}}
+\NormalTok{cv.error}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1.0012907 0.9932016 0.9840021 0.9854419 0.9869106 0.9876803 0.9888996
+\end{verbatim}
+
+We plot the effect of increasing the complexity of the model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# plot of error rates}
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =} \KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{7}\NormalTok{),}
+     \DataTypeTok{y =}\NormalTok{ cv.error,}
+     \DataTypeTok{bty =} \StringTok{"n"}\NormalTok{, }
+     \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"complexity"}\NormalTok{, }
+     \DataTypeTok{ylab =} \StringTok{"cross-validation error"}\NormalTok{,}
+     \DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\FloatTok{0.98}\NormalTok{, }\FloatTok{1.01}\NormalTok{))}
+\KeywordTok{lines}\NormalTok{( }\DataTypeTok{y =}\NormalTok{ cv.error, }\DataTypeTok{x =} \KeywordTok{seq}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{7}\NormalTok{), }\DataTypeTok{lwd =} \DecValTok{2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/non.finished.plotting-1.pdf}
 
 
 \end{document}

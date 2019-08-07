@@ -1850,8 +1850,8 @@ We start rolling the dice, using R's random number generator and the \texttt{run
 \end{Shaded}
 
 \begin{verbatim}
- [1] 2.521300 3.467514 1.369289 2.423361 4.019759 4.134584 4.994683
- [8] 6.917358 1.677068 4.005559
+ [1] 1.741844 5.771283 6.189035 6.244724 4.858865 4.935539 2.975421
+ [8] 1.173231 4.266911 6.031508
 \end{verbatim}
 
 We have indeed drawn 10 numbers but they are not integers as we would like---we want to simulate a die, so the values should be 1, 2, 3, 4, 5 or 6. We will return to this in a moment but for now let's return to the randomness. Let's draw 10 numbers again:
@@ -1867,8 +1867,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 2.521300 3.467514 1.369289 2.423361 4.019759 4.134584 4.994683
- [8] 6.917358 1.677068 4.005559
+ [1] 1.741844 5.771283 6.189035 6.244724 4.858865 4.935539 2.975421
+ [8] 1.173231 4.266911 6.031508
 \end{verbatim}
 
 \begin{Shaded}
@@ -1879,8 +1879,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 1.037233 1.183132 5.857390 2.648824 1.740200 2.385746 6.568719
- [8] 6.750616 1.130504 6.938775
+ [1] 3.835428 6.910071 4.906824 4.243408 2.678436 3.478764 1.262931
+ [8] 6.636945 4.675963 6.356551
 \end{verbatim}
 
 The numbers of the first and second roll differ because we have drawn values at random. To make our results replicate and to ensure that everyone in the seminar works with the same numbers, we set R's random number generator with the \texttt{set.seed()} function. As argument we plug in some arbitrary value (it does not matter which but using a different one will lead to a different quasi-random draw).
@@ -2807,6 +2807,1047 @@ This is the same as the result we obtained when we calculated the fitted value m
 \item
   \href{http://altaf.shinyapps.io/linear-regression}{Linear Regression - Interactive App}
 \end{itemize}
+
+\hypertarget{multiple-linear-regression-models}{%
+\subsubsection{Multiple linear regression models}\label{multiple-linear-regression-models}}
+
+we load the full standard (cross-sectional) dataset from the Quality of Government Institute (this is a newer version that the one we used earlier). This is a great data source for comparativist research. The codebook is available from their main \href{http://qog.pol.gu.se/data/datadownloads/qogstandarddata}{website}. You can also find time-series and cross-section data sets on this page.
+
+The dataset is in csv format (\texttt{.csv}). Loading it requires the \texttt{read.csv()} function. Let's load the data set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"http://uclspp.github.io/datasets/data/qog_std_cs_jan15.csv"}\NormalTok{, }\DataTypeTok{stringsAsFactors =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Check the dimensions of the dataset
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{dim}\NormalTok{(world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1]  193 2037
+\end{verbatim}
+
+The dataset contains 2037 variables but we're only interested in the following:
+
+\begin{tabular}{l|l}
+\hline
+Variable & Description\\
+\hline
+wbgi\_pse & A measure of political stability (larger values mean more stability)\\
+\hline
+lp\_lat\_abst & Distance to the equator or latitude\\
+\hline
+dr\_ing & Index for the level of globalization\\
+\hline
+ti\_cpi & Transparency International's Corruptions Perceptions Index (larger values mean better quality institutions, i.e. less corruption)\\
+\hline
+br\_dem & Factor variable stating whether the country is a democracy or not (with labels `1. Democracy` and `0. Dictatorship`)\\
+\hline
+\end{tabular}
+
+Our dependent variable (also called response or outcome variable) is \texttt{wbgi\_pse}. We will rename the variables we care about to something meaningful.
+
+CAUTION: When renaming variables, do not use spaces or special characters in the name. You can, however, use a period (\texttt{.}) or underscore (\texttt{\_}) to make the names more readable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data) }\OperatorTok{==}\StringTok{ "cname"}\NormalTok{] <-}\StringTok{ "country"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data) }\OperatorTok{==}\StringTok{ "wbgi_pse"}\NormalTok{] <-}\StringTok{ "pol_stability"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data) }\OperatorTok{==}\StringTok{ "lp_lat_abst"}\NormalTok{] <-}\StringTok{ "latitude"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data) }\OperatorTok{==}\StringTok{ "dr_ig"}\NormalTok{] <-}\StringTok{ "globalization"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data) }\OperatorTok{==}\StringTok{ "chga_demo"}\NormalTok{] <-}\StringTok{ "democracy"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data) }\OperatorTok{==}\StringTok{ "ti_cpi"}\NormalTok{] <-}\StringTok{ "inst_quality"}
+\end{Highlighting}
+\end{Shaded}
+
+Now Let's look at some of these variables using the \texttt{summary()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{pol_stability)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-3.10637 -0.72686 -0.01900 -0.06079  0.78486  1.57240 
+\end{verbatim}
+
+If you think about political stability, and how one could measure it, you know there is an order implicit in the measurement -- more or less stability. From there, what you need to know is whether the more or less is ordinal or interval scaled. Checking \texttt{pol\_stability} you see a range from roughly -3 to 1.6. The variable is numerical and has decimal places. This tells you that the variable is at least interval scaled. You will not see ordinally scaled variables with decimal places. Examine the summaries of the other variables and determine their level of measurement.
+
+Now let's look at the variables that we think can explain political stability. We can use the \texttt{summary()} function on more than one variable by combining their names in a vector.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(world_data[}\KeywordTok{c}\NormalTok{(}\StringTok{'latitude'}\NormalTok{, }\StringTok{'globalization'}\NormalTok{, }\StringTok{'inst_quality'}\NormalTok{, }\StringTok{'democracy'}\NormalTok{)])}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+    latitude      globalization    inst_quality    democracy        
+ Min.   :0.0000   Min.   :24.35   Min.   :1.010   Length:193        
+ 1st Qu.:0.1444   1st Qu.:45.22   1st Qu.:2.400   Class :character  
+ Median :0.2444   Median :54.99   Median :3.300   Mode  :character  
+ Mean   :0.2865   Mean   :57.15   Mean   :3.988                     
+ 3rd Qu.:0.4444   3rd Qu.:68.34   3rd Qu.:5.100                     
+ Max.   :0.7222   Max.   :92.30   Max.   :9.300                     
+ NA's   :12       NA's   :12      NA's   :12                        
+\end{verbatim}
+
+The variables \texttt{latitude}, \texttt{globalization} and \texttt{inst\_quality} have 12 missing values each marked as \texttt{NA}. \texttt{democracy} has 1 missing value. Missing values could cause trouble because operations including an \texttt{NA} will produce \texttt{NA} as a result (e.g.: \texttt{1\ +\ NA\ =\ NA}). We will drop these missing values from our data set using the \texttt{is.na()} function and square brackets. The exlamation mark in front of \texttt{is.na()} means ``not''. So, we keep all rows that are not NA's on the variable \texttt{latitude}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{latitude), ]}
+\end{Highlighting}
+\end{Shaded}
+
+Generally, we want to make sure we drop missing values only from variables that we care about. Now that you have seen how to do this, drop missings from \texttt{globalization}, \texttt{inst\_quality}, and \texttt{democracy} yourself.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{globalization), ]}
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{inst_quality), ]}
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{democracy), ]}
+\end{Highlighting}
+\end{Shaded}
+
+Let's check the range of the variable \texttt{latitude} from our summary above. It is between \texttt{0} and \texttt{1}. The codebook clarifies that the latitude of a country's capital has been divided by \texttt{90} to get a variable that ranges from \texttt{0} to \texttt{1}. This would make interpretation difficult. When interpreting the effect of such a variable a unit change (a change of \texttt{1}) covers the entire range or put differently, it is a change from a country at the equator to a country at one of the poles.
+
+We therefore multiply by \texttt{90} again. This will turn the units of the \texttt{latitude} variable into degrees again which makes interpretation easier.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world_data}\OperatorTok{$}\NormalTok{latitude <-}\StringTok{ }\NormalTok{world_data}\OperatorTok{$}\NormalTok{latitude }\OperatorTok{*}\StringTok{ }\DecValTok{90}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{estimating-a-bivariate-regression}{%
+\subsubsection{Estimating a Bivariate Regression}\label{estimating-a-bivariate-regression}}
+
+Is there a correlation between the distance of a country to the equator and the level of political stability? Both political stability (dependent variable) and distance to the equator (independent variable) are continuous. Therefore, we will get an idea about the relationship using a scatter plot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{latitude,}
+     \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{pol_stability, }
+     \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Latitude"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Political Stability"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-151-1.pdf}
+
+Looking at the cloud of points suggests that there might be a positive relationship: increases in our independent variable \texttt{latitude} appear to be associated with increases in the dependent variable \texttt{pol\_stability} (the further from the equator, the more stable).
+
+We can fit a line of best fit through the points. To do this we must estimate the bivariate regression model with the \texttt{lm()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{latitude_model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(pol_stability }\OperatorTok{~}\StringTok{ }\NormalTok{latitude, }\DataTypeTok{data =}\NormalTok{ world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+Now we can create a scatterplot with a regression line using the \texttt{abline()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{latitude,}
+     \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{pol_stability,}
+     \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+     \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+     \DataTypeTok{xlab =} \StringTok{"Latitude"}\NormalTok{,}
+     \DataTypeTok{ylab =} \StringTok{"Political Stability"}\NormalTok{)}
+
+\KeywordTok{abline}\NormalTok{(latitude_model, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-153-1.pdf}
+
+We can also view a simple summary of the regression by using the \texttt{screenreg} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{screenreg}\NormalTok{(latitude_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+=======================
+             Model 1   
+-----------------------
+(Intercept)   -0.58 ***
+              (0.12)   
+latitude       0.02 ***
+              (0.00)   
+-----------------------
+R^2            0.11    
+Adj. R^2       0.10    
+Num. obs.    170       
+RMSE           0.89    
+=======================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+Thinking back to earlier today, how do we interpret this regression?
+
+\begin{itemize}
+\tightlist
+\item
+  The coefficient for the variable \texttt{latitude} (\(\beta_1\)) indicates that a one-unit increase in a country's latitude is associated with a 0.0178378 increase in the measure of political stability, on average. Question: Is this association statistically significant at the 95\% confidence level?
+\item
+  The coefficient for the \texttt{(intercept)} term (\(\beta_0\)) indicates that the average level of political stability for a country with a latitude of 0 is -0.580075 (where \texttt{latitude\ =\ 0} is a country positioned at the equator)
+\item
+  The \(R^2\) of the model is 0.1065267. This implies that 11\% of the variation in the dependent variable (political stability) is explained by the independent variable (latitude) in the model.
+\end{itemize}
+
+The regression above suggests that there is a significant association between these variables However, as good social scientistis, we probably do not think that the distance of a country from the equator is a theoretically relevant variable for explaining political stability. This is because there is no plausible causal link between the two. We should therefore consider other variables to include in our model.
+
+We will include the index of globalization (higher values mean more integration with the rest of the world), the quality of institutions, and the indicator for whether the country is a democracy. For all of these variables we can come up with a theoretical story for their effect on political stability.
+
+To specify a \emph{multiple} linear regression model, the only thing we need to change is the \texttt{formula} argument of the \texttt{lm()} function. In particular, if we wish to add additional explanatory variables, the formula argument will take the following form:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dependent.var }\OperatorTok{~}\StringTok{ }\NormalTok{independent.var}\FloatTok{.1} \OperatorTok{+}\StringTok{ }\NormalTok{independent.var}\FloatTok{.2} \OperatorTok{+}\StringTok{ }\NormalTok{independent.var}\FloatTok{.3}\NormalTok{ ...}
+\end{Highlighting}
+\end{Shaded}
+
+In our example here, the model would therefore look like the following:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{inst_model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}
+\NormalTok{  pol_stability }\OperatorTok{~}\StringTok{ }\NormalTok{latitude }\OperatorTok{+}\StringTok{ }\NormalTok{globalization }\OperatorTok{+}\StringTok{ }\NormalTok{inst_quality }\OperatorTok{+}\StringTok{ }\NormalTok{democracy, }
+  \DataTypeTok{data =}\NormalTok{ world_data}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+Remember, \texttt{pol\_stability} is our dependent variable, as before, and now we have four independent variables: \texttt{latitude}, \texttt{globalization}, \texttt{democracy} and \texttt{inst\_quality}. Again, just as with the bivariate model, we can view the summarised output of the regression by using \texttt{screenreg()}. As we now have two models (a simple regression model, and a multiple regression model), we can join them together using the \texttt{list()} function, and then put all of that inside \texttt{screenreg()}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{screenreg}\NormalTok{(}\KeywordTok{list}\NormalTok{(latitude_model, inst_model))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+=============================================
+                       Model 1     Model 2   
+---------------------------------------------
+(Intercept)             -0.58 ***   -1.25 ***
+                        (0.12)      (0.20)   
+latitude                 0.02 ***    0.00    
+                        (0.00)      (0.00)   
+globalization                       -0.00    
+                                    (0.01)   
+inst_quality                         0.34 ***
+                                    (0.04)   
+democracy1. Democracy                0.04    
+                                    (0.11)   
+---------------------------------------------
+R^2                      0.11        0.50    
+Adj. R^2                 0.10        0.49    
+Num. obs.              170         170       
+RMSE                     0.89        0.67    
+=============================================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+Including the two new predictors leads to substantial changes.
+
+\begin{itemize}
+\tightlist
+\item
+  First, we now explain 50\% of the variance of our dependent variable instead of just 11\%.
+\item
+  Second, the effect of the distance to the equator is no longer significant.
+\item
+  Third, better quality institutions are associated with more political stability. In particular, a one-unit increase in the measure of instituion quality (which ranges from 1 to 10) is associated with a 0.338882 increase in the measure for political stability.
+\item
+  Fourth, there is no significant relationship between globalization and political stability in this data.
+\item
+  Fifth, there is no significant relationship between democracy and political stability in this data.
+\end{itemize}
+
+\#\#\# Predicting outcome conditional on institutional quality
+
+Just as we did with the simple regression model last week, we can use the fitted model object to calculate the fitted values of our dependent variable for different values of our explanatory variables. To do so, we again use the \texttt{predict()} function.
+
+We proceed in three steps.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  We set the values of the covariates for which we would like to produce fitted values.
+
+  \begin{itemize}
+  \tightlist
+  \item
+    You will need to set covariate values for \emph{every} explanatory variable that you included in your model.
+  \item
+    As only one of our variables has a significant relationship with the outcome in the multiple regression model that we estimated above, we are really only interested in that variable (\texttt{inst\_quality}).
+  \item
+    Therefore, we will calculate fitted values over the range of \texttt{inst\_quality}, while setting the values of \texttt{latitude} and \texttt{globalization} to their mean values.
+  \item
+    As \texttt{democracy} is a factor variable, we cannot use the mean value. Instead, we will set \texttt{democracy} to be equal to \texttt{"1.\ Democracy"} which is the label for democratic countries
+  \end{itemize}
+\item
+  We calculate the fitted values.
+\item
+  We report the results (here we will produce a plot).
+\end{enumerate}
+
+For step one, the following code produces a \texttt{data.frame} of new covariate values for which we would like to calculate a fitted value from our model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{democracies <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
+  \DataTypeTok{inst_quality =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{1.4}\NormalTok{, }\DataTypeTok{to =} \FloatTok{9.3}\NormalTok{, }\DataTypeTok{by =} \DecValTok{1}\NormalTok{),}
+  \DataTypeTok{globalization =} \KeywordTok{mean}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{globalization),}
+  \DataTypeTok{latitude =} \KeywordTok{mean}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{latitude),}
+  \DataTypeTok{democracy =} \StringTok{"1. Democracy"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We've just created a \texttt{data.frame} of hypothetical democracies with varying level of institutional quality. Let's see what this \texttt{data.frame} looks like.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{democracies}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  inst_quality globalization latitude    democracy
+1          1.4      57.93053 25.78218 1. Democracy
+2          2.4      57.93053 25.78218 1. Democracy
+3          3.4      57.93053 25.78218 1. Democracy
+4          4.4      57.93053 25.78218 1. Democracy
+5          5.4      57.93053 25.78218 1. Democracy
+6          6.4      57.93053 25.78218 1. Democracy
+7          7.4      57.93053 25.78218 1. Democracy
+8          8.4      57.93053 25.78218 1. Democracy
+\end{verbatim}
+
+In this \texttt{data.frame}, we have set the \texttt{inst\_quality} variable to vary between 1.4 and 9.3000002, with increments of 1 unit which represents the range of \texttt{inst\_quality} in our dataset.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{min}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{inst_quality)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 1.4
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{max}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{inst_quality)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] 9.3
+\end{verbatim}
+
+We have set \texttt{globalization} to be equal to the mean value of \texttt{globalization} in the \texttt{world\_data} object, and \texttt{latitude} to be equal to the mean value of \texttt{latitude} in the \texttt{world\_data} object. Finally, we have set \texttt{democracy} to be equal to \texttt{"1.\ Democracy"} (the value for democratic countries).
+
+We can now calculate the fitted values for each of these combinations of our explanatory variables using the \texttt{predict()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{democracies}\OperatorTok{$}\NormalTok{predicted_pol_stability <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(inst_model, }\DataTypeTok{newdata =}\NormalTok{ democracies)}
+\end{Highlighting}
+\end{Shaded}
+
+We can now look again at the \texttt{democracies} object:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{democracies}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+  inst_quality globalization latitude    democracy predicted_pol_stability
+1          1.4      57.93053 25.78218 1. Democracy             -1.00319887
+2          2.4      57.93053 25.78218 1. Democracy             -0.66431685
+3          3.4      57.93053 25.78218 1. Democracy             -0.32543483
+4          4.4      57.93053 25.78218 1. Democracy              0.01344719
+5          5.4      57.93053 25.78218 1. Democracy              0.35232921
+6          6.4      57.93053 25.78218 1. Democracy              0.69121123
+7          7.4      57.93053 25.78218 1. Democracy              1.03009325
+8          8.4      57.93053 25.78218 1. Democracy              1.36897527
+\end{verbatim}
+
+Hey presto! Now, for each of our explanatory variable combinations, we have the corresponding fitted values as calculated from our estimated regression.
+
+Finally, we can plot these values:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ democracies}\OperatorTok{$}\NormalTok{inst_quality,}
+  \DataTypeTok{y =}\NormalTok{ democracies}\OperatorTok{$}\NormalTok{predicted_pol_stability,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{, }
+  \DataTypeTok{col =} \StringTok{"blue"}\NormalTok{,}
+  \DataTypeTok{type =} \StringTok{"l"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Institution Quality"}\NormalTok{, }
+  \DataTypeTok{ylab =} \StringTok{"Fitted value for political stability"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-165-1.pdf}
+
+We could also use the output from our model to plot two separate lines of fitted values: one for democracies, and one for dictatorships. We have already done this for democracies, so the following code constructs a \texttt{data.frame} of fitted values for dictatorships:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dictatorships <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}
+  \DataTypeTok{inst_quality =} \KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \FloatTok{1.4}\NormalTok{, }\DataTypeTok{to =} \FloatTok{9.3}\NormalTok{, }\DataTypeTok{by =} \DecValTok{1}\NormalTok{),}
+  \DataTypeTok{globalization =} \KeywordTok{mean}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{globalization),}
+  \DataTypeTok{latitude =} \KeywordTok{mean}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{latitude),}
+  \DataTypeTok{democracy =} \StringTok{"0. Dictatorship"}
+\NormalTok{)}
+
+\NormalTok{dictatorships}\OperatorTok{$}\NormalTok{predicted_pol_stability <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(inst_model, }\DataTypeTok{newdata =}\NormalTok{ dictatorships)}
+\end{Highlighting}
+\end{Shaded}
+
+Now that we have calculated these fitted values, we can add the line for dictatorships to the plot we created above using the \texttt{lines()} function:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ democracies}\OperatorTok{$}\NormalTok{inst_quality,}
+  \DataTypeTok{y =}\NormalTok{ democracies}\OperatorTok{$}\NormalTok{predicted_pol_stability,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{, }
+  \DataTypeTok{col =} \StringTok{"blue"}\NormalTok{,}
+  \DataTypeTok{type =} \StringTok{"l"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Institution Quality"}\NormalTok{, }
+  \DataTypeTok{ylab =} \StringTok{"Fitted value for political stability"}
+\NormalTok{)}
+
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ dictatorships}\OperatorTok{$}\NormalTok{inst_quality,}
+      \DataTypeTok{y =}\NormalTok{ dictatorships}\OperatorTok{$}\NormalTok{predicted_pol_stability,}
+      \DataTypeTok{data =}\NormalTok{ dictatorships,}
+      \DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in plot.xy(xy.coords(x, y), type = type, ...): "data" is not a
+graphical parameter
+\end{verbatim}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-167-1.pdf}
+
+We can see from the plot that the fitted values for democracies (blue line) are almost exactly the same as those for dictatorships (red line). This is reassuring, as the estimated coefficient on the democracy variable was very small (0.04) and was not statistically significantly different from 0. Often, however, it can be very illuminating to construct plots like this where we construct a line to indicate how our predicted values for Y vary across one of our explanatory variables (here, institution quality), and we create different lines for different values of another explanatory variable (here, democracy/dictatorship).
+
+\hypertarget{non-linearities}{%
+\subsubsection{Non-Linearities}\label{non-linearities}}
+
+Let's clear our workspace for now to keep the workspace tidy and to prevent our computer from slowing down.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{rm}\NormalTok{(}\DataTypeTok{list =} \KeywordTok{ls}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+We will use the small version of the Quality of Government data from 2012 again (\texttt{QoG2012.csv}) with four variables:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+\begin{minipage}[b]{0.17\columnwidth}\raggedright
+Variable\strut
+\end{minipage} & \begin{minipage}[b]{0.77\columnwidth}\raggedright
+Description\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+\texttt{former\_col}\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+0 = not a former colony 1 = former colony\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+\texttt{undp\_hdi}\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+UNDP Human Development Index. Higher values mean better quality of life\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+\texttt{wbgi\_cce}\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+Control of corruption. Higher values mean better control of corruption\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.17\columnwidth}\raggedright
+\texttt{wdi\_gdpc}\strut
+\end{minipage} & \begin{minipage}[t]{0.77\columnwidth}\raggedright
+GDP per capita in US dollars\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world_data <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"QoG2012.csv"}\NormalTok{)}
+\KeywordTok{names}\NormalTok{(world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "h_j"         "wdi_gdpc"    "undp_hdi"    "wbgi_cce"    "wbgi_pse"   
+[6] "former_col"  "lp_lat_abst"
+\end{verbatim}
+
+Rename the variables by yourself to:
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule
+New Name & Old Name\tabularnewline
+\midrule
+\endhead
+\texttt{human\_development} & \texttt{undp\_hdi}\tabularnewline
+\texttt{institutions\_quality} & \texttt{wbgi\_cce}\tabularnewline
+\texttt{gdp\_capita} & \texttt{wdi\_gdpc}\tabularnewline
+\bottomrule
+\end{longtable}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "h_j"         "wdi_gdpc"    "undp_hdi"    "wbgi_cce"    "wbgi_pse"   
+[6] "former_col"  "lp_lat_abst"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data)}\OperatorTok{==}\StringTok{"undp_hdi"}\NormalTok{] <-}\StringTok{ "human_development"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data)}\OperatorTok{==}\StringTok{"wbgi_cce"}\NormalTok{] <-}\StringTok{ "institutions_quality"}
+\KeywordTok{names}\NormalTok{(world_data)[}\KeywordTok{names}\NormalTok{(world_data)}\OperatorTok{==}\StringTok{"wdi_gdpc"}\NormalTok{] <-}\StringTok{ "gdp_capita"}
+\KeywordTok{names}\NormalTok{(world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1] "h_j"                  "gdp_capita"           "human_development"   
+[4] "institutions_quality" "wbgi_pse"             "former_col"          
+[7] "lp_lat_abst"         
+\end{verbatim}
+
+Now let's look at the summary statistics for the entire data set.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(world_data) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+      h_j           gdp_capita      human_development institutions_quality
+ Min.   :0.0000   Min.   :  226.2   Min.   :0.2730    Min.   :-1.69953    
+ 1st Qu.:0.0000   1st Qu.: 1768.0   1st Qu.:0.5390    1st Qu.:-0.81965    
+ Median :0.0000   Median : 5326.1   Median :0.7510    Median :-0.30476    
+ Mean   :0.3787   Mean   :10184.1   Mean   :0.6982    Mean   :-0.05072    
+ 3rd Qu.:1.0000   3rd Qu.:12976.5   3rd Qu.:0.8335    3rd Qu.: 0.50649    
+ Max.   :1.0000   Max.   :63686.7   Max.   :0.9560    Max.   : 2.44565    
+ NA's   :25       NA's   :16        NA's   :19        NA's   :2           
+    wbgi_pse          former_col      lp_lat_abst    
+ Min.   :-2.46746   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:-0.72900   1st Qu.:0.0000   1st Qu.:0.1343  
+ Median : 0.02772   Median :1.0000   Median :0.2444  
+ Mean   :-0.03957   Mean   :0.6289   Mean   :0.2829  
+ 3rd Qu.: 0.79847   3rd Qu.:1.0000   3rd Qu.:0.4444  
+ Max.   : 1.67561   Max.   :1.0000   Max.   :0.7222  
+                                     NA's   :7       
+\end{verbatim}
+
+We need to remove missing values from \texttt{gdp\_capita}, \texttt{human\_development}, and \texttt{institutions\_quality}. Do so yourself. Do not drop observations that missing values on other observations such as \texttt{lp\_lat\_abst}. We might throw away useful information when doing so.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{gdp_capita), ]}
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{human_development), ]}
+\NormalTok{world_data <-}\StringTok{ }\NormalTok{world_data[ }\OperatorTok{!}\KeywordTok{is.na}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{institutions_quality), ]}
+\end{Highlighting}
+\end{Shaded}
+
+Let's suppose we want to illustrate the relationship between GDP per capita and the human development index. We draw a scatter plot to investigate the relationship between the quality of life (hdi) and wealth (gdp/captia).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{gdp_capita,}
+  \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{human_development,}
+  \DataTypeTok{data =}\NormalTok{ world_data,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"grey"}\NormalTok{,}
+  \DataTypeTok{main =} \StringTok{"Relationship between the quality of life and wealth"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Human development index"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"GDP per capita"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in plot.window(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in plot.xy(xy, type, ...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in title(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-173-1.pdf}
+
+It's easy to see, that the relationship between GDP per captia and the Human Development Index is not linear. Increases in wealth rapidly increase the quality of life in poor societies. The richer the country, the less pronounced the effect of additional wealth. We would mis-specify our model if we do not take the non-linear relationship into account.
+
+Let's go ahead and fit a mis-specified model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{linear.model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(human_development }\OperatorTok{~}\StringTok{ }\NormalTok{gdp_capita, }\DataTypeTok{data =}\NormalTok{ world_data)}
+\KeywordTok{screenreg}\NormalTok{(linear.model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+=======================
+             Model 1   
+-----------------------
+(Intercept)    0.59 ***
+              (0.01)   
+gdp_capita     0.00 ***
+              (0.00)   
+-----------------------
+R^2            0.49    
+Adj. R^2       0.49    
+Num. obs.    172       
+RMSE           0.13    
+=======================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+We detect a significant linear relationship. The effect may look small because the coefficient rounded to two digits is zero. But remember, this is the effect of increasing GDP/capita by \(1\) US dollar on the quality of life. That effect is naturally small but it is probably not small when we increase wealth by \(1000\) US dollars.
+
+However, our model would also entail that for every increase in GDP/capita, the quality of life increases on average by the same amount. We saw from our plot that this is not the case. The effect of GDP/capita on the quality of life is conditional on the level of GDP/capita. If that sounds like an interaction to you, then that is great because, we will model the non-linearity by raising the GDP/capita to a higher power. That is in effect an interaction of the variable with itself. GDP/capita raised to the second power, e.g.~is GDP/capita * GDP/capita.
+
+\hypertarget{polynomials}{%
+\paragraph{Polynomials}\label{polynomials}}
+
+We know from school that polynomials like \(X^2\), \(X^3\) and so on are not linear. The relationship depicted in our plot above suggests a quadratic relationship between GDP per capita and the human development index might be appropriate (there is only one obvious ``bend'' in the data). To incorporate this intuition into our model, we will use the \texttt{poly()} function in our linear model to raise GDP/capita to the second power like so: \texttt{poly(gdp\_capita,\ degree\ =\ 2).}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{quadratic.model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(}
+\NormalTok{  human_development }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(gdp_capita, }\DataTypeTok{degree =} \DecValTok{2}\NormalTok{), }
+  \DataTypeTok{data =}\NormalTok{ world_data}
+\NormalTok{)}
+
+
+\KeywordTok{screenreg}\NormalTok{(}
+  \KeywordTok{list}\NormalTok{(linear.model, quadratic.model), }
+  \DataTypeTok{custom.model.names =} \KeywordTok{c}\NormalTok{(}\StringTok{"Linear model"}\NormalTok{, }\StringTok{"Quadratic model"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+============================================================
+                               Linear model  Quadratic model
+------------------------------------------------------------
+(Intercept)                      0.59 ***      0.70 ***     
+                                (0.01)        (0.01)        
+gdp_capita                       0.00 ***                   
+                                (0.00)                      
+poly(gdp_capita, degree = 2)1                  1.66 ***     
+                                              (0.10)        
+poly(gdp_capita, degree = 2)2                 -1.00 ***     
+                                              (0.10)        
+------------------------------------------------------------
+R^2                              0.49          0.67         
+Adj. R^2                         0.49          0.66         
+Num. obs.                      172           172            
+RMSE                             0.13          0.10         
+============================================================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+It is important to note, that in the quadratic model the effect of GDP/capita is no longer easy to interpret. We cannot say for every increase in GDP/capita by one dollar, the quality of life increases on average by some fixed amount. This is because the effect of GDP/capita depends on how rich a country was to begin with. We can, however, interpret the statitical significance of the quadratic term: the coefficient is about 10 times as large in absolute terms as the standard error, meaning we can easily reject the null hypothesis that the relationship between GDP and the HDI is linear. Furthermore, it looks like our model that includes the quadratic term has a much better fit, as the adjusted \(R^2\) has increased by a lot.
+
+We can interpret the effect of wealth (GDP/capita) on the quality of life (human development index) by predicting the fitted values of the human development index given a certain level of GDP/capita. We will vary GDP/captia from its minimum in the data to its maximum and the plot the results which is a good way to illustrate a non-linear relationship.
+
+Step 1: We find the minimum and maximum values of GDP/capita.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{range}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{gdp_capita)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+[1]   226.235 63686.676
+\end{verbatim}
+
+Step 2: We predict fitted values for varying levels of GDP/captia (let's create 100 predictions).
+
+We create our sequence of 100 GDP/capita values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gdp_seq <-}\StringTok{ }\KeywordTok{seq}\NormalTok{(}\DataTypeTok{from =} \DecValTok{226}\NormalTok{, }\DataTypeTok{to =} \DecValTok{63686}\NormalTok{, }\DataTypeTok{length.out =} \DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+We set our covariate values (here we only have one covariate: GDP/captia)
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x <-}\StringTok{ }\KeywordTok{data.frame}\NormalTok{(}\DataTypeTok{gdp_capita =}\NormalTok{ gdp_seq)}
+\end{Highlighting}
+\end{Shaded}
+
+We predict the outcome (human development index) for each of the 100 GDP levels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y_hat <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(quadratic.model, }\DataTypeTok{newdata =}\NormalTok{ x)}
+\end{Highlighting}
+\end{Shaded}
+
+Step 3: Now that we have created our predictions. We plot again and then we add the \texttt{linear.model} using \texttt{abline} and we add our non-linear version \texttt{quadratic.model} using the \texttt{lines()} function.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{gdp_capita,}
+  \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{human_development,}
+  \DataTypeTok{data =}\NormalTok{ world_data,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"grey"}\NormalTok{,}
+  \DataTypeTok{main =} \StringTok{"Relationship between the quality of life and wealth"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Human development index"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"GDP per capita"}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in plot.window(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in plot.xy(xy, type, ...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in title(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# the linear model}
+\KeywordTok{abline}\NormalTok{(linear.model, }\DataTypeTok{col =} \StringTok{"black"}\NormalTok{)}
+
+\CommentTok{# better model}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ gdp_seq, }\DataTypeTok{y =}\NormalTok{ y_hat, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-180-1.pdf}
+
+We could go further than this quadratic specification, and instead estimate a \texttt{cubic.model} with GDP/capita raised to the power of three. Do this now and present your results visually.
+
+Estimate cubic model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{cubic.model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(human_development }\OperatorTok{~}\StringTok{ }\KeywordTok{poly}\NormalTok{(gdp_capita, }\DecValTok{3}\NormalTok{), }\DataTypeTok{data =}\NormalTok{ world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+We predict the outcome (human development index) for each of the 100 GDP levels
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y_hat2 <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(cubic.model, }\DataTypeTok{newdata =}\NormalTok{ x)}
+\end{Highlighting}
+\end{Shaded}
+
+Next, we plot the linear and quadratic models
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{gdp_capita,}
+  \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{human_development,}
+  \DataTypeTok{data =}\NormalTok{ world_data,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"grey"}\NormalTok{,}
+  \DataTypeTok{main =} \StringTok{"Relationship between the quality of life and wealth"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Human development index"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"GDP per capita"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in plot.window(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in plot.xy(xy, type, ...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in title(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# the linear model}
+\KeywordTok{abline}\NormalTok{(linear.model, }\DataTypeTok{col =} \StringTok{"black"}\NormalTok{)}
+
+\CommentTok{# quadratic model}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ gdp_seq, }\DataTypeTok{y =}\NormalTok{ y_hat, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+
+\CommentTok{# cubic model}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ gdp_seq, }\DataTypeTok{y =}\NormalTok{ y_hat2, }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-183-1.pdf}
+
+The cubic model provides a similar story to the quadratic model (the relationship between GDP/capita and HDI is steep at first, and then flatter at the higher levels of GDP/captia), but it looks somewhat strange, particularly at the higher levels of GDP/capita. In particular, it seems that the few extreme X values are causing a strange shape: the cubic is being wagged around by its tail. This is a common problem with polynomial regression models, and so we will now consider an alternative.
+
+\hypertarget{log-transformations}{%
+\paragraph{Log-transformations}\label{log-transformations}}
+
+Many non-linear relationships actually do look linear on the log scale. We can illustrate this by taking the natural logarithm of GDP/captia and plot the relationship between quality of life and our transformed GDP variable.
+
+Note: Some of you will remember from your school calculators that you have an ln button and a log button where ln takes the natural logarithm and log takes the logarithm with base 10. The natural logarithm represents relations that occur frequently in the world and R takes the natural logarithm with the \texttt{log()} function by default.
+
+Below, we plot the same plot from before but we wrap \texttt{gdp\_capita} in the \texttt{log()} function which log-transforms the variable.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =} \KeywordTok{log}\NormalTok{(world_data}\OperatorTok{$}\NormalTok{gdp_capita),}
+  \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{human_development,}
+  \DataTypeTok{data =}\NormalTok{ world_data,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"grey"}\NormalTok{,}
+  \DataTypeTok{main =} \StringTok{"Relationship between the quality of life and wealth on the log scale"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Human development index"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"Logged gdp/capita"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in plot.window(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in plot.xy(xy, type, ...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in title(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-184-1.pdf}
+
+As you can see, the relationship now looks much closer to linear and we get the best fit to the data (as measured by adjusted \(R^2\)) if we run our model with log-transformed gdp.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{log.model <-}\StringTok{ }\KeywordTok{lm}\NormalTok{(human_development }\OperatorTok{~}\StringTok{ }\KeywordTok{log}\NormalTok{(gdp_capita), }\DataTypeTok{data =}\NormalTok{ world_data)}
+\end{Highlighting}
+\end{Shaded}
+
+Let's check our model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{screenreg}\NormalTok{(}
+  \KeywordTok{list}\NormalTok{(linear.model, quadratic.model, cubic.model, log.model),}
+  \DataTypeTok{custom.model.names =} \KeywordTok{c}\NormalTok{(}\StringTok{"Linear Model"}\NormalTok{, }\StringTok{"Quadratic Model"}\NormalTok{, }\StringTok{"Cubic Model"}\NormalTok{, }\StringTok{"Log Model"}\NormalTok{)}
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+
+=====================================================================================
+                               Linear Model  Quadratic Model  Cubic Model  Log Model 
+-------------------------------------------------------------------------------------
+(Intercept)                      0.59 ***      0.70 ***         0.70 ***    -0.36 ***
+                                (0.01)        (0.01)           (0.01)       (0.04)   
+gdp_capita                       0.00 ***                                            
+                                (0.00)                                               
+poly(gdp_capita, degree = 2)1                  1.66 ***                              
+                                              (0.10)                                 
+poly(gdp_capita, degree = 2)2                 -1.00 ***                              
+                                              (0.10)                                 
+poly(gdp_capita, 3)1                                            1.66 ***             
+                                                               (0.09)                
+poly(gdp_capita, 3)2                                           -1.00 ***             
+                                                               (0.09)                
+poly(gdp_capita, 3)3                                            0.65 ***             
+                                                               (0.09)                
+log(gdp_capita)                                                              0.12 ***
+                                                                            (0.00)   
+-------------------------------------------------------------------------------------
+R^2                              0.49          0.67             0.74         0.81    
+Adj. R^2                         0.49          0.66             0.74         0.81    
+Num. obs.                      172           172              172          172       
+RMSE                             0.13          0.10             0.09         0.08    
+=====================================================================================
+*** p < 0.001, ** p < 0.01, * p < 0.05
+\end{verbatim}
+
+Polynomials can be useful for modelling non-linearities. However, for each additional polynomial term we add, we also add an additional parameter that needs to be estimated. This reduces the degrees of freedom of the model. If we can get a linear relationship on the log scale, one advantage is that we use the same number of parameters as in the original linear model.
+
+Furthermore, we gain interpretability. The relationship is linear on the log scale of gdp/capita. This means we can interpret the effect of gdp/captia as: For an increase of gdp/captia by one percent, the quality of life increases by \(\frac{\hat{\beta}}{100} = \frac{0.12}{100}\) points on average. The effect is very large because \texttt{human\_development} only varies from \(0\) to \(1\).
+
+The adjusted \(R^2\) also suggests that the log model provides the best fit to the data. To illustrate that this is the case, we return to our plot and show the model fit graphically.
+
+Get the fitted values for the log model.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{y_hat3 <-}\StringTok{ }\KeywordTok{predict}\NormalTok{(log.model, }\DataTypeTok{newdata =}\NormalTok{ x)}
+\end{Highlighting}
+\end{Shaded}
+
+Create a plot showing the fitted values
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(}
+  \DataTypeTok{x =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{gdp_capita,}
+  \DataTypeTok{y =}\NormalTok{ world_data}\OperatorTok{$}\NormalTok{human_development,}
+  \DataTypeTok{data =}\NormalTok{ world_data,}
+  \DataTypeTok{pch =} \DecValTok{20}\NormalTok{,}
+  \DataTypeTok{frame.plot =} \OtherTok{FALSE}\NormalTok{,}
+  \DataTypeTok{col =} \StringTok{"grey"}\NormalTok{,}
+  \DataTypeTok{main =} \StringTok{"Relationship between the quality of life and wealth"}\NormalTok{,}
+  \DataTypeTok{ylab =} \StringTok{"Human development index"}\NormalTok{,}
+  \DataTypeTok{xlab =} \StringTok{"GDP per capita"}
+\NormalTok{  )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+Warning in plot.window(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in plot.xy(xy, type, ...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): "data" is not
+a graphical parameter
+\end{verbatim}
+
+\begin{verbatim}
+Warning in title(...): "data" is not a graphical parameter
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{# Linear model}
+\KeywordTok{abline}\NormalTok{(linear.model, }\DataTypeTok{col =} \StringTok{"black"}\NormalTok{)}
+
+\CommentTok{# Quadratic model}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ gdp_seq, }\DataTypeTok{y =}\NormalTok{ y_hat, }\DataTypeTok{col =} \StringTok{"red"}\NormalTok{)}
+
+\CommentTok{# Cubic model}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ gdp_seq, }\DataTypeTok{y =}\NormalTok{ y_hat2, }\DataTypeTok{col =} \StringTok{"green"}\NormalTok{)}
+
+\CommentTok{# Log model}
+\KeywordTok{lines}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ gdp_seq, }\DataTypeTok{y =}\NormalTok{ y_hat3, }\DataTypeTok{col =} \StringTok{"blue"}\NormalTok{)}
+
+\CommentTok{# Add a legend}
+\KeywordTok{legend}\NormalTok{(}\StringTok{"bottomright"}\NormalTok{, }
+       \DataTypeTok{legend =} \KeywordTok{c}\NormalTok{(}\StringTok{"Linear"}\NormalTok{, }\StringTok{"Quadratic"}\NormalTok{, }\StringTok{"Cubic"}\NormalTok{, }\StringTok{"Log"}\NormalTok{), }
+       \DataTypeTok{lty =} \DecValTok{1}\NormalTok{, }
+       \DataTypeTok{col =} \KeywordTok{c}\NormalTok{(}\StringTok{"black"}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"green"}\NormalTok{, }\StringTok{"blue"}\NormalTok{) }
+\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{suffolk2019_files/figure-latex/unnamed-chunk-188-1.pdf}
+
+The blue line shows the log-transformed model. It clearly fits the data best.
 
 \hypertarget{prediction-and-assessing-prediction-accuracy}{%
 \section{Prediction and assessing prediction accuracy}\label{prediction-and-assessing-prediction-accuracy}}

@@ -205,6 +205,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="9.1.1" data-path="seminar9.html"><a href="seminar9.html#interpreting-regression-output"><i class="fa fa-check"></i><b>9.1.1</b> Interpreting Regression Output</a></li>
 <li class="chapter" data-level="9.1.2" data-path="seminar9.html"><a href="seminar9.html#fitted-values"><i class="fa fa-check"></i><b>9.1.2</b> Fitted values</a></li>
 <li class="chapter" data-level="9.1.3" data-path="seminar9.html"><a href="seminar9.html#additional-resources"><i class="fa fa-check"></i><b>9.1.3</b> Additional Resources</a></li>
+<li class="chapter" data-level="9.1.4" data-path="seminar9.html"><a href="seminar9.html#multiple-linear-regression-models"><i class="fa fa-check"></i><b>9.1.4</b> Multiple linear regression models</a></li>
+<li class="chapter" data-level="9.1.5" data-path="seminar9.html"><a href="seminar9.html#estimating-a-bivariate-regression"><i class="fa fa-check"></i><b>9.1.5</b> Estimating a Bivariate Regression</a></li>
+<li class="chapter" data-level="9.1.6" data-path="seminar9.html"><a href="seminar9.html#non-linearities"><i class="fa fa-check"></i><b>9.1.6</b> Non-Linearities</a></li>
 </ul></li>
 </ul></li>
 <li class="chapter" data-level="10" data-path="seminar10.html"><a href="seminar10.html"><i class="fa fa-check"></i><b>10</b> Prediction and assessing prediction accuracy</a><ul>
@@ -520,7 +523,606 @@ RMSE            13.52        20.01
 <ul>
 <li><a href="http://altaf.shinyapps.io/linear-regression">Linear Regression - Interactive App</a></li>
 </ul>
+</div>
+<div id="multiple-linear-regression-models" class="section level3">
+<h3><span class="header-section-number">9.1.4</span> Multiple linear regression models</h3>
+<p>we load the full standard (cross-sectional) dataset from the Quality of Government Institute (this is a newer version that the one we used earlier). This is a great data source for comparativist research. The codebook is available from their main <a href="http://qog.pol.gu.se/data/datadownloads/qogstandarddata">website</a>. You can also find time-series and cross-section data sets on this page.</p>
+<p>The dataset is in csv format (<code>.csv</code>). Loading it requires the <code>read.csv()</code> function. Let’s load the data set.</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1">world_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;http://uclspp.github.io/datasets/data/qog_std_cs_jan15.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>Check the dimensions of the dataset</p>
+<div class="sourceCode" id="cb211"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb211-1" title="1"><span class="kw">dim</span>(world_data)</a></code></pre></div>
+<pre><code>[1]  193 2037</code></pre>
+<p>The dataset contains 2037 variables but we’re only interested in the following:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">wbgi_pse</td>
+<td align="left">A measure of political stability (larger values mean more stability)</td>
+</tr>
+<tr class="even">
+<td align="left">lp_lat_abst</td>
+<td align="left">Distance to the equator or latitude</td>
+</tr>
+<tr class="odd">
+<td align="left">dr_ing</td>
+<td align="left">Index for the level of globalization</td>
+</tr>
+<tr class="even">
+<td align="left">ti_cpi</td>
+<td align="left">Transparency International’s Corruptions Perceptions Index (larger values mean better quality institutions, i.e. less corruption)</td>
+</tr>
+<tr class="odd">
+<td align="left">br_dem</td>
+<td align="left">Factor variable stating whether the country is a democracy or not (with labels <code>1. Democracy</code> and <code>0. Dictatorship</code>)</td>
+</tr>
+</tbody>
+</table>
+<p>Our dependent variable (also called response or outcome variable) is <code>wbgi_pse</code>. We will rename the variables we care about to something meaningful.</p>
+<p>CAUTION: When renaming variables, do not use spaces or special characters in the name. You can, however, use a period (<code>.</code>) or underscore (<code>_</code>) to make the names more readable.</p>
+<div class="sourceCode" id="cb213"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb213-1" title="1"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data) <span class="op">==</span><span class="st"> &quot;cname&quot;</span>] &lt;-<span class="st"> &quot;country&quot;</span></a>
+<a class="sourceLine" id="cb213-2" title="2"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data) <span class="op">==</span><span class="st"> &quot;wbgi_pse&quot;</span>] &lt;-<span class="st"> &quot;pol_stability&quot;</span></a>
+<a class="sourceLine" id="cb213-3" title="3"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data) <span class="op">==</span><span class="st"> &quot;lp_lat_abst&quot;</span>] &lt;-<span class="st"> &quot;latitude&quot;</span></a>
+<a class="sourceLine" id="cb213-4" title="4"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data) <span class="op">==</span><span class="st"> &quot;dr_ig&quot;</span>] &lt;-<span class="st"> &quot;globalization&quot;</span></a>
+<a class="sourceLine" id="cb213-5" title="5"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data) <span class="op">==</span><span class="st"> &quot;chga_demo&quot;</span>] &lt;-<span class="st"> &quot;democracy&quot;</span></a>
+<a class="sourceLine" id="cb213-6" title="6"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data) <span class="op">==</span><span class="st"> &quot;ti_cpi&quot;</span>] &lt;-<span class="st"> &quot;inst_quality&quot;</span></a></code></pre></div>
+<p>Now Let’s look at some of these variables using the <code>summary()</code> function.</p>
+<div class="sourceCode" id="cb214"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb214-1" title="1"><span class="kw">summary</span>(world_data<span class="op">$</span>pol_stability)</a></code></pre></div>
+<pre><code>    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+-3.10637 -0.72686 -0.01900 -0.06079  0.78486  1.57240 </code></pre>
+<p>If you think about political stability, and how one could measure it, you know there is an order implicit in the measurement – more or less stability. From there, what you need to know is whether the more or less is ordinal or interval scaled. Checking <code>pol_stability</code> you see a range from roughly -3 to 1.6. The variable is numerical and has decimal places. This tells you that the variable is at least interval scaled. You will not see ordinally scaled variables with decimal places. Examine the summaries of the other variables and determine their level of measurement.</p>
+<p>Now let’s look at the variables that we think can explain political stability. We can use the <code>summary()</code> function on more than one variable by combining their names in a vector.</p>
+<div class="sourceCode" id="cb216"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb216-1" title="1"><span class="kw">summary</span>(world_data[<span class="kw">c</span>(<span class="st">&#39;latitude&#39;</span>, <span class="st">&#39;globalization&#39;</span>, <span class="st">&#39;inst_quality&#39;</span>, <span class="st">&#39;democracy&#39;</span>)])</a></code></pre></div>
+<pre><code>    latitude      globalization    inst_quality    democracy        
+ Min.   :0.0000   Min.   :24.35   Min.   :1.010   Length:193        
+ 1st Qu.:0.1444   1st Qu.:45.22   1st Qu.:2.400   Class :character  
+ Median :0.2444   Median :54.99   Median :3.300   Mode  :character  
+ Mean   :0.2865   Mean   :57.15   Mean   :3.988                     
+ 3rd Qu.:0.4444   3rd Qu.:68.34   3rd Qu.:5.100                     
+ Max.   :0.7222   Max.   :92.30   Max.   :9.300                     
+ NA&#39;s   :12       NA&#39;s   :12      NA&#39;s   :12                        </code></pre>
+<p>The variables <code>latitude</code>, <code>globalization</code> and <code>inst_quality</code> have 12 missing values each marked as <code>NA</code>. <code>democracy</code> has 1 missing value. Missing values could cause trouble because operations including an <code>NA</code> will produce <code>NA</code> as a result (e.g.: <code>1 + NA = NA</code>). We will drop these missing values from our data set using the <code>is.na()</code> function and square brackets. The exlamation mark in front of <code>is.na()</code> means “not”. So, we keep all rows that are not NA’s on the variable <code>latitude</code>.</p>
+<div class="sourceCode" id="cb218"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb218-1" title="1">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>latitude), ]</a></code></pre></div>
+<p>Generally, we want to make sure we drop missing values only from variables that we care about. Now that you have seen how to do this, drop missings from <code>globalization</code>, <code>inst_quality</code>, and <code>democracy</code> yourself.</p>
+<div class="sourceCode" id="cb219"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb219-1" title="1">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>globalization), ]</a>
+<a class="sourceLine" id="cb219-2" title="2">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>inst_quality), ]</a>
+<a class="sourceLine" id="cb219-3" title="3">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>democracy), ]</a></code></pre></div>
+<p>Let’s check the range of the variable <code>latitude</code> from our summary above. It is between <code>0</code> and <code>1</code>. The codebook clarifies that the latitude of a country’s capital has been divided by <code>90</code> to get a variable that ranges from <code>0</code> to <code>1</code>. This would make interpretation difficult. When interpreting the effect of such a variable a unit change (a change of <code>1</code>) covers the entire range or put differently, it is a change from a country at the equator to a country at one of the poles.</p>
+<p><img src="img/latitude.png" width="280"></p>
+<p>We therefore multiply by <code>90</code> again. This will turn the units of the <code>latitude</code> variable into degrees again which makes interpretation easier.</p>
+<div class="sourceCode" id="cb220"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb220-1" title="1">world_data<span class="op">$</span>latitude &lt;-<span class="st"> </span>world_data<span class="op">$</span>latitude <span class="op">*</span><span class="st"> </span><span class="dv">90</span></a></code></pre></div>
+</div>
+<div id="estimating-a-bivariate-regression" class="section level3">
+<h3><span class="header-section-number">9.1.5</span> Estimating a Bivariate Regression</h3>
+<p>Is there a correlation between the distance of a country to the equator and the level of political stability? Both political stability (dependent variable) and distance to the equator (independent variable) are continuous. Therefore, we will get an idea about the relationship using a scatter plot.</p>
+<div class="sourceCode" id="cb221"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb221-1" title="1"><span class="kw">plot</span>(<span class="dt">x =</span> world_data<span class="op">$</span>latitude,</a>
+<a class="sourceLine" id="cb221-2" title="2">     <span class="dt">y =</span> world_data<span class="op">$</span>pol_stability, </a>
+<a class="sourceLine" id="cb221-3" title="3">     <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb221-4" title="4">     <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb221-5" title="5">     <span class="dt">xlab =</span> <span class="st">&quot;Latitude&quot;</span>,</a>
+<a class="sourceLine" id="cb221-6" title="6">     <span class="dt">ylab =</span> <span class="st">&quot;Political Stability&quot;</span>)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-151-1.png" width="672" /></p>
+<p>Looking at the cloud of points suggests that there might be a positive relationship: increases in our independent variable <code>latitude</code> appear to be associated with increases in the dependent variable <code>pol_stability</code> (the further from the equator, the more stable).</p>
+<p>We can fit a line of best fit through the points. To do this we must estimate the bivariate regression model with the <code>lm()</code> function.</p>
+<div class="sourceCode" id="cb222"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb222-1" title="1">latitude_model &lt;-<span class="st"> </span><span class="kw">lm</span>(pol_stability <span class="op">~</span><span class="st"> </span>latitude, <span class="dt">data =</span> world_data)</a></code></pre></div>
+<p>Now we can create a scatterplot with a regression line using the <code>abline()</code> function.</p>
+<div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb223-1" title="1"><span class="kw">plot</span>(<span class="dt">x =</span> world_data<span class="op">$</span>latitude,</a>
+<a class="sourceLine" id="cb223-2" title="2">     <span class="dt">y =</span> world_data<span class="op">$</span>pol_stability,</a>
+<a class="sourceLine" id="cb223-3" title="3">     <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb223-4" title="4">     <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb223-5" title="5">     <span class="dt">xlab =</span> <span class="st">&quot;Latitude&quot;</span>,</a>
+<a class="sourceLine" id="cb223-6" title="6">     <span class="dt">ylab =</span> <span class="st">&quot;Political Stability&quot;</span>)</a>
+<a class="sourceLine" id="cb223-7" title="7"></a>
+<a class="sourceLine" id="cb223-8" title="8"><span class="kw">abline</span>(latitude_model, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-153-1.png" width="672" /></p>
+<p>We can also view a simple summary of the regression by using the <code>screenreg</code> function:</p>
+<div class="sourceCode" id="cb224"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb224-1" title="1"><span class="kw">screenreg</span>(latitude_model)</a></code></pre></div>
+<pre><code>
+=======================
+             Model 1   
+-----------------------
+(Intercept)   -0.58 ***
+              (0.12)   
+latitude       0.02 ***
+              (0.00)   
+-----------------------
+R^2            0.11    
+Adj. R^2       0.10    
+Num. obs.    170       
+RMSE           0.89    
+=======================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>Thinking back to earlier today, how do we interpret this regression?</p>
+<ul>
+<li>The coefficient for the variable <code>latitude</code> (<span class="math inline">\(\beta_1\)</span>) indicates that a one-unit increase in a country’s latitude is associated with a 0.0178378 increase in the measure of political stability, on average. Question: Is this association statistically significant at the 95% confidence level?</li>
+<li>The coefficient for the <code>(intercept)</code> term (<span class="math inline">\(\beta_0\)</span>) indicates that the average level of political stability for a country with a latitude of 0 is -0.580075 (where <code>latitude = 0</code> is a country positioned at the equator)</li>
+<li>The <span class="math inline">\(R^2\)</span> of the model is 0.1065267. This implies that 11% of the variation in the dependent variable (political stability) is explained by the independent variable (latitude) in the model.</li>
+</ul>
+<p>The regression above suggests that there is a significant association between these variables However, as good social scientistis, we probably do not think that the distance of a country from the equator is a theoretically relevant variable for explaining political stability. This is because there is no plausible causal link between the two. We should therefore consider other variables to include in our model.</p>
+<p>We will include the index of globalization (higher values mean more integration with the rest of the world), the quality of institutions, and the indicator for whether the country is a democracy. For all of these variables we can come up with a theoretical story for their effect on political stability.</p>
+<p>To specify a <em>multiple</em> linear regression model, the only thing we need to change is the <code>formula</code> argument of the <code>lm()</code> function. In particular, if we wish to add additional explanatory variables, the formula argument will take the following form:</p>
+<div class="sourceCode" id="cb226"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb226-1" title="1">dependent.var <span class="op">~</span><span class="st"> </span>independent.var<span class="fl">.1</span> <span class="op">+</span><span class="st"> </span>independent.var<span class="fl">.2</span> <span class="op">+</span><span class="st"> </span>independent.var<span class="fl">.3</span> ...</a></code></pre></div>
+<p>In our example here, the model would therefore look like the following:</p>
+<div class="sourceCode" id="cb227"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb227-1" title="1">inst_model &lt;-<span class="st"> </span><span class="kw">lm</span>(</a>
+<a class="sourceLine" id="cb227-2" title="2">  pol_stability <span class="op">~</span><span class="st"> </span>latitude <span class="op">+</span><span class="st"> </span>globalization <span class="op">+</span><span class="st"> </span>inst_quality <span class="op">+</span><span class="st"> </span>democracy, </a>
+<a class="sourceLine" id="cb227-3" title="3">  <span class="dt">data =</span> world_data</a>
+<a class="sourceLine" id="cb227-4" title="4">)</a></code></pre></div>
+<p>Remember, <code>pol_stability</code> is our dependent variable, as before, and now we have four independent variables: <code>latitude</code>, <code>globalization</code>, <code>democracy</code> and <code>inst_quality</code>. Again, just as with the bivariate model, we can view the summarised output of the regression by using <code>screenreg()</code>. As we now have two models (a simple regression model, and a multiple regression model), we can join them together using the <code>list()</code> function, and then put all of that inside <code>screenreg()</code>.</p>
+<div class="sourceCode" id="cb228"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb228-1" title="1"><span class="kw">screenreg</span>(<span class="kw">list</span>(latitude_model, inst_model))</a></code></pre></div>
+<pre><code>
+=============================================
+                       Model 1     Model 2   
+---------------------------------------------
+(Intercept)             -0.58 ***   -1.25 ***
+                        (0.12)      (0.20)   
+latitude                 0.02 ***    0.00    
+                        (0.00)      (0.00)   
+globalization                       -0.00    
+                                    (0.01)   
+inst_quality                         0.34 ***
+                                    (0.04)   
+democracy1. Democracy                0.04    
+                                    (0.11)   
+---------------------------------------------
+R^2                      0.11        0.50    
+Adj. R^2                 0.10        0.49    
+Num. obs.              170         170       
+RMSE                     0.89        0.67    
+=============================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>Including the two new predictors leads to substantial changes.</p>
+<ul>
+<li>First, we now explain 50% of the variance of our dependent variable instead of just 11%.</li>
+<li>Second, the effect of the distance to the equator is no longer significant.</li>
+<li>Third, better quality institutions are associated with more political stability. In particular, a one-unit increase in the measure of instituion quality (which ranges from 1 to 10) is associated with a 0.338882 increase in the measure for political stability.</li>
+<li>Fourth, there is no significant relationship between globalization and political stability in this data.</li>
+<li>Fifth, there is no significant relationship between democracy and political stability in this data.</li>
+</ul>
+<p>### Predicting outcome conditional on institutional quality</p>
+<p>Just as we did with the simple regression model last week, we can use the fitted model object to calculate the fitted values of our dependent variable for different values of our explanatory variables. To do so, we again use the <code>predict()</code> function.</p>
+<p>We proceed in three steps.</p>
+<ol style="list-style-type: decimal">
+<li>We set the values of the covariates for which we would like to produce fitted values.
+<ul>
+<li>You will need to set covariate values for <em>every</em> explanatory variable that you included in your model.</li>
+<li>As only one of our variables has a significant relationship with the outcome in the multiple regression model that we estimated above, we are really only interested in that variable (<code>inst_quality</code>).</li>
+<li>Therefore, we will calculate fitted values over the range of <code>inst_quality</code>, while setting the values of <code>latitude</code> and <code>globalization</code> to their mean values.</li>
+<li>As <code>democracy</code> is a factor variable, we cannot use the mean value. Instead, we will set <code>democracy</code> to be equal to <code>"1. Democracy"</code> which is the label for democratic countries</li>
+</ul></li>
+<li>We calculate the fitted values.</li>
+<li>We report the results (here we will produce a plot).</li>
+</ol>
+<p>For step one, the following code produces a <code>data.frame</code> of new covariate values for which we would like to calculate a fitted value from our model:</p>
+<div class="sourceCode" id="cb230"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb230-1" title="1">democracies &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb230-2" title="2">  <span class="dt">inst_quality =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="fl">1.4</span>, <span class="dt">to =</span> <span class="fl">9.3</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb230-3" title="3">  <span class="dt">globalization =</span> <span class="kw">mean</span>(world_data<span class="op">$</span>globalization),</a>
+<a class="sourceLine" id="cb230-4" title="4">  <span class="dt">latitude =</span> <span class="kw">mean</span>(world_data<span class="op">$</span>latitude),</a>
+<a class="sourceLine" id="cb230-5" title="5">  <span class="dt">democracy =</span> <span class="st">&quot;1. Democracy&quot;</span></a>
+<a class="sourceLine" id="cb230-6" title="6">)</a></code></pre></div>
+<p>We’ve just created a <code>data.frame</code> of hypothetical democracies with varying level of institutional quality. Let’s see what this <code>data.frame</code> looks like.</p>
+<div class="sourceCode" id="cb231"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb231-1" title="1">democracies</a></code></pre></div>
+<pre><code>  inst_quality globalization latitude    democracy
+1          1.4      57.93053 25.78218 1. Democracy
+2          2.4      57.93053 25.78218 1. Democracy
+3          3.4      57.93053 25.78218 1. Democracy
+4          4.4      57.93053 25.78218 1. Democracy
+5          5.4      57.93053 25.78218 1. Democracy
+6          6.4      57.93053 25.78218 1. Democracy
+7          7.4      57.93053 25.78218 1. Democracy
+8          8.4      57.93053 25.78218 1. Democracy</code></pre>
+<p>In this <code>data.frame</code>, we have set the <code>inst_quality</code> variable to vary between 1.4 and 9.3000002, with increments of 1 unit which represents the range of <code>inst_quality</code> in our dataset.</p>
+<div class="sourceCode" id="cb233"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb233-1" title="1"><span class="kw">min</span>(world_data<span class="op">$</span>inst_quality)</a></code></pre></div>
+<pre><code>[1] 1.4</code></pre>
+<div class="sourceCode" id="cb235"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb235-1" title="1"><span class="kw">max</span>(world_data<span class="op">$</span>inst_quality)</a></code></pre></div>
+<pre><code>[1] 9.3</code></pre>
+<p>We have set <code>globalization</code> to be equal to the mean value of <code>globalization</code> in the <code>world_data</code> object, and <code>latitude</code> to be equal to the mean value of <code>latitude</code> in the <code>world_data</code> object. Finally, we have set <code>democracy</code> to be equal to <code>"1. Democracy"</code> (the value for democratic countries).</p>
+<p>We can now calculate the fitted values for each of these combinations of our explanatory variables using the <code>predict()</code> function.</p>
+<div class="sourceCode" id="cb237"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb237-1" title="1">democracies<span class="op">$</span>predicted_pol_stability &lt;-<span class="st"> </span><span class="kw">predict</span>(inst_model, <span class="dt">newdata =</span> democracies)</a></code></pre></div>
+<p>We can now look again at the <code>democracies</code> object:</p>
+<div class="sourceCode" id="cb238"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb238-1" title="1">democracies</a></code></pre></div>
+<pre><code>  inst_quality globalization latitude    democracy predicted_pol_stability
+1          1.4      57.93053 25.78218 1. Democracy             -1.00319887
+2          2.4      57.93053 25.78218 1. Democracy             -0.66431685
+3          3.4      57.93053 25.78218 1. Democracy             -0.32543483
+4          4.4      57.93053 25.78218 1. Democracy              0.01344719
+5          5.4      57.93053 25.78218 1. Democracy              0.35232921
+6          6.4      57.93053 25.78218 1. Democracy              0.69121123
+7          7.4      57.93053 25.78218 1. Democracy              1.03009325
+8          8.4      57.93053 25.78218 1. Democracy              1.36897527</code></pre>
+<p>Hey presto! Now, for each of our explanatory variable combinations, we have the corresponding fitted values as calculated from our estimated regression.</p>
+<p>Finally, we can plot these values:</p>
+<div class="sourceCode" id="cb240"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb240-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb240-2" title="2">  <span class="dt">x =</span> democracies<span class="op">$</span>inst_quality,</a>
+<a class="sourceLine" id="cb240-3" title="3">  <span class="dt">y =</span> democracies<span class="op">$</span>predicted_pol_stability,</a>
+<a class="sourceLine" id="cb240-4" title="4">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb240-5" title="5">  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>,</a>
+<a class="sourceLine" id="cb240-6" title="6">  <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>,</a>
+<a class="sourceLine" id="cb240-7" title="7">  <span class="dt">xlab =</span> <span class="st">&quot;Institution Quality&quot;</span>, </a>
+<a class="sourceLine" id="cb240-8" title="8">  <span class="dt">ylab =</span> <span class="st">&quot;Fitted value for political stability&quot;</span></a>
+<a class="sourceLine" id="cb240-9" title="9">)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-165-1.png" width="672" /></p>
+<p>We could also use the output from our model to plot two separate lines of fitted values: one for democracies, and one for dictatorships. We have already done this for democracies, so the following code constructs a <code>data.frame</code> of fitted values for dictatorships:</p>
+<div class="sourceCode" id="cb241"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb241-1" title="1">dictatorships &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb241-2" title="2">  <span class="dt">inst_quality =</span> <span class="kw">seq</span>(<span class="dt">from =</span> <span class="fl">1.4</span>, <span class="dt">to =</span> <span class="fl">9.3</span>, <span class="dt">by =</span> <span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb241-3" title="3">  <span class="dt">globalization =</span> <span class="kw">mean</span>(world_data<span class="op">$</span>globalization),</a>
+<a class="sourceLine" id="cb241-4" title="4">  <span class="dt">latitude =</span> <span class="kw">mean</span>(world_data<span class="op">$</span>latitude),</a>
+<a class="sourceLine" id="cb241-5" title="5">  <span class="dt">democracy =</span> <span class="st">&quot;0. Dictatorship&quot;</span></a>
+<a class="sourceLine" id="cb241-6" title="6">)</a>
+<a class="sourceLine" id="cb241-7" title="7"></a>
+<a class="sourceLine" id="cb241-8" title="8">dictatorships<span class="op">$</span>predicted_pol_stability &lt;-<span class="st"> </span><span class="kw">predict</span>(inst_model, <span class="dt">newdata =</span> dictatorships)</a></code></pre></div>
+<p>Now that we have calculated these fitted values, we can add the line for dictatorships to the plot we created above using the <code>lines()</code> function:</p>
+<div class="sourceCode" id="cb242"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb242-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb242-2" title="2">  <span class="dt">x =</span> democracies<span class="op">$</span>inst_quality,</a>
+<a class="sourceLine" id="cb242-3" title="3">  <span class="dt">y =</span> democracies<span class="op">$</span>predicted_pol_stability,</a>
+<a class="sourceLine" id="cb242-4" title="4">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>, </a>
+<a class="sourceLine" id="cb242-5" title="5">  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>,</a>
+<a class="sourceLine" id="cb242-6" title="6">  <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>,</a>
+<a class="sourceLine" id="cb242-7" title="7">  <span class="dt">xlab =</span> <span class="st">&quot;Institution Quality&quot;</span>, </a>
+<a class="sourceLine" id="cb242-8" title="8">  <span class="dt">ylab =</span> <span class="st">&quot;Fitted value for political stability&quot;</span></a>
+<a class="sourceLine" id="cb242-9" title="9">)</a>
+<a class="sourceLine" id="cb242-10" title="10"></a>
+<a class="sourceLine" id="cb242-11" title="11"><span class="kw">lines</span>(<span class="dt">x =</span> dictatorships<span class="op">$</span>inst_quality,</a>
+<a class="sourceLine" id="cb242-12" title="12">      <span class="dt">y =</span> dictatorships<span class="op">$</span>predicted_pol_stability,</a>
+<a class="sourceLine" id="cb242-13" title="13">      <span class="dt">data =</span> dictatorships,</a>
+<a class="sourceLine" id="cb242-14" title="14">      <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<pre><code>Warning in plot.xy(xy.coords(x, y), type = type, ...): &quot;data&quot; is not a
+graphical parameter</code></pre>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-167-1.png" width="672" /></p>
+<p>We can see from the plot that the fitted values for democracies (blue line) are almost exactly the same as those for dictatorships (red line). This is reassuring, as the estimated coefficient on the democracy variable was very small (0.04) and was not statistically significantly different from 0. Often, however, it can be very illuminating to construct plots like this where we construct a line to indicate how our predicted values for Y vary across one of our explanatory variables (here, institution quality), and we create different lines for different values of another explanatory variable (here, democracy/dictatorship).</p>
+</div>
+<div id="non-linearities" class="section level3">
+<h3><span class="header-section-number">9.1.6</span> Non-Linearities</h3>
+<p>Let’s clear our workspace for now to keep the workspace tidy and to prevent our computer from slowing down.</p>
+<div class="sourceCode" id="cb244"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb244-1" title="1"><span class="kw">rm</span>(<span class="dt">list =</span> <span class="kw">ls</span>())</a></code></pre></div>
+<p>We will use the small version of the Quality of Government data from 2012 again (<code>QoG2012.csv</code>) with four variables:</p>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="81%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>former_col</code></td>
+<td>0 = not a former colony <br> 1 = former colony</td>
+</tr>
+<tr class="even">
+<td><code>undp_hdi</code></td>
+<td>UNDP Human Development Index. Higher values mean better quality of life</td>
+</tr>
+<tr class="odd">
+<td><code>wbgi_cce</code></td>
+<td>Control of corruption. Higher values mean better control of corruption</td>
+</tr>
+<tr class="even">
+<td><code>wdi_gdpc</code></td>
+<td>GDP per capita in US dollars</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb245"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb245-1" title="1">world_data &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;QoG2012.csv&quot;</span>)</a>
+<a class="sourceLine" id="cb245-2" title="2"><span class="kw">names</span>(world_data)</a></code></pre></div>
+<pre><code>[1] &quot;h_j&quot;         &quot;wdi_gdpc&quot;    &quot;undp_hdi&quot;    &quot;wbgi_cce&quot;    &quot;wbgi_pse&quot;   
+[6] &quot;former_col&quot;  &quot;lp_lat_abst&quot;</code></pre>
+<p>Rename the variables by yourself to:</p>
+<table>
+<thead>
+<tr class="header">
+<th>New Name</th>
+<th>Old Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>human_development</code></td>
+<td><code>undp_hdi</code></td>
+</tr>
+<tr class="even">
+<td><code>institutions_quality</code></td>
+<td><code>wbgi_cce</code></td>
+</tr>
+<tr class="odd">
+<td><code>gdp_capita</code></td>
+<td><code>wdi_gdpc</code></td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb247"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb247-1" title="1"><span class="kw">names</span>(world_data)</a></code></pre></div>
+<pre><code>[1] &quot;h_j&quot;         &quot;wdi_gdpc&quot;    &quot;undp_hdi&quot;    &quot;wbgi_cce&quot;    &quot;wbgi_pse&quot;   
+[6] &quot;former_col&quot;  &quot;lp_lat_abst&quot;</code></pre>
+<div class="sourceCode" id="cb249"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb249-1" title="1"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data)<span class="op">==</span><span class="st">&quot;undp_hdi&quot;</span>] &lt;-<span class="st"> &quot;human_development&quot;</span></a>
+<a class="sourceLine" id="cb249-2" title="2"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data)<span class="op">==</span><span class="st">&quot;wbgi_cce&quot;</span>] &lt;-<span class="st"> &quot;institutions_quality&quot;</span></a>
+<a class="sourceLine" id="cb249-3" title="3"><span class="kw">names</span>(world_data)[<span class="kw">names</span>(world_data)<span class="op">==</span><span class="st">&quot;wdi_gdpc&quot;</span>] &lt;-<span class="st"> &quot;gdp_capita&quot;</span></a>
+<a class="sourceLine" id="cb249-4" title="4"><span class="kw">names</span>(world_data)</a></code></pre></div>
+<pre><code>[1] &quot;h_j&quot;                  &quot;gdp_capita&quot;           &quot;human_development&quot;   
+[4] &quot;institutions_quality&quot; &quot;wbgi_pse&quot;             &quot;former_col&quot;          
+[7] &quot;lp_lat_abst&quot;         </code></pre>
+<p>Now let’s look at the summary statistics for the entire data set.</p>
+<div class="sourceCode" id="cb251"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb251-1" title="1"><span class="kw">summary</span>(world_data) </a></code></pre></div>
+<pre><code>      h_j           gdp_capita      human_development institutions_quality
+ Min.   :0.0000   Min.   :  226.2   Min.   :0.2730    Min.   :-1.69953    
+ 1st Qu.:0.0000   1st Qu.: 1768.0   1st Qu.:0.5390    1st Qu.:-0.81965    
+ Median :0.0000   Median : 5326.1   Median :0.7510    Median :-0.30476    
+ Mean   :0.3787   Mean   :10184.1   Mean   :0.6982    Mean   :-0.05072    
+ 3rd Qu.:1.0000   3rd Qu.:12976.5   3rd Qu.:0.8335    3rd Qu.: 0.50649    
+ Max.   :1.0000   Max.   :63686.7   Max.   :0.9560    Max.   : 2.44565    
+ NA&#39;s   :25       NA&#39;s   :16        NA&#39;s   :19        NA&#39;s   :2           
+    wbgi_pse          former_col      lp_lat_abst    
+ Min.   :-2.46746   Min.   :0.0000   Min.   :0.0000  
+ 1st Qu.:-0.72900   1st Qu.:0.0000   1st Qu.:0.1343  
+ Median : 0.02772   Median :1.0000   Median :0.2444  
+ Mean   :-0.03957   Mean   :0.6289   Mean   :0.2829  
+ 3rd Qu.: 0.79847   3rd Qu.:1.0000   3rd Qu.:0.4444  
+ Max.   : 1.67561   Max.   :1.0000   Max.   :0.7222  
+                                     NA&#39;s   :7       </code></pre>
+<p>We need to remove missing values from <code>gdp_capita</code>, <code>human_development</code>, and <code>institutions_quality</code>. Do so yourself. Do not drop observations that missing values on other observations such as <code>lp_lat_abst</code>. We might throw away useful information when doing so.</p>
+<div class="sourceCode" id="cb253"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb253-1" title="1">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>gdp_capita), ]</a>
+<a class="sourceLine" id="cb253-2" title="2">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>human_development), ]</a>
+<a class="sourceLine" id="cb253-3" title="3">world_data &lt;-<span class="st"> </span>world_data[ <span class="op">!</span><span class="kw">is.na</span>(world_data<span class="op">$</span>institutions_quality), ]</a></code></pre></div>
+<p>Let’s suppose we want to illustrate the relationship between GDP per capita and the human development index. We draw a scatter plot to investigate the relationship between the quality of life (hdi) and wealth (gdp/captia).</p>
+<div class="sourceCode" id="cb254"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb254-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb254-2" title="2">  <span class="dt">x =</span> world_data<span class="op">$</span>gdp_capita,</a>
+<a class="sourceLine" id="cb254-3" title="3">  <span class="dt">y =</span> world_data<span class="op">$</span>human_development,</a>
+<a class="sourceLine" id="cb254-4" title="4">  <span class="dt">data =</span> world_data,</a>
+<a class="sourceLine" id="cb254-5" title="5">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb254-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb254-7" title="7">  <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>,</a>
+<a class="sourceLine" id="cb254-8" title="8">  <span class="dt">main =</span> <span class="st">&quot;Relationship between the quality of life and wealth&quot;</span>,</a>
+<a class="sourceLine" id="cb254-9" title="9">  <span class="dt">ylab =</span> <span class="st">&quot;Human development index&quot;</span>,</a>
+<a class="sourceLine" id="cb254-10" title="10">  <span class="dt">xlab =</span> <span class="st">&quot;GDP per capita&quot;</span></a>
+<a class="sourceLine" id="cb254-11" title="11">)</a></code></pre></div>
+<pre><code>Warning in plot.window(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in plot.xy(xy, type, ...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter
 
+Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter</code></pre>
+<pre><code>Warning in title(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-173-1.png" width="672" /></p>
+<p>It’s easy to see, that the relationship between GDP per captia and the Human Development Index is not linear. Increases in wealth rapidly increase the quality of life in poor societies. The richer the country, the less pronounced the effect of additional wealth. We would mis-specify our model if we do not take the non-linear relationship into account.</p>
+<p>Let’s go ahead and fit a mis-specified model:</p>
+<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb259-1" title="1">linear.model &lt;-<span class="st"> </span><span class="kw">lm</span>(human_development <span class="op">~</span><span class="st"> </span>gdp_capita, <span class="dt">data =</span> world_data)</a>
+<a class="sourceLine" id="cb259-2" title="2"><span class="kw">screenreg</span>(linear.model)</a></code></pre></div>
+<pre><code>
+=======================
+             Model 1   
+-----------------------
+(Intercept)    0.59 ***
+              (0.01)   
+gdp_capita     0.00 ***
+              (0.00)   
+-----------------------
+R^2            0.49    
+Adj. R^2       0.49    
+Num. obs.    172       
+RMSE           0.13    
+=======================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>We detect a significant linear relationship. The effect may look small because the coefficient rounded to two digits is zero. But remember, this is the effect of increasing GDP/capita by <span class="math inline">\(1\)</span> US dollar on the quality of life. That effect is naturally small but it is probably not small when we increase wealth by <span class="math inline">\(1000\)</span> US dollars.</p>
+<p>However, our model would also entail that for every increase in GDP/capita, the quality of life increases on average by the same amount. We saw from our plot that this is not the case. The effect of GDP/capita on the quality of life is conditional on the level of GDP/capita. If that sounds like an interaction to you, then that is great because, we will model the non-linearity by raising the GDP/capita to a higher power. That is in effect an interaction of the variable with itself. GDP/capita raised to the second power, e.g. is GDP/capita * GDP/capita.</p>
+<div id="polynomials" class="section level4">
+<h4><span class="header-section-number">9.1.6.1</span> Polynomials</h4>
+<p>We know from school that polynomials like <span class="math inline">\(X^2\)</span>, <span class="math inline">\(X^3\)</span> and so on are not linear. The relationship depicted in our plot above suggests a quadratic relationship between GDP per capita and the human development index might be appropriate (there is only one obvious “bend” in the data). To incorporate this intuition into our model, we will use the <code>poly()</code> function in our linear model to raise GDP/capita to the second power like so: <code>poly(gdp_capita, degree = 2).</code></p>
+<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb261-1" title="1">quadratic.model &lt;-<span class="st"> </span><span class="kw">lm</span>(</a>
+<a class="sourceLine" id="cb261-2" title="2">  human_development <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(gdp_capita, <span class="dt">degree =</span> <span class="dv">2</span>), </a>
+<a class="sourceLine" id="cb261-3" title="3">  <span class="dt">data =</span> world_data</a>
+<a class="sourceLine" id="cb261-4" title="4">)</a>
+<a class="sourceLine" id="cb261-5" title="5"></a>
+<a class="sourceLine" id="cb261-6" title="6"></a>
+<a class="sourceLine" id="cb261-7" title="7"><span class="kw">screenreg</span>(</a>
+<a class="sourceLine" id="cb261-8" title="8">  <span class="kw">list</span>(linear.model, quadratic.model), </a>
+<a class="sourceLine" id="cb261-9" title="9">  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Linear model&quot;</span>, <span class="st">&quot;Quadratic model&quot;</span>)</a>
+<a class="sourceLine" id="cb261-10" title="10">)</a></code></pre></div>
+<pre><code>
+============================================================
+                               Linear model  Quadratic model
+------------------------------------------------------------
+(Intercept)                      0.59 ***      0.70 ***     
+                                (0.01)        (0.01)        
+gdp_capita                       0.00 ***                   
+                                (0.00)                      
+poly(gdp_capita, degree = 2)1                  1.66 ***     
+                                              (0.10)        
+poly(gdp_capita, degree = 2)2                 -1.00 ***     
+                                              (0.10)        
+------------------------------------------------------------
+R^2                              0.49          0.67         
+Adj. R^2                         0.49          0.66         
+Num. obs.                      172           172            
+RMSE                             0.13          0.10         
+============================================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>It is important to note, that in the quadratic model the effect of GDP/capita is no longer easy to interpret. We cannot say for every increase in GDP/capita by one dollar, the quality of life increases on average by some fixed amount. This is because the effect of GDP/capita depends on how rich a country was to begin with. We can, however, interpret the statitical significance of the quadratic term: the coefficient is about 10 times as large in absolute terms as the standard error, meaning we can easily reject the null hypothesis that the relationship between GDP and the HDI is linear. Furthermore, it looks like our model that includes the quadratic term has a much better fit, as the adjusted <span class="math inline">\(R^2\)</span> has increased by a lot.</p>
+<p>We can interpret the effect of wealth (GDP/capita) on the quality of life (human development index) by predicting the fitted values of the human development index given a certain level of GDP/capita. We will vary GDP/captia from its minimum in the data to its maximum and the plot the results which is a good way to illustrate a non-linear relationship.</p>
+<p>Step 1: We find the minimum and maximum values of GDP/capita.</p>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb263-1" title="1"><span class="kw">range</span>(world_data<span class="op">$</span>gdp_capita)</a></code></pre></div>
+<pre><code>[1]   226.235 63686.676</code></pre>
+<p>Step 2: We predict fitted values for varying levels of GDP/captia (let’s create 100 predictions).</p>
+<p>We create our sequence of 100 GDP/capita values</p>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb265-1" title="1">gdp_seq &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="dv">226</span>, <span class="dt">to =</span> <span class="dv">63686</span>, <span class="dt">length.out =</span> <span class="dv">100</span>)</a></code></pre></div>
+<p>We set our covariate values (here we only have one covariate: GDP/captia)</p>
+<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb266-1" title="1">x &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">gdp_capita =</span> gdp_seq)</a></code></pre></div>
+<p>We predict the outcome (human development index) for each of the 100 GDP levels</p>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb267-1" title="1">y_hat &lt;-<span class="st"> </span><span class="kw">predict</span>(quadratic.model, <span class="dt">newdata =</span> x)</a></code></pre></div>
+<p>Step 3: Now that we have created our predictions. We plot again and then we add the <code>linear.model</code> using <code>abline</code> and we add our non-linear version <code>quadratic.model</code> using the <code>lines()</code> function.</p>
+<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb268-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb268-2" title="2">  <span class="dt">x =</span> world_data<span class="op">$</span>gdp_capita,</a>
+<a class="sourceLine" id="cb268-3" title="3">  <span class="dt">y =</span> world_data<span class="op">$</span>human_development,</a>
+<a class="sourceLine" id="cb268-4" title="4">  <span class="dt">data =</span> world_data,</a>
+<a class="sourceLine" id="cb268-5" title="5">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb268-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb268-7" title="7">  <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>,</a>
+<a class="sourceLine" id="cb268-8" title="8">  <span class="dt">main =</span> <span class="st">&quot;Relationship between the quality of life and wealth&quot;</span>,</a>
+<a class="sourceLine" id="cb268-9" title="9">  <span class="dt">ylab =</span> <span class="st">&quot;Human development index&quot;</span>,</a>
+<a class="sourceLine" id="cb268-10" title="10">  <span class="dt">xlab =</span> <span class="st">&quot;GDP per capita&quot;</span></a>
+<a class="sourceLine" id="cb268-11" title="11">)</a></code></pre></div>
+<pre><code>Warning in plot.window(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in plot.xy(xy, type, ...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter</code></pre>
+<pre><code>Warning in title(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb273-1" title="1"><span class="co"># the linear model</span></a>
+<a class="sourceLine" id="cb273-2" title="2"><span class="kw">abline</span>(linear.model, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)</a>
+<a class="sourceLine" id="cb273-3" title="3"></a>
+<a class="sourceLine" id="cb273-4" title="4"><span class="co"># better model</span></a>
+<a class="sourceLine" id="cb273-5" title="5"><span class="kw">lines</span>(<span class="dt">x =</span> gdp_seq, <span class="dt">y =</span> y_hat, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-180-1.png" width="672" /></p>
+<p>We could go further than this quadratic specification, and instead estimate a <code>cubic.model</code> with GDP/capita raised to the power of three. Do this now and present your results visually.</p>
+<p>Estimate cubic model</p>
+<div class="sourceCode" id="cb274"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb274-1" title="1">cubic.model &lt;-<span class="st"> </span><span class="kw">lm</span>(human_development <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(gdp_capita, <span class="dv">3</span>), <span class="dt">data =</span> world_data)</a></code></pre></div>
+<p>We predict the outcome (human development index) for each of the 100 GDP levels</p>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb275-1" title="1">y_hat2 &lt;-<span class="st"> </span><span class="kw">predict</span>(cubic.model, <span class="dt">newdata =</span> x)</a></code></pre></div>
+<p>Next, we plot the linear and quadratic models</p>
+<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb276-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb276-2" title="2">  <span class="dt">x =</span> world_data<span class="op">$</span>gdp_capita,</a>
+<a class="sourceLine" id="cb276-3" title="3">  <span class="dt">y =</span> world_data<span class="op">$</span>human_development,</a>
+<a class="sourceLine" id="cb276-4" title="4">  <span class="dt">data =</span> world_data,</a>
+<a class="sourceLine" id="cb276-5" title="5">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb276-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb276-7" title="7">  <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>,</a>
+<a class="sourceLine" id="cb276-8" title="8">  <span class="dt">main =</span> <span class="st">&quot;Relationship between the quality of life and wealth&quot;</span>,</a>
+<a class="sourceLine" id="cb276-9" title="9">  <span class="dt">ylab =</span> <span class="st">&quot;Human development index&quot;</span>,</a>
+<a class="sourceLine" id="cb276-10" title="10">  <span class="dt">xlab =</span> <span class="st">&quot;GDP per capita&quot;</span></a>
+<a class="sourceLine" id="cb276-11" title="11">  )</a></code></pre></div>
+<pre><code>Warning in plot.window(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in plot.xy(xy, type, ...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter</code></pre>
+<pre><code>Warning in title(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb281-1" title="1"><span class="co"># the linear model</span></a>
+<a class="sourceLine" id="cb281-2" title="2"><span class="kw">abline</span>(linear.model, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)</a>
+<a class="sourceLine" id="cb281-3" title="3"></a>
+<a class="sourceLine" id="cb281-4" title="4"><span class="co"># quadratic model</span></a>
+<a class="sourceLine" id="cb281-5" title="5"><span class="kw">lines</span>(<span class="dt">x =</span> gdp_seq, <span class="dt">y =</span> y_hat, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb281-6" title="6"></a>
+<a class="sourceLine" id="cb281-7" title="7"><span class="co"># cubic model</span></a>
+<a class="sourceLine" id="cb281-8" title="8"><span class="kw">lines</span>(<span class="dt">x =</span> gdp_seq, <span class="dt">y =</span> y_hat2, <span class="dt">col =</span> <span class="st">&quot;green&quot;</span>)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-183-1.png" width="672" /></p>
+<p>The cubic model provides a similar story to the quadratic model (the relationship between GDP/capita and HDI is steep at first, and then flatter at the higher levels of GDP/captia), but it looks somewhat strange, particularly at the higher levels of GDP/capita. In particular, it seems that the few extreme X values are causing a strange shape: the cubic is being wagged around by its tail. This is a common problem with polynomial regression models, and so we will now consider an alternative.</p>
+</div>
+<div id="log-transformations" class="section level4">
+<h4><span class="header-section-number">9.1.6.2</span> Log-transformations</h4>
+<p>Many non-linear relationships actually do look linear on the log scale. We can illustrate this by taking the natural logarithm of GDP/captia and plot the relationship between quality of life and our transformed GDP variable.</p>
+<p>Note: Some of you will remember from your school calculators that you have an ln button and a log button where ln takes the natural logarithm and log takes the logarithm with base 10. The natural logarithm represents relations that occur frequently in the world and R takes the natural logarithm with the <code>log()</code> function by default.</p>
+<p>Below, we plot the same plot from before but we wrap <code>gdp_capita</code> in the <code>log()</code> function which log-transforms the variable.</p>
+<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb282-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb282-2" title="2">  <span class="dt">x =</span> <span class="kw">log</span>(world_data<span class="op">$</span>gdp_capita),</a>
+<a class="sourceLine" id="cb282-3" title="3">  <span class="dt">y =</span> world_data<span class="op">$</span>human_development,</a>
+<a class="sourceLine" id="cb282-4" title="4">  <span class="dt">data =</span> world_data,</a>
+<a class="sourceLine" id="cb282-5" title="5">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb282-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb282-7" title="7">  <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>,</a>
+<a class="sourceLine" id="cb282-8" title="8">  <span class="dt">main =</span> <span class="st">&quot;Relationship between the quality of life and wealth on the log scale&quot;</span>,</a>
+<a class="sourceLine" id="cb282-9" title="9">  <span class="dt">ylab =</span> <span class="st">&quot;Human development index&quot;</span>,</a>
+<a class="sourceLine" id="cb282-10" title="10">  <span class="dt">xlab =</span> <span class="st">&quot;Logged gdp/capita&quot;</span></a>
+<a class="sourceLine" id="cb282-11" title="11">  )</a></code></pre></div>
+<pre><code>Warning in plot.window(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in plot.xy(xy, type, ...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter</code></pre>
+<pre><code>Warning in title(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-184-1.png" width="672" /></p>
+<p>As you can see, the relationship now looks much closer to linear and we get the best fit to the data (as measured by adjusted <span class="math inline">\(R^2\)</span>) if we run our model with log-transformed gdp.</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb287-1" title="1">log.model &lt;-<span class="st"> </span><span class="kw">lm</span>(human_development <span class="op">~</span><span class="st"> </span><span class="kw">log</span>(gdp_capita), <span class="dt">data =</span> world_data)</a></code></pre></div>
+<p>Let’s check our model</p>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb288-1" title="1"><span class="kw">screenreg</span>(</a>
+<a class="sourceLine" id="cb288-2" title="2">  <span class="kw">list</span>(linear.model, quadratic.model, cubic.model, log.model),</a>
+<a class="sourceLine" id="cb288-3" title="3">  <span class="dt">custom.model.names =</span> <span class="kw">c</span>(<span class="st">&quot;Linear Model&quot;</span>, <span class="st">&quot;Quadratic Model&quot;</span>, <span class="st">&quot;Cubic Model&quot;</span>, <span class="st">&quot;Log Model&quot;</span>)</a>
+<a class="sourceLine" id="cb288-4" title="4">)</a></code></pre></div>
+<pre><code>
+=====================================================================================
+                               Linear Model  Quadratic Model  Cubic Model  Log Model 
+-------------------------------------------------------------------------------------
+(Intercept)                      0.59 ***      0.70 ***         0.70 ***    -0.36 ***
+                                (0.01)        (0.01)           (0.01)       (0.04)   
+gdp_capita                       0.00 ***                                            
+                                (0.00)                                               
+poly(gdp_capita, degree = 2)1                  1.66 ***                              
+                                              (0.10)                                 
+poly(gdp_capita, degree = 2)2                 -1.00 ***                              
+                                              (0.10)                                 
+poly(gdp_capita, 3)1                                            1.66 ***             
+                                                               (0.09)                
+poly(gdp_capita, 3)2                                           -1.00 ***             
+                                                               (0.09)                
+poly(gdp_capita, 3)3                                            0.65 ***             
+                                                               (0.09)                
+log(gdp_capita)                                                              0.12 ***
+                                                                            (0.00)   
+-------------------------------------------------------------------------------------
+R^2                              0.49          0.67             0.74         0.81    
+Adj. R^2                         0.49          0.66             0.74         0.81    
+Num. obs.                      172           172              172          172       
+RMSE                             0.13          0.10             0.09         0.08    
+=====================================================================================
+*** p &lt; 0.001, ** p &lt; 0.01, * p &lt; 0.05</code></pre>
+<p>Polynomials can be useful for modelling non-linearities. However, for each additional polynomial term we add, we also add an additional parameter that needs to be estimated. This reduces the degrees of freedom of the model. If we can get a linear relationship on the log scale, one advantage is that we use the same number of parameters as in the original linear model.</p>
+<p>Furthermore, we gain interpretability. The relationship is linear on the log scale of gdp/capita. This means we can interpret the effect of gdp/captia as: For an increase of gdp/captia by one percent, the quality of life increases by <span class="math inline">\(\frac{\hat{\beta}}{100} = \frac{0.12}{100}\)</span> points on average. The effect is very large because <code>human_development</code> only varies from <span class="math inline">\(0\)</span> to <span class="math inline">\(1\)</span>.</p>
+<p>The adjusted <span class="math inline">\(R^2\)</span> also suggests that the log model provides the best fit to the data. To illustrate that this is the case, we return to our plot and show the model fit graphically.</p>
+<p>Get the fitted values for the log model.</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb290-1" title="1">y_hat3 &lt;-<span class="st"> </span><span class="kw">predict</span>(log.model, <span class="dt">newdata =</span> x)</a></code></pre></div>
+<p>Create a plot showing the fitted values</p>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb291-1" title="1"><span class="kw">plot</span>(</a>
+<a class="sourceLine" id="cb291-2" title="2">  <span class="dt">x =</span> world_data<span class="op">$</span>gdp_capita,</a>
+<a class="sourceLine" id="cb291-3" title="3">  <span class="dt">y =</span> world_data<span class="op">$</span>human_development,</a>
+<a class="sourceLine" id="cb291-4" title="4">  <span class="dt">data =</span> world_data,</a>
+<a class="sourceLine" id="cb291-5" title="5">  <span class="dt">pch =</span> <span class="dv">20</span>,</a>
+<a class="sourceLine" id="cb291-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb291-7" title="7">  <span class="dt">col =</span> <span class="st">&quot;grey&quot;</span>,</a>
+<a class="sourceLine" id="cb291-8" title="8">  <span class="dt">main =</span> <span class="st">&quot;Relationship between the quality of life and wealth&quot;</span>,</a>
+<a class="sourceLine" id="cb291-9" title="9">  <span class="dt">ylab =</span> <span class="st">&quot;Human development index&quot;</span>,</a>
+<a class="sourceLine" id="cb291-10" title="10">  <span class="dt">xlab =</span> <span class="st">&quot;GDP per capita&quot;</span></a>
+<a class="sourceLine" id="cb291-11" title="11">  )</a></code></pre></div>
+<pre><code>Warning in plot.window(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in plot.xy(xy, type, ...): &quot;data&quot; is not a graphical parameter</code></pre>
+<pre><code>Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter
+
+Warning in axis(side = side, at = at, labels = labels, ...): &quot;data&quot; is not
+a graphical parameter</code></pre>
+<pre><code>Warning in title(...): &quot;data&quot; is not a graphical parameter</code></pre>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb296-1" title="1"><span class="co"># Linear model</span></a>
+<a class="sourceLine" id="cb296-2" title="2"><span class="kw">abline</span>(linear.model, <span class="dt">col =</span> <span class="st">&quot;black&quot;</span>)</a>
+<a class="sourceLine" id="cb296-3" title="3"></a>
+<a class="sourceLine" id="cb296-4" title="4"><span class="co"># Quadratic model</span></a>
+<a class="sourceLine" id="cb296-5" title="5"><span class="kw">lines</span>(<span class="dt">x =</span> gdp_seq, <span class="dt">y =</span> y_hat, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb296-6" title="6"></a>
+<a class="sourceLine" id="cb296-7" title="7"><span class="co"># Cubic model</span></a>
+<a class="sourceLine" id="cb296-8" title="8"><span class="kw">lines</span>(<span class="dt">x =</span> gdp_seq, <span class="dt">y =</span> y_hat2, <span class="dt">col =</span> <span class="st">&quot;green&quot;</span>)</a>
+<a class="sourceLine" id="cb296-9" title="9"></a>
+<a class="sourceLine" id="cb296-10" title="10"><span class="co"># Log model</span></a>
+<a class="sourceLine" id="cb296-11" title="11"><span class="kw">lines</span>(<span class="dt">x =</span> gdp_seq, <span class="dt">y =</span> y_hat3, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a>
+<a class="sourceLine" id="cb296-12" title="12"></a>
+<a class="sourceLine" id="cb296-13" title="13"><span class="co"># Add a legend</span></a>
+<a class="sourceLine" id="cb296-14" title="14"><span class="kw">legend</span>(<span class="st">&quot;bottomright&quot;</span>, </a>
+<a class="sourceLine" id="cb296-15" title="15">       <span class="dt">legend =</span> <span class="kw">c</span>(<span class="st">&quot;Linear&quot;</span>, <span class="st">&quot;Quadratic&quot;</span>, <span class="st">&quot;Cubic&quot;</span>, <span class="st">&quot;Log&quot;</span>), </a>
+<a class="sourceLine" id="cb296-16" title="16">       <span class="dt">lty =</span> <span class="dv">1</span>, </a>
+<a class="sourceLine" id="cb296-17" title="17">       <span class="dt">col =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;green&quot;</span>, <span class="st">&quot;blue&quot;</span>) </a>
+<a class="sourceLine" id="cb296-18" title="18">)</a></code></pre></div>
+<p><img src="suffolk2019_files/figure-html/unnamed-chunk-188-1.png" width="672" /></p>
+<p>The blue line shows the log-transformed model. It clearly fits the data best.</p>
+
+</div>
 </div>
 </div>
 </div>

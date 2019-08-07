@@ -232,3 +232,5 @@ This is the same as the result we obtained when we calculated the fitted value m
 
 - [Linear Regression - Interactive App](http://altaf.shinyapps.io/linear-regression)
 
+### Multiple linear regression models
+

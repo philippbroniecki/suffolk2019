@@ -1850,8 +1850,8 @@ We start rolling the dice, using R's random number generator and the \texttt{run
 \end{Shaded}
 
 \begin{verbatim}
- [1] 1.109883 6.321325 2.876502 2.125217 6.041873 6.137893 4.048980
- [8] 3.923783 1.428766 4.938259
+ [1] 3.914340 6.648334 5.374970 6.858924 2.378042 2.420376 2.435827
+ [8] 5.025957 4.946409 2.603442
 \end{verbatim}
 
 We have indeed drawn 10 numbers but they are not integers as we would like---we want to simulate a die, so the values should be 1, 2, 3, 4, 5 or 6. We will return to this in a moment but for now let's return to the randomness. Let's draw 10 numbers again:
@@ -1867,8 +1867,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 1.109883 6.321325 2.876502 2.125217 6.041873 6.137893 4.048980
- [8] 3.923783 1.428766 4.938259
+ [1] 3.914340 6.648334 5.374970 6.858924 2.378042 2.420376 2.435827
+ [8] 5.025957 4.946409 2.603442
 \end{verbatim}
 
 \begin{Shaded}
@@ -1879,8 +1879,8 @@ We have indeed drawn 10 numbers but they are not integers as we would like---we 
 \end{Shaded}
 
 \begin{verbatim}
- [1] 5.840975 4.784617 5.182077 6.602005 2.663387 4.268067 2.328778
- [8] 6.522150 5.753821 1.007542
+ [1] 6.361785 5.227791 5.374180 6.761897 4.188136 4.297521 3.275946
+ [8] 3.158357 5.006695 2.745375
 \end{verbatim}
 
 The numbers of the first and second roll differ because we have drawn values at random. To make our results replicate and to ensure that everyone in the seminar works with the same numbers, we set R's random number generator with the \texttt{set.seed()} function. As argument we plug in some arbitrary value (it does not matter which but using a different one will lead to a different quasi-random draw).

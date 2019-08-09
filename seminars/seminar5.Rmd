@@ -1,4 +1,4 @@
-# Type coercion
+# Hypothesis Testing
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')

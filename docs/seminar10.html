@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 10 Prediction and assessing prediction accuracy | Suffolk 2019</title>
   <meta name="description" content="Chapter 10 Prediction and assessing prediction accuracy | Suffolk 2019" />
-  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 10 Prediction and assessing prediction accuracy | Suffolk 2019" />
   <meta property="og:type" content="book" />
@@ -62,6 +62,7 @@ a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -303,56 +304,56 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Let’s load the dataset.</p>
-<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb297-1" title="1">df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">df &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre>
 <p>Declaring categorical variables.</p>
-<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb298-1" title="1"><span class="co"># data manipulation</span></a>
-<a class="sourceLine" id="cb298-2" title="2">df<span class="op">$</span>RSex &lt;-<span class="st"> </span><span class="kw">factor</span>(df<span class="op">$</span>RSex, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))</a>
-<a class="sourceLine" id="cb298-3" title="3">df<span class="op">$</span>health.good &lt;-<span class="st"> </span><span class="kw">factor</span>(df<span class="op">$</span>health.good, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;bad&quot;</span>, <span class="st">&quot;fair&quot;</span>, <span class="st">&quot;fairly good&quot;</span>, <span class="st">&quot;good&quot;</span>) )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># data manipulation</span>
+df<span class="op">$</span>RSex &lt;-<span class="st"> </span><span class="kw">factor</span>(df<span class="op">$</span>RSex, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>))
+df<span class="op">$</span>health.good &lt;-<span class="st"> </span><span class="kw">factor</span>(df<span class="op">$</span>health.good, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;bad&quot;</span>, <span class="st">&quot;fair&quot;</span>, <span class="st">&quot;fairly good&quot;</span>, <span class="st">&quot;good&quot;</span>) )</code></pre>
 <p>We want to predict whether respondents over-estimate immigration from non-western contexts. We begin by normalizing our variables. Then we look at the distribution of the dependent variable. We check how well we could predict misperception of immigration in our sample without a statistical model.</p>
-<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb299-1" title="1"><span class="co"># create a copy of the original IMMBRIT variable (needed for classification with lm)</span></a>
-<a class="sourceLine" id="cb299-2" title="2">df<span class="op">$</span>IMMBRIT_original_scale &lt;-<span class="st"> </span>df<span class="op">$</span>IMMBRIT</a>
-<a class="sourceLine" id="cb299-3" title="3"></a>
-<a class="sourceLine" id="cb299-4" title="4"><span class="co"># our function for normalization</span></a>
-<a class="sourceLine" id="cb299-5" title="5">our.norm &lt;-<span class="st"> </span><span class="cf">function</span>(x){</a>
-<a class="sourceLine" id="cb299-6" title="6">  <span class="kw">return</span>((x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))</a>
-<a class="sourceLine" id="cb299-7" title="7">}</a>
-<a class="sourceLine" id="cb299-8" title="8"></a>
-<a class="sourceLine" id="cb299-9" title="9"><span class="co"># continuous variables</span></a>
-<a class="sourceLine" id="cb299-10" title="10">c.vars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;IMMBRIT&quot;</span>, <span class="st">&quot;RAge&quot;</span>, <span class="st">&quot;Househld&quot;</span>, <span class="st">&quot;HHInc&quot;</span>, <span class="st">&quot;employMonths&quot;</span>, <span class="st">&quot;WWWhourspW&quot;</span>)</a>
-<a class="sourceLine" id="cb299-11" title="11"></a>
-<a class="sourceLine" id="cb299-12" title="12"><span class="co"># normalize</span></a>
-<a class="sourceLine" id="cb299-13" title="13">df[, c.vars] &lt;-<span class="st"> </span><span class="kw">apply</span>( df[, c.vars], <span class="dv">2</span>, our.norm )</a>
-<a class="sourceLine" id="cb299-14" title="14"></a>
-<a class="sourceLine" id="cb299-15" title="15"><span class="co"># predict whether poeple overestimate rate of immigrants (i.e. more than 10.7%)</span></a>
-<a class="sourceLine" id="cb299-16" title="16"><span class="kw">table</span>(df<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create a copy of the original IMMBRIT variable (needed for classification with lm)</span>
+df<span class="op">$</span>IMMBRIT_original_scale &lt;-<span class="st"> </span>df<span class="op">$</span>IMMBRIT
+
+<span class="co"># our function for normalization</span>
+our.norm &lt;-<span class="st"> </span><span class="cf">function</span>(x){
+  <span class="kw">return</span>((x <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(x)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(x))
+}
+
+<span class="co"># continuous variables</span>
+c.vars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;IMMBRIT&quot;</span>, <span class="st">&quot;RAge&quot;</span>, <span class="st">&quot;Househld&quot;</span>, <span class="st">&quot;HHInc&quot;</span>, <span class="st">&quot;employMonths&quot;</span>, <span class="st">&quot;WWWhourspW&quot;</span>)
+
+<span class="co"># normalize</span>
+df[, c.vars] &lt;-<span class="st"> </span><span class="kw">apply</span>( df[, c.vars], <span class="dv">2</span>, our.norm )
+
+<span class="co"># predict whether poeple overestimate rate of immigrants (i.e. more than 10.7%)</span>
+<span class="kw">table</span>(df<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>
   0   1 
 290 759 </code></pre>
-<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb301-1" title="1"><span class="co"># probability of misperception of immigration in the sample</span></a>
-<a class="sourceLine" id="cb301-2" title="2"><span class="kw">mean</span>(df<span class="op">$</span>over.estimate)  </a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># probability of misperception of immigration in the sample</span>
+<span class="kw">mean</span>(df<span class="op">$</span>over.estimate)  </code></pre>
 <pre><code>[1] 0.7235462</code></pre>
-<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb303-1" title="1"><span class="co"># naive guess</span></a>
-<a class="sourceLine" id="cb303-2" title="2"><span class="kw">median</span>(df<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># naive guess</span>
+<span class="kw">median</span>(df<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>[1] 1</code></pre>
 <p>Create dummy variables from our categorical variables.</p>
-<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb305-1" title="1">df<span class="op">$</span>Cons &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-2" title="2">df<span class="op">$</span>Lab &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-3" title="3">df<span class="op">$</span>SNP &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">3</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-4" title="4">df<span class="op">$</span>GP &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">4</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-5" title="5">df<span class="op">$</span>BNP &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">6</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-6" title="6">df<span class="op">$</span>Ukip &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-7" title="7">df<span class="op">$</span>party.other &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">7</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-8" title="8">df<span class="op">$</span>rural &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>urban <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-9" title="9">df<span class="op">$</span>partly.rural &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>urban <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb305-10" title="10">df<span class="op">$</span>urban &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>urban <span class="op">==</span><span class="st"> </span><span class="dv">4</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">df<span class="op">$</span>Cons &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>Lab &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>SNP &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">3</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>GP &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">4</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>BNP &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">6</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>Ukip &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>party.other &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">7</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>rural &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>urban <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>partly.rural &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>urban <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+df<span class="op">$</span>urban &lt;-<span class="st"> </span><span class="kw">ifelse</span>(df<span class="op">$</span>urban <span class="op">==</span><span class="st"> </span><span class="dv">4</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</code></pre>
 <p>Now, we fit a logistic regression.</p>
-<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb306-1" title="1"><span class="co"># run logistic regression</span></a>
-<a class="sourceLine" id="cb306-2" title="2">m.log &lt;-<span class="st"> </span><span class="kw">glm</span>(over.estimate <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>RAge <span class="op">+</span><span class="st"> </span>Househld <span class="op">+</span><span class="st"> </span>Lab <span class="op">+</span><span class="st"> </span>SNP <span class="op">+</span><span class="st"> </span>Ukip <span class="op">+</span><span class="st"> </span>BNP <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb306-3" title="3"><span class="st">               </span>GP <span class="op">+</span><span class="st"> </span>party.other <span class="op">+</span><span class="st"> </span>paper <span class="op">+</span><span class="st"> </span>WWWhourspW <span class="op">+</span><span class="st">  </span>religious <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb306-4" title="4"><span class="st">               </span>employMonths <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb306-5" title="5"><span class="st">               </span>health.good <span class="op">+</span><span class="st"> </span>HHInc, <span class="dt">data =</span> df,</a>
-<a class="sourceLine" id="cb306-6" title="6">             <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
-<a class="sourceLine" id="cb306-7" title="7"><span class="kw">summary</span>(m.log)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># run logistic regression</span>
+m.log &lt;-<span class="st"> </span><span class="kw">glm</span>(over.estimate <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>RAge <span class="op">+</span><span class="st"> </span>Househld <span class="op">+</span><span class="st"> </span>Lab <span class="op">+</span><span class="st"> </span>SNP <span class="op">+</span><span class="st"> </span>Ukip <span class="op">+</span><span class="st"> </span>BNP <span class="op">+</span><span class="st"> </span>
+<span class="st">               </span>GP <span class="op">+</span><span class="st"> </span>party.other <span class="op">+</span><span class="st"> </span>paper <span class="op">+</span><span class="st"> </span>WWWhourspW <span class="op">+</span><span class="st">  </span>religious <span class="op">+</span><span class="st"> </span>
+<span class="st">               </span>employMonths <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>
+<span class="st">               </span>health.good <span class="op">+</span><span class="st"> </span>HHInc, <span class="dt">data =</span> df,
+             <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))
+<span class="kw">summary</span>(m.log)</code></pre>
 <pre><code>
 Call:
 glm(formula = over.estimate ~ RSex + RAge + Househld + Lab + 
@@ -398,8 +399,8 @@ AIC: 1185.3
 
 Number of Fisher Scoring iterations: 5</code></pre>
 <p>There are also two other ways to look at the estimated parameters of our model. We can just call the coefficients or we can exploit that they are an object within the summary object of the model object.</p>
-<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb308-1" title="1"><span class="co"># extract coeffiecients only</span></a>
-<a class="sourceLine" id="cb308-2" title="2"><span class="kw">coef</span>(m.log)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># extract coeffiecients only</span>
+<span class="kw">coef</span>(m.log)</code></pre>
 <pre><code>           (Intercept)             RSexFemale                   RAge 
             0.72437209             0.64029593             0.01031349 
               Househld                    Lab                    SNP 
@@ -414,8 +415,8 @@ Number of Fisher Scoring iterations: 5</code></pre>
            -0.37977789             0.12731654            -0.09534035 
 health.goodfairly good        health.goodgood                  HHInc 
             0.11669492             0.02743714            -0.48513120 </code></pre>
-<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb310-1" title="1"><span class="co"># only estimates table of summary</span></a>
-<a class="sourceLine" id="cb310-2" title="2"><span class="kw">summary</span>(m.log)<span class="op">$</span>coef</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># only estimates table of summary</span>
+<span class="kw">summary</span>(m.log)<span class="op">$</span>coef</code></pre>
 <pre><code>                          Estimate Std. Error     z value     Pr(&gt;|z|)
 (Intercept)             0.72437209 0.36093823  2.00691428 4.475879e-02
 RSexFemale              0.64029593 0.15056566  4.25260266 2.113003e-05
@@ -438,8 +439,8 @@ health.goodfair        -0.09534035 0.33855835 -0.28160685 7.782450e-01
 health.goodfairly good  0.11669492 0.31239717  0.37354666 7.087416e-01
 health.goodgood         0.02743714 0.31895327  0.08602245 9.314486e-01
 HHInc                  -0.48513120 0.08447377 -5.74298026 9.302457e-09</code></pre>
-<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb312-1" title="1"><span class="co"># display p-values only</span></a>
-<a class="sourceLine" id="cb312-2" title="2"><span class="kw">summary</span>(m.log)<span class="op">$</span>coef[, <span class="dv">4</span>]</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># display p-values only</span>
+<span class="kw">summary</span>(m.log)<span class="op">$</span>coef[, <span class="dv">4</span>]</code></pre>
 <pre><code>           (Intercept)             RSexFemale                   RAge 
           4.475879e-02           2.113003e-05           9.094926e-01 
               Househld                    Lab                    SNP 
@@ -455,154 +456,154 @@ HHInc                  -0.48513120 0.08447377 -5.74298026 9.302457e-09</code></p
 health.goodfairly good        health.goodgood                  HHInc 
           7.087416e-01           9.314486e-01           9.302457e-09 </code></pre>
 <p>The parameters may be of interest if inference is our goal. But if we are just interested in classification we would like to make predictions. This can be done directly by using the predict() function:</p>
-<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb314-1" title="1"><span class="co"># predict probabilities</span></a>
-<a class="sourceLine" id="cb314-2" title="2">pred.probs &lt;-<span class="st"> </span><span class="kw">predict</span>( m.log, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb314-3" title="3">pred.probs[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="co"># predictions for the first 10 respondents</span></a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># predict probabilities</span>
+pred.probs &lt;-<span class="st"> </span><span class="kw">predict</span>( m.log, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)
+pred.probs[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>] <span class="co"># predictions for the first 10 respondents</span></code></pre>
 <pre><code>        1         2         3         4         5         6         7 
 0.5213789 0.9181186 0.8412570 0.8244665 0.8349719 0.6931744 0.9370885 
         8         9        10 
 0.6815346 0.9090575 0.6897961 </code></pre>
 <p>To see how good our classification model is we need to compare the classification with the actual outcomes. We first create an object <code>exp.out</code> which will be either <code>0</code> or <code>1</code>. In a second step, we cross-tab it with the true outcomes and this allows us to see how well the classification model is doing.</p>
-<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb316-1" title="1"><span class="co"># predict whether respondent over-estimates or not</span></a>
-<a class="sourceLine" id="cb316-2" title="2">exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( pred.probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb316-3" title="3"></a>
-<a class="sourceLine" id="cb316-4" title="4"><span class="co"># confusion matrix (table of predictions and true outcomes)</span></a>
-<a class="sourceLine" id="cb316-5" title="5"><span class="kw">table</span>(<span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># predict whether respondent over-estimates or not</span>
+exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( pred.probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+
+<span class="co"># confusion matrix (table of predictions and true outcomes)</span>
+<span class="kw">table</span>(<span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>          truth
 prediction   0   1
          0  41  40
          1 249 719</code></pre>
 <p>The diagonal elements are the correct classifications and the off-diagonal ones are wrong. We can compute the share of correct classified observations as a ratio.</p>
-<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb318-1" title="1"><span class="co"># percent correctly classified</span></a>
-<a class="sourceLine" id="cb318-2" title="2">(<span class="dv">41</span> <span class="op">+</span><span class="st"> </span><span class="dv">719</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1049</span></a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># percent correctly classified</span>
+(<span class="dv">41</span> <span class="op">+</span><span class="st"> </span><span class="dv">719</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1049</span></code></pre>
 <pre><code>[1] 0.7244995</code></pre>
 <p>We can also write code that will estimate the percentage correctly classified for different values.</p>
-<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb320-1" title="1"><span class="co"># more generally</span></a>
-<a class="sourceLine" id="cb320-2" title="2"><span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># more generally</span>
+<span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>[1] 0.7244995</code></pre>
 <p>This is the performance on the training data and we expect the test error to be higher than this. To get at a better indication of the model’s classification error we can split the dataset into a training set and a test set.</p>
-<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb322-1" title="1"><span class="co"># set the random number generator</span></a>
-<a class="sourceLine" id="cb322-2" title="2"><span class="kw">set.seed</span>(<span class="dv">12</span>)</a>
-<a class="sourceLine" id="cb322-3" title="3"></a>
-<a class="sourceLine" id="cb322-4" title="4"><span class="co"># random draw of 80% of the observation (row numbers) to train the model</span></a>
-<a class="sourceLine" id="cb322-5" title="5">train.ids &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">nrow</span>(df), <span class="dt">size =</span> <span class="kw">as.integer</span>( (<span class="kw">nrow</span>(df)<span class="op">*</span>.<span class="dv">80</span>) ), <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb322-6" title="6"></a>
-<a class="sourceLine" id="cb322-7" title="7"><span class="co"># the validation data </span></a>
-<a class="sourceLine" id="cb322-8" title="8">df.test &lt;-<span class="st"> </span>df[ <span class="op">-</span>train.ids, ]</a>
-<a class="sourceLine" id="cb322-9" title="9"><span class="kw">dim</span>(df.test)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># set the random number generator</span>
+<span class="kw">set.seed</span>(<span class="dv">12</span>)
+
+<span class="co"># random draw of 80% of the observation (row numbers) to train the model</span>
+train.ids &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">nrow</span>(df), <span class="dt">size =</span> <span class="kw">as.integer</span>( (<span class="kw">nrow</span>(df)<span class="op">*</span>.<span class="dv">80</span>) ), <span class="dt">replace =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># the validation data </span>
+df.test &lt;-<span class="st"> </span>df[ <span class="op">-</span>train.ids, ]
+<span class="kw">dim</span>(df.test)</code></pre>
 <pre><code>[1] 210  23</code></pre>
 <p>Now we fit the model using the training data only and then test its performance on the test data.</p>
-<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb324-1" title="1"><span class="co"># re-fit the model on the raining data</span></a>
-<a class="sourceLine" id="cb324-2" title="2">m.log &lt;-<span class="st"> </span><span class="kw">glm</span>(over.estimate <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>RAge <span class="op">+</span><span class="st"> </span>Househld <span class="op">+</span><span class="st"> </span>Lab <span class="op">+</span><span class="st"> </span>SNP <span class="op">+</span><span class="st"> </span>Ukip <span class="op">+</span><span class="st"> </span>BNP <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb324-3" title="3"><span class="st">               </span>GP <span class="op">+</span><span class="st"> </span>party.other <span class="op">+</span><span class="st"> </span>paper <span class="op">+</span><span class="st"> </span>WWWhourspW <span class="op">+</span><span class="st">  </span>religious <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb324-4" title="4"><span class="st">               </span>employMonths <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>health.good <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb324-5" title="5"><span class="st">               </span>HHInc, <span class="dt">data =</span> df, <span class="dt">subset =</span> train.ids, </a>
-<a class="sourceLine" id="cb324-6" title="6">             <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
-<a class="sourceLine" id="cb324-7" title="7"></a>
-<a class="sourceLine" id="cb324-8" title="8"><span class="co"># predict probabilities of over-estimating but for the unseen data</span></a>
-<a class="sourceLine" id="cb324-9" title="9">pred.probs &lt;-<span class="st"> </span><span class="kw">predict</span>(m.log, <span class="dt">newdata =</span> df.test, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb324-10" title="10"></a>
-<a class="sourceLine" id="cb324-11" title="11"><span class="co"># classify predictions as over-estimating or not</span></a>
-<a class="sourceLine" id="cb324-12" title="12">exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( pred.probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb324-13" title="13"></a>
-<a class="sourceLine" id="cb324-14" title="14"><span class="co"># confusion matrix of predictions against truth</span></a>
-<a class="sourceLine" id="cb324-15" title="15"><span class="kw">table</span>( <span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df.test<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># re-fit the model on the raining data</span>
+m.log &lt;-<span class="st"> </span><span class="kw">glm</span>(over.estimate <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>RAge <span class="op">+</span><span class="st"> </span>Househld <span class="op">+</span><span class="st"> </span>Lab <span class="op">+</span><span class="st"> </span>SNP <span class="op">+</span><span class="st"> </span>Ukip <span class="op">+</span><span class="st"> </span>BNP <span class="op">+</span><span class="st"> </span>
+<span class="st">               </span>GP <span class="op">+</span><span class="st"> </span>party.other <span class="op">+</span><span class="st"> </span>paper <span class="op">+</span><span class="st"> </span>WWWhourspW <span class="op">+</span><span class="st">  </span>religious <span class="op">+</span><span class="st"> </span>
+<span class="st">               </span>employMonths <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>health.good <span class="op">+</span><span class="st"> </span>
+<span class="st">               </span>HHInc, <span class="dt">data =</span> df, <span class="dt">subset =</span> train.ids, 
+             <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))
+
+<span class="co"># predict probabilities of over-estimating but for the unseen data</span>
+pred.probs &lt;-<span class="st"> </span><span class="kw">predict</span>(m.log, <span class="dt">newdata =</span> df.test, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)
+
+<span class="co"># classify predictions as over-estimating or not</span>
+exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( pred.probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+
+<span class="co"># confusion matrix of predictions against truth</span>
+<span class="kw">table</span>( <span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df.test<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>          truth
 prediction   0   1
          0   5   7
          1  65 133</code></pre>
-<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb326-1" title="1"><span class="co"># percent correctly classified</span></a>
-<a class="sourceLine" id="cb326-2" title="2"><span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df.test<span class="op">$</span>over.estimate )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># percent correctly classified</span>
+<span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df.test<span class="op">$</span>over.estimate )</code></pre>
 <pre><code>[1] 0.6571429</code></pre>
 <p>We see that the classification accuracy is too high in the training dataset. The accuracy on the test dataset provides a good estimate of the model’s abbility to correctly identify observations.</p>
 <p>Let’s try to improve the classification model by relying on the best predictors.</p>
-<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb328-1" title="1"><span class="co"># try to improve the prediction model by relying on &quot;good&quot; predictors</span></a>
-<a class="sourceLine" id="cb328-2" title="2">m.log &lt;-<span class="st"> </span><span class="kw">glm</span>(over.estimate <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>HHInc, </a>
-<a class="sourceLine" id="cb328-3" title="3">             <span class="dt">data =</span> df, <span class="dt">subset =</span> train.ids, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))</a>
-<a class="sourceLine" id="cb328-4" title="4">pred.probs &lt;-<span class="st"> </span><span class="kw">predict</span>(m.log, <span class="dt">newdata =</span> df.test, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a>
-<a class="sourceLine" id="cb328-5" title="5">exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( pred.probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb328-6" title="6"><span class="kw">table</span>( <span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df.test<span class="op">$</span>over.estimate )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># try to improve the prediction model by relying on &quot;good&quot; predictors</span>
+m.log &lt;-<span class="st"> </span><span class="kw">glm</span>(over.estimate <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>HHInc, 
+             <span class="dt">data =</span> df, <span class="dt">subset =</span> train.ids, <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&quot;logit&quot;</span>))
+pred.probs &lt;-<span class="st"> </span><span class="kw">predict</span>(m.log, <span class="dt">newdata =</span> df.test, <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)
+exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( pred.probs <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+<span class="kw">table</span>( <span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df.test<span class="op">$</span>over.estimate )</code></pre>
 <pre><code>          truth
 prediction   0   1
          0   6   4
          1  64 136</code></pre>
-<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb330-1" title="1"><span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df.test<span class="op">$</span>over.estimate )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df.test<span class="op">$</span>over.estimate )</code></pre>
 <pre><code>[1] 0.6761905</code></pre>
 <p>We see that the classification model’s accurcy increases when we only rely the strongest predictors.</p>
 <p>You can also make predictions for specific settings:</p>
-<div class="sourceCode" id="cb332"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb332-1" title="1"><span class="co"># prediction for a specific setting</span></a>
-<a class="sourceLine" id="cb332-2" title="2"><span class="kw">predict</span>(m.log, <span class="dt">newdata =</span> <span class="kw">data.frame</span>( <span class="dt">RSex =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>),</a>
-<a class="sourceLine" id="cb332-3" title="3">                                     <span class="dt">rural =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</a>
-<a class="sourceLine" id="cb332-4" title="4">                                     <span class="dt">partly.rural =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</a>
-<a class="sourceLine" id="cb332-5" title="5">                                     <span class="dt">urban =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),</a>
-<a class="sourceLine" id="cb332-6" title="6">                                     <span class="dt">HHInc =</span> <span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">9</span>)), <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># prediction for a specific setting</span>
+<span class="kw">predict</span>(m.log, <span class="dt">newdata =</span> <span class="kw">data.frame</span>( <span class="dt">RSex =</span> <span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>, <span class="st">&quot;Female&quot;</span>),
+                                     <span class="dt">rural =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),
+                                     <span class="dt">partly.rural =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),
+                                     <span class="dt">urban =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>),
+                                     <span class="dt">HHInc =</span> <span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">9</span>)), <span class="dt">type =</span> <span class="st">&quot;response&quot;</span>)</code></pre>
 <pre><code>         1          2 
 0.02372597 0.04504885 </code></pre>
 <div id="model-the-underlying-continuous-process" class="section level3">
 <h3><span class="header-section-number">10.1.1</span> Model the Underlying Continuous Process</h3>
 <p>Lastly, we can try to model the underlying process and classify afterwards. By doing that, the depdendent variable provides more information. In effect we turn our classification problem into a regression problem.</p>
-<div class="sourceCode" id="cb334"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb334-1" title="1"><span class="co"># fit the linear model on the numer of immigrants per 100 Brits</span></a>
-<a class="sourceLine" id="cb334-2" title="2">m.lm &lt;-<span class="st"> </span><span class="kw">lm</span>(IMMBRIT <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>HHInc, </a>
-<a class="sourceLine" id="cb334-3" title="3">            <span class="dt">data =</span> df, <span class="dt">subset =</span> train.ids)</a>
-<a class="sourceLine" id="cb334-4" title="4"></a>
-<a class="sourceLine" id="cb334-5" title="5"><span class="co"># predict</span></a>
-<a class="sourceLine" id="cb334-6" title="6">y_hat &lt;-<span class="st"> </span><span class="kw">predict</span>(m.lm, <span class="dt">newdata =</span> df.test)</a>
-<a class="sourceLine" id="cb334-7" title="7"></a>
-<a class="sourceLine" id="cb334-8" title="8"><span class="co"># threshold for classfication</span></a>
-<a class="sourceLine" id="cb334-9" title="9">threshold &lt;-<span class="st"> </span>(<span class="fl">10.7</span> <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(df<span class="op">$</span>IMMBRIT_original_scale)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(df<span class="op">$</span>IMMBRIT_original_scale)</a>
-<a class="sourceLine" id="cb334-10" title="10"></a>
-<a class="sourceLine" id="cb334-11" title="11"><span class="co"># now we do the classfication </span></a>
-<a class="sourceLine" id="cb334-12" title="12">exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( y_hat <span class="op">&gt;</span><span class="st"> </span>threshold, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb334-13" title="13"></a>
-<a class="sourceLine" id="cb334-14" title="14"><span class="co"># confusion matrix</span></a>
-<a class="sourceLine" id="cb334-15" title="15"><span class="kw">table</span>( <span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df.test<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># fit the linear model on the numer of immigrants per 100 Brits</span>
+m.lm &lt;-<span class="st"> </span><span class="kw">lm</span>(IMMBRIT <span class="op">~</span><span class="st"> </span>RSex <span class="op">+</span><span class="st"> </span>rural <span class="op">+</span><span class="st"> </span>partly.rural <span class="op">+</span><span class="st"> </span>urban <span class="op">+</span><span class="st"> </span>HHInc, 
+            <span class="dt">data =</span> df, <span class="dt">subset =</span> train.ids)
+
+<span class="co"># predict</span>
+y_hat &lt;-<span class="st"> </span><span class="kw">predict</span>(m.lm, <span class="dt">newdata =</span> df.test)
+
+<span class="co"># threshold for classfication</span>
+threshold &lt;-<span class="st"> </span>(<span class="fl">10.7</span> <span class="op">-</span><span class="st"> </span><span class="kw">mean</span>(df<span class="op">$</span>IMMBRIT_original_scale)) <span class="op">/</span><span class="st"> </span><span class="kw">sd</span>(df<span class="op">$</span>IMMBRIT_original_scale)
+
+<span class="co"># now we do the classfication </span>
+exp.out &lt;-<span class="st"> </span><span class="kw">ifelse</span>( y_hat <span class="op">&gt;</span><span class="st"> </span>threshold, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+
+<span class="co"># confusion matrix</span>
+<span class="kw">table</span>( <span class="dt">prediction =</span> exp.out, <span class="dt">truth =</span> df.test<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>          truth
 prediction   0   1
          1  70 140</code></pre>
-<div class="sourceCode" id="cb336"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb336-1" title="1"><span class="co"># percent correctly classified</span></a>
-<a class="sourceLine" id="cb336-2" title="2"><span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df.test<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># percent correctly classified</span>
+<span class="kw">mean</span>( exp.out <span class="op">==</span><span class="st"> </span>df.test<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>[1] 0.6666667</code></pre>
 <p>We do worse by treating this as a regression problem rather than a classification problem.</p>
 </div>
 <div id="leave-one-out-cross-validation" class="section level3">
 <h3><span class="header-section-number">10.1.2</span> Leave-One-Out-Cross-Validation</h3>
 <p>The <code>glm()</code> function offers a generalization of the linear model while allowing for different link functions and error distributions other than gaussian. By default, <code>glm()</code> simply fits a linear model identical to the one estimated with <code>lm()</code>.</p>
-<div class="sourceCode" id="cb338"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb338-1" title="1"><span class="co"># linear regression fitted with glm() and lm()</span></a>
-<a class="sourceLine" id="cb338-2" title="2">glm.fit &lt;-<span class="st"> </span><span class="kw">glm</span>( IMMBRIT <span class="op">~</span><span class="st"> </span>RAge, <span class="dt">data =</span> df)</a>
-<a class="sourceLine" id="cb338-3" title="3">lm.fit &lt;-<span class="st"> </span><span class="kw">lm</span>( IMMBRIT <span class="op">~</span><span class="st"> </span>RAge, <span class="dt">data =</span> df)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># linear regression fitted with glm() and lm()</span>
+glm.fit &lt;-<span class="st"> </span><span class="kw">glm</span>( IMMBRIT <span class="op">~</span><span class="st"> </span>RAge, <span class="dt">data =</span> df)
+lm.fit &lt;-<span class="st"> </span><span class="kw">lm</span>( IMMBRIT <span class="op">~</span><span class="st"> </span>RAge, <span class="dt">data =</span> df)</code></pre>
 <p>The <code>glm()</code> function can be used with <code>cv.glm()</code> to estimate k-fold cross-validation prediction error.</p>
-<div class="sourceCode" id="cb339"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb339-1" title="1"><span class="co"># use cv.glm() for k-fold corss-validation on glm</span></a>
-<a class="sourceLine" id="cb339-2" title="2"><span class="kw">library</span>(boot)</a>
-<a class="sourceLine" id="cb339-3" title="3">cv.err &lt;-<span class="st"> </span><span class="kw">cv.glm</span>(df, glm.fit)</a>
-<a class="sourceLine" id="cb339-4" title="4"><span class="co"># cross-validation error</span></a>
-<a class="sourceLine" id="cb339-5" title="5">cv.err<span class="op">$</span>delta</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use cv.glm() for k-fold corss-validation on glm</span>
+<span class="kw">library</span>(boot)
+cv.err &lt;-<span class="st"> </span><span class="kw">cv.glm</span>(df, glm.fit)
+<span class="co"># cross-validation error</span>
+cv.err<span class="op">$</span>delta</code></pre>
 <pre><code>[1] 1.001291 1.001289</code></pre>
-<div class="sourceCode" id="cb341"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb341-1" title="1"><span class="co"># the number of folds</span></a>
-<a class="sourceLine" id="cb341-2" title="2">cv.err<span class="op">$</span>K</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># the number of folds</span>
+cv.err<span class="op">$</span>K</code></pre>
 <pre><code>[1] 1049</code></pre>
 <p>The returned value from <code>cv.glm()</code> contains a delta vector of components - the raw cross-validation estimate and the adjusted cross-validation estimate respectively. We are interested in the raw cross-validation error.</p>
 <p>NOTE: if we do not provide the option <strong>K</strong> in <code>cv.glm()</code> we automatically perfrom LOOCV.</p>
 <p>We can repeat this process in a <code>for()</code> loop to compare the cross-validation error of higher-order polynomials. The following example estimates the polynomial fit of the order 1 through 7 and stores the result in a cv.error vector.</p>
-<div class="sourceCode" id="cb343"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb343-1" title="1"><span class="co"># container for cv errors</span></a>
-<a class="sourceLine" id="cb343-2" title="2">cv.error &lt;-<span class="st"> </span><span class="ot">NA</span></a>
-<a class="sourceLine" id="cb343-3" title="3"></a>
-<a class="sourceLine" id="cb343-4" title="4"><span class="co"># loop over age raised to the power 1...7</span></a>
-<a class="sourceLine" id="cb343-5" title="5"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){</a>
-<a class="sourceLine" id="cb343-6" title="6">  glm.fit &lt;-<span class="st"> </span><span class="kw">glm</span>( IMMBRIT <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(RAge, i), <span class="dt">data =</span> df )</a>
-<a class="sourceLine" id="cb343-7" title="7">  cv.error[i] &lt;-<span class="st"> </span><span class="kw">cv.glm</span>(df, glm.fit)<span class="op">$</span>delta[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb343-8" title="8">}</a>
-<a class="sourceLine" id="cb343-9" title="9">cv.error</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># container for cv errors</span>
+cv.error &lt;-<span class="st"> </span><span class="ot">NA</span>
+
+<span class="co"># loop over age raised to the power 1...7</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){
+  glm.fit &lt;-<span class="st"> </span><span class="kw">glm</span>( IMMBRIT <span class="op">~</span><span class="st"> </span><span class="kw">poly</span>(RAge, i), <span class="dt">data =</span> df )
+  cv.error[i] &lt;-<span class="st"> </span><span class="kw">cv.glm</span>(df, glm.fit)<span class="op">$</span>delta[<span class="dv">1</span>]
+}
+cv.error</code></pre>
 <pre><code>[1] 1.0012907 0.9932016 0.9840021 0.9854419 0.9869106 0.9876803 0.9888996</code></pre>
 <p>We plot the effect of increasing the complexity of the model</p>
-<div class="sourceCode" id="cb345"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb345-1" title="1"><span class="co"># plot of error rates</span></a>
-<a class="sourceLine" id="cb345-2" title="2"><span class="kw">plot</span>(<span class="dt">x =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">7</span>),</a>
-<a class="sourceLine" id="cb345-3" title="3">     <span class="dt">y =</span> cv.error,</a>
-<a class="sourceLine" id="cb345-4" title="4">     <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>, </a>
-<a class="sourceLine" id="cb345-5" title="5">     <span class="dt">pch =</span> <span class="dv">20</span>,</a>
-<a class="sourceLine" id="cb345-6" title="6">     <span class="dt">xlab =</span> <span class="st">&quot;complexity&quot;</span>, </a>
-<a class="sourceLine" id="cb345-7" title="7">     <span class="dt">ylab =</span> <span class="st">&quot;cross-validation error&quot;</span>,</a>
-<a class="sourceLine" id="cb345-8" title="8">     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="fl">0.98</span>, <span class="fl">1.01</span>))</a>
-<a class="sourceLine" id="cb345-9" title="9"><span class="kw">lines</span>( <span class="dt">y =</span> cv.error, <span class="dt">x =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>), <span class="dt">lwd =</span> <span class="dv">2</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># plot of error rates</span>
+<span class="kw">plot</span>(<span class="dt">x =</span> <span class="kw">seq</span>(<span class="dv">1</span>, <span class="dv">7</span>),
+     <span class="dt">y =</span> cv.error,
+     <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>, 
+     <span class="dt">pch =</span> <span class="dv">20</span>,
+     <span class="dt">xlab =</span> <span class="st">&quot;complexity&quot;</span>, 
+     <span class="dt">ylab =</span> <span class="st">&quot;cross-validation error&quot;</span>,
+     <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="fl">0.98</span>, <span class="fl">1.01</span>))
+<span class="kw">lines</span>( <span class="dt">y =</span> cv.error, <span class="dt">x =</span> <span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">7</span>), <span class="dt">lwd =</span> <span class="dv">2</span>)</code></pre>
 <p><img src="suffolk2019_files/figure-html/non.finished.plotting-1.png" width="672" /></p>
 
 </div>

@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Suffolk 2019</title>
-  <meta name="description" content="Suffolk 2019" />
-  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+  <title>Introduction to Statistics with R</title>
+  <meta name="description" content="Introduction to Statistics with R" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Suffolk 2019" />
+  <meta property="og:title" content="Introduction to Statistics with R" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Suffolk 2019" />
+  <meta name="twitter:title" content="Introduction to Statistics with R" />
   
   
   
@@ -62,6 +62,7 @@ a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -143,7 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.4" data-path="seminar1.html"><a href="seminar1.html#scripts"><i class="fa fa-check"></i><b>1.1.4</b> Scripts</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="seminar2.html"><a href="seminar2.html"><i class="fa fa-check"></i><b>2</b> R-syntax, data structures and types</a><ul>
+<li class="chapter" data-level="2" data-path="seminar2.html"><a href="seminar2.html"><i class="fa fa-check"></i><b>2</b> Data Types And Levels of Measurement</a><ul>
 <li class="chapter" data-level="2.1" data-path="seminar2.html"><a href="seminar2.html#seminar"><i class="fa fa-check"></i><b>2.1</b> Seminar</a><ul>
 <li class="chapter" data-level="2.1.1" data-path="seminar2.html"><a href="seminar2.html#functions"><i class="fa fa-check"></i><b>2.1.1</b> Functions</a></li>
 <li class="chapter" data-level="2.1.2" data-path="seminar2.html"><a href="seminar2.html#getting-help"><i class="fa fa-check"></i><b>2.1.2</b> Getting Help</a></li>
@@ -153,7 +154,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.6" data-path="seminar2.html"><a href="seminar2.html#arrays"><i class="fa fa-check"></i><b>2.1.6</b> Arrays</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="seminar3.html"><a href="seminar3.html"><i class="fa fa-check"></i><b>3</b> Data import (from csv, txt, and excel)</a><ul>
+<li class="chapter" data-level="3" data-path="seminar3.html"><a href="seminar3.html"><i class="fa fa-check"></i><b>3</b> Central Tendency and Dispersion</a><ul>
 <li class="chapter" data-level="3.1" data-path="seminar3.html"><a href="seminar3.html#seminar-1"><i class="fa fa-check"></i><b>3.1</b> Seminar</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="seminar3.html"><a href="seminar3.html#setting-up"><i class="fa fa-check"></i><b>3.1.1</b> Setting up</a></li>
 <li class="chapter" data-level="3.1.2" data-path="seminar3.html"><a href="seminar3.html#loading-data"><i class="fa fa-check"></i><b>3.1.2</b> Loading data</a></li>
@@ -163,7 +164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.6" data-path="seminar3.html"><a href="seminar3.html#importing-a-dataset-in-.txt-format."><i class="fa fa-check"></i><b>3.1.6</b> Importing a dataset in .txt format.</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> Creating, amending, exporting data frames</a><ul>
+<li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> Covariance and Correlation</a><ul>
 <li class="chapter" data-level="4.1" data-path="seminar4.html"><a href="seminar4.html#seminar-2"><i class="fa fa-check"></i><b>4.1</b> Seminar</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="seminar4.html"><a href="seminar4.html#creating-data-frames"><i class="fa fa-check"></i><b>4.1.1</b> Creating data frames</a></li>
 <li class="chapter" data-level="4.1.2" data-path="seminar4.html"><a href="seminar4.html#working-with-data-frames"><i class="fa fa-check"></i><b>4.1.2</b> Working with data frames</a></li>
@@ -171,49 +172,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.1.4" data-path="seminar4.html"><a href="seminar4.html#saving-data-frames"><i class="fa fa-check"></i><b>4.1.4</b> Saving data frames</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="seminar5.html"><a href="seminar5.html"><i class="fa fa-check"></i><b>5</b> Type coercion</a><ul>
+<li class="chapter" data-level="5" data-path="seminar5.html"><a href="seminar5.html"><i class="fa fa-check"></i><b>5</b> Hypothesis Testing</a><ul>
 <li class="chapter" data-level="5.1" data-path="seminar5.html"><a href="seminar5.html#seminar-3"><i class="fa fa-check"></i><b>5.1</b> Seminar</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="seminar5.html"><a href="seminar5.html#coerce-a-factor-to-character"><i class="fa fa-check"></i><b>5.1.1</b> Coerce a factor to character</a></li>
 <li class="chapter" data-level="5.1.2" data-path="seminar5.html"><a href="seminar5.html#coerce-a-character-variable-into-a-factor-variable"><i class="fa fa-check"></i><b>5.1.2</b> Coerce a character variable into a factor variable</a></li>
 <li class="chapter" data-level="5.1.3" data-path="seminar5.html"><a href="seminar5.html#coerce-a-character-variable-into-a-numeric-variable"><i class="fa fa-check"></i><b>5.1.3</b> Coerce a character variable into a numeric variable</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="seminar6.html"><a href="seminar6.html"><i class="fa fa-check"></i><b>6</b> Loops and conditions</a><ul>
+<li class="chapter" data-level="6" data-path="seminar6.html"><a href="seminar6.html"><i class="fa fa-check"></i><b>6</b> Linear Regression</a><ul>
 <li class="chapter" data-level="6.1" data-path="seminar6.html"><a href="seminar6.html#seminar-4"><i class="fa fa-check"></i><b>6.1</b> Seminar</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="seminar6.html"><a href="seminar6.html#for-loops"><i class="fa fa-check"></i><b>6.1.1</b> For loops</a></li>
 <li class="chapter" data-level="6.1.2" data-path="seminar6.html"><a href="seminar6.html#conditions"><i class="fa fa-check"></i><b>6.1.2</b> Conditions</a></li>
 <li class="chapter" data-level="6.1.3" data-path="seminar6.html"><a href="seminar6.html#the-ifelse-function"><i class="fa fa-check"></i><b>6.1.3</b> The ifelse() function</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="seminar7.html"><a href="seminar7.html"><i class="fa fa-check"></i><b>7</b> Visualising data</a><ul>
-<li class="chapter" data-level="7.1" data-path="seminar7.html"><a href="seminar7.html#seminar-5"><i class="fa fa-check"></i><b>7.1</b> Seminar</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="seminar7.html"><a href="seminar7.html#plots"><i class="fa fa-check"></i><b>7.1.1</b> Plots</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="seminar8.html"><a href="seminar8.html"><i class="fa fa-check"></i><b>8</b> Correlations and differences in means</a><ul>
-<li class="chapter" data-level="8.1" data-path="seminar8.html"><a href="seminar8.html#seminar-6"><i class="fa fa-check"></i><b>8.1</b> Seminar</a><ul>
-<li class="chapter" data-level="8.1.1" data-path="seminar8.html"><a href="seminar8.html#sample-variance-and-sample-standard-deviation"><i class="fa fa-check"></i><b>8.1.1</b> Sample Variance and Sample Standard Deviation</a></li>
-<li class="chapter" data-level="8.1.2" data-path="seminar8.html"><a href="seminar8.html#t-test-for-the-sample-mean"><i class="fa fa-check"></i><b>8.1.2</b> T test for the sample mean</a></li>
-<li class="chapter" data-level="8.1.3" data-path="seminar8.html"><a href="seminar8.html#loading-real-data"><i class="fa fa-check"></i><b>8.1.3</b> Loading real data</a></li>
-<li class="chapter" data-level="8.1.4" data-path="seminar8.html"><a href="seminar8.html#t-test-one-sample-hypothesis-test-with-real-data"><i class="fa fa-check"></i><b>8.1.4</b> T-test (one-sample hypothesis test) with real data</a></li>
-<li class="chapter" data-level="8.1.5" data-path="seminar8.html"><a href="seminar8.html#t-test-difference-in-means"><i class="fa fa-check"></i><b>8.1.5</b> T-test (difference in means)</a></li>
-<li class="chapter" data-level="8.1.6" data-path="seminar8.html"><a href="seminar8.html#relationships-between-continuous-variables"><i class="fa fa-check"></i><b>8.1.6</b> Relationships between continuous variables</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="seminar9.html"><a href="seminar9.html"><i class="fa fa-check"></i><b>9</b> Regression</a><ul>
-<li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="seminar9.html"><a href="seminar9.html#interpreting-regression-output"><i class="fa fa-check"></i><b>9.1.1</b> Interpreting Regression Output</a></li>
-<li class="chapter" data-level="9.1.2" data-path="seminar9.html"><a href="seminar9.html#fitted-values"><i class="fa fa-check"></i><b>9.1.2</b> Fitted values</a></li>
-<li class="chapter" data-level="9.1.3" data-path="seminar9.html"><a href="seminar9.html#additional-resources"><i class="fa fa-check"></i><b>9.1.3</b> Additional Resources</a></li>
-<li class="chapter" data-level="9.1.4" data-path="seminar9.html"><a href="seminar9.html#multiple-linear-regression-models"><i class="fa fa-check"></i><b>9.1.4</b> Multiple linear regression models</a></li>
-<li class="chapter" data-level="9.1.5" data-path="seminar9.html"><a href="seminar9.html#estimating-a-bivariate-regression"><i class="fa fa-check"></i><b>9.1.5</b> Estimating a Bivariate Regression</a></li>
-<li class="chapter" data-level="9.1.6" data-path="seminar9.html"><a href="seminar9.html#non-linearities"><i class="fa fa-check"></i><b>9.1.6</b> Non-Linearities</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="seminar10.html"><a href="seminar10.html"><i class="fa fa-check"></i><b>10</b> Prediction and assessing prediction accuracy</a><ul>
-<li class="chapter" data-level="10.1" data-path="seminar10.html"><a href="seminar10.html#seminar-8"><i class="fa fa-check"></i><b>10.1</b> Seminar</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="seminar10.html"><a href="seminar10.html#model-the-underlying-continuous-process"><i class="fa fa-check"></i><b>10.1.1</b> Model the Underlying Continuous Process</a></li>
-<li class="chapter" data-level="10.1.2" data-path="seminar10.html"><a href="seminar10.html#leave-one-out-cross-validation"><i class="fa fa-check"></i><b>10.1.2</b> Leave-One-Out-Cross-Validation</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -225,7 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Suffolk 2019</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Statistics with R</a>
           </h1>
         </div>
 
@@ -234,14 +204,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
             <section class="normal" id="section-">
 <div id="header">
-<h1 class="title">Suffolk 2019</h1>
+<h1 class="title">Introduction to Statistics with R</h1>
 </div>
 <div id="about-this-course" class="section level1 unnumbered">
 <h1>About this course</h1>
-<p>This course is an introduction R, RStudio and statistics. Our primary aims are to get comfortable working with R and to be able to prepare, manipulate, analyse and visualise data.</p>
+<p>bla bla</p>
 <hr />
 <div class="container btn-container">
-<p><button type = "button" class = "btn btn-lg btn-primary" onclick="window.open('https://github.com/philippbroniecki/statistics1/raw/master/admin/slides day 1.pdf');">Slides day 1</button></p>
+<p><button type = "button" class = "btn btn-lg btn-primary" onclick="window.open('https://github.com/philippbroniecki/suffolk2019/raw/master/admin/slides day 1.pdf');">Slides day 1</button></p>
 </div>
 
 </div>
@@ -288,7 +258,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["suffolk2019.pdf"],
+"download": ["stats101.pdf"],
 "toc": {
 "collapse": "section",
 "scroll_highlight": true
@@ -297,19 +267,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

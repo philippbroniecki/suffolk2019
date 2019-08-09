@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Visualising data | Suffolk 2019</title>
   <meta name="description" content="Chapter 7 Visualising data | Suffolk 2019" />
-  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Visualising data | Suffolk 2019" />
   <meta property="og:type" content="book" />
@@ -62,6 +62,7 @@ a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -303,14 +304,14 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>Let’s load the dataset.</p>
-<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb120-1" title="1">dat1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">dat1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>, <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</code></pre>
 <p>We can look at the variable names in our data with the <a href="http://bit.ly/R_names"><code>names()</code></a> function.</p>
 <p>The <a href="http://bit.ly/R_dim"><code>dim()</code></a> function can be used to find out the dimensions of the dataset (dimension 1 = rows, dimension 2 = columns).</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1"><span class="kw">dim</span>(dat1)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dim</span>(dat1)</code></pre>
 <pre><code>[1] 1049   13</code></pre>
 <p>So, the <a href="http://bit.ly/R_dim"><code>dim()</code></a> function tells us that we have data from 1049 respondents with 13 variables for each respondent.</p>
 <p>Let’s take a quick peek at the first 10 observations to see what the dataset looks like. By default the <a href="http://bit.ly/R_head"><code>head()</code></a> function returns the first 6 rows, but let’s tell it to return the first 10 rows instead.</p>
-<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1"><span class="kw">head</span>(dat1, <span class="dt">n =</span> <span class="dv">10</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(dat1, <span class="dt">n =</span> <span class="dv">10</span>)</code></pre>
 <pre><code>   IMMBRIT over.estimate RSex RAge Househld paper WWWhourspW religious
 1        1             0    1   50        2     0          1         0
 2       50             1    2   18        3     0          4         0
@@ -334,7 +335,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 9           264     2           2    11          3
 10           72     1           3     8          1</code></pre>
 <p>Finally, let’s look at summary statistics of our dataset.</p>
-<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">summary</span>(dat1)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(dat1)</code></pre>
 <pre><code>    IMMBRIT       over.estimate         RSex            RAge      
  Min.   :  0.00   Min.   :0.0000   Min.   :1.000   Min.   :17.00  
  1st Qu.: 10.00   1st Qu.:0.0000   1st Qu.:1.000   1st Qu.:36.00  
@@ -366,78 +367,78 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="plots" class="section level3">
 <h3><span class="header-section-number">7.1.1</span> Plots</h3>
 <p>We can visualize the data with the help of a boxplot, so let’s see how the perception of the number of immigrants is distributed.</p>
-<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="co"># how good are we at guessing immigration</span></a>
-<a class="sourceLine" id="cb127-2" title="2"><span class="kw">boxplot</span>(</a>
-<a class="sourceLine" id="cb127-3" title="3">  dat1<span class="op">$</span>IMMBRIT, </a>
-<a class="sourceLine" id="cb127-4" title="4">  <span class="dt">main =</span> <span class="st">&quot;Perception of Immigration from Non-Western Countries&quot;</span>,</a>
-<a class="sourceLine" id="cb127-5" title="5">  <span class="dt">ylab =</span> <span class="st">&quot;Subjective number of immigrants per 100 British&quot;</span>, </a>
-<a class="sourceLine" id="cb127-6" title="6">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span></a>
-<a class="sourceLine" id="cb127-7" title="7">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># how good are we at guessing immigration</span>
+<span class="kw">boxplot</span>(
+  dat1<span class="op">$</span>IMMBRIT, 
+  <span class="dt">main =</span> <span class="st">&quot;Perception of Immigration from Non-Western Countries&quot;</span>,
+  <span class="dt">ylab =</span> <span class="st">&quot;Subjective number of immigrants per 100 British&quot;</span>, 
+  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>
+  )</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-87-1.png" width="672" /></p>
 <p>Notice how the lower whisker is much shorter than the upper one. The distribution is right skewed. The right tail (higher values) is a lot longer. We can see this beter using a density plot. We combine R’s <code>denisty()</code> function with the <code>plot()</code> function.</p>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb128-1" title="1"><span class="kw">plot</span>(</a>
-<a class="sourceLine" id="cb128-2" title="2">  <span class="kw">density</span>(dat1<span class="op">$</span>IMMBRIT),</a>
-<a class="sourceLine" id="cb128-3" title="3">  <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>,</a>
-<a class="sourceLine" id="cb128-4" title="4">  <span class="dt">lwd =</span> <span class="fl">1.5</span>,</a>
-<a class="sourceLine" id="cb128-5" title="5">  <span class="dt">main =</span> <span class="st">&quot;Perception of Immigration from Non-Western Countries&quot;</span>,</a>
-<a class="sourceLine" id="cb128-6" title="6">  <span class="dt">xlab =</span> <span class="st">&quot;Subjective number of immigrants per 100 British&quot;</span></a>
-<a class="sourceLine" id="cb128-7" title="7">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(
+  <span class="kw">density</span>(dat1<span class="op">$</span>IMMBRIT),
+  <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span>,
+  <span class="dt">lwd =</span> <span class="fl">1.5</span>,
+  <span class="dt">main =</span> <span class="st">&quot;Perception of Immigration from Non-Western Countries&quot;</span>,
+  <span class="dt">xlab =</span> <span class="st">&quot;Subjective number of immigrants per 100 British&quot;</span>
+  )</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-88-1.png" width="672" /></p>
 <p>We can also plot histograms using the <code>hist()</code> function.</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="co"># histogram</span></a>
-<a class="sourceLine" id="cb129-2" title="2"><span class="kw">hist</span>( dat1<span class="op">$</span>employMonths, <span class="dt">main =</span> <span class="st">&quot;histogram&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># histogram</span>
+<span class="kw">hist</span>( dat1<span class="op">$</span>employMonths, <span class="dt">main =</span> <span class="st">&quot;histogram&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;darkgray&quot;</span>)</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-89-1.png" width="672" /></p>
 <p>It is plausible that perception of immigration from Non-Western countries is related to party affiliation. In our dataset, we have a some party affiliation dummies (binary variables). We can use square brackets to subset our data such that we produce a boxplot only for members of the Conservative Party. We first create the binary variables <em>Cons</em> and <em>Lab</em> for (Conservatives and Labour respectively) using the <code>ifelse()</code> function.</p>
-<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb130-1" title="1">dat1<span class="op">$</span>Cons &lt;-<span class="st"> </span><span class="kw">ifelse</span>(dat1<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb130-2" title="2">dat1<span class="op">$</span>Lab &lt;-<span class="st"> </span><span class="kw">ifelse</span>(dat1<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">dat1<span class="op">$</span>Cons &lt;-<span class="st"> </span><span class="kw">ifelse</span>(dat1<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)
+dat1<span class="op">$</span>Lab &lt;-<span class="st"> </span><span class="kw">ifelse</span>(dat1<span class="op">$</span>party_self <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span>)</code></pre>
 <p>We have a look at the variable <em>Cons</em> using the <code>table()</code> function first.</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1"><span class="kw">table</span>(dat1<span class="op">$</span>Cons)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat1<span class="op">$</span>Cons)</code></pre>
 <pre><code>
   0   1 
 765 284 </code></pre>
 <p>In our data, 284 respondents associate with the Conservative party and 765 do not. We create a boxplot of <em>IMMBRIT</em> but only for members of the Conservative Party. We do so by using the square brackets to subset our data.</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="co"># boxplot of immbrit for those observations where Cons is 1</span></a>
-<a class="sourceLine" id="cb133-2" title="2"><span class="kw">boxplot</span>(</a>
-<a class="sourceLine" id="cb133-3" title="3">  dat1<span class="op">$</span>IMMBRIT[dat1<span class="op">$</span>Cons<span class="op">==</span><span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb133-4" title="4">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb133-5" title="5">  <span class="dt">xlab =</span> <span class="st">&quot;Conservatives&quot;</span>,</a>
-<a class="sourceLine" id="cb133-6" title="6">  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span></a>
-<a class="sourceLine" id="cb133-7" title="7">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># boxplot of immbrit for those observations where Cons is 1</span>
+<span class="kw">boxplot</span>(
+  dat1<span class="op">$</span>IMMBRIT[dat1<span class="op">$</span>Cons<span class="op">==</span><span class="dv">1</span>],
+  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,
+  <span class="dt">xlab =</span> <span class="st">&quot;Conservatives&quot;</span>,
+  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>
+  )</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-92-1.png" width="672" /></p>
 <p>We would now like to compare the distribution of the perception fo Conservatives to the distribution among Labour respondents. We can subset the data just like we did for the Conservative Party. In addtion, we want to plot the two plots next to each other, i.e., they should be in the same plot. We can achieve this with the <code>par()</code> function and the <code>mfrow</code> argument. This will spilt the plot window into rows and columns. We want 2 columns to plot 2 boxplots next to each other.</p>
-<div class="sourceCode" id="cb134"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb134-1" title="1"><span class="co"># split plot window into 1 row and 2 columns</span></a>
-<a class="sourceLine" id="cb134-2" title="2"><span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb134-3" title="3"></a>
-<a class="sourceLine" id="cb134-4" title="4"><span class="co"># plot 1</span></a>
-<a class="sourceLine" id="cb134-5" title="5"><span class="kw">boxplot</span>(</a>
-<a class="sourceLine" id="cb134-6" title="6">  dat1<span class="op">$</span>IMMBRIT[dat1<span class="op">$</span>Cons<span class="op">==</span><span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb134-7" title="7">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb134-8" title="8">  <span class="dt">xlab =</span> <span class="st">&quot;Conservatives&quot;</span>,</a>
-<a class="sourceLine" id="cb134-9" title="9">  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span></a>
-<a class="sourceLine" id="cb134-10" title="10">  )</a>
-<a class="sourceLine" id="cb134-11" title="11"></a>
-<a class="sourceLine" id="cb134-12" title="12"><span class="co"># plot 2</span></a>
-<a class="sourceLine" id="cb134-13" title="13"><span class="kw">boxplot</span>(</a>
-<a class="sourceLine" id="cb134-14" title="14">  dat1<span class="op">$</span>IMMBRIT[dat1<span class="op">$</span>Lab<span class="op">==</span><span class="dv">1</span>],</a>
-<a class="sourceLine" id="cb134-15" title="15">  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,</a>
-<a class="sourceLine" id="cb134-16" title="16">  <span class="dt">xlab =</span> <span class="st">&quot;Labour&quot;</span>,</a>
-<a class="sourceLine" id="cb134-17" title="17">  <span class="dt">col =</span> <span class="st">&quot;red&quot;</span></a>
-<a class="sourceLine" id="cb134-18" title="18">  )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># split plot window into 1 row and 2 columns</span>
+<span class="kw">par</span>(<span class="dt">mfrow =</span> <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))
+
+<span class="co"># plot 1</span>
+<span class="kw">boxplot</span>(
+  dat1<span class="op">$</span>IMMBRIT[dat1<span class="op">$</span>Cons<span class="op">==</span><span class="dv">1</span>],
+  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,
+  <span class="dt">xlab =</span> <span class="st">&quot;Conservatives&quot;</span>,
+  <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>
+  )
+
+<span class="co"># plot 2</span>
+<span class="kw">boxplot</span>(
+  dat1<span class="op">$</span>IMMBRIT[dat1<span class="op">$</span>Lab<span class="op">==</span><span class="dv">1</span>],
+  <span class="dt">frame.plot =</span> <span class="ot">FALSE</span>,
+  <span class="dt">xlab =</span> <span class="st">&quot;Labour&quot;</span>,
+  <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>
+  )</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
 <p>It is very hard to spot differences. The distributions are similar. The median for Labour respondents is larger which mean that the central Labour respondent over-estimates immigration more than the central Conservative respondent.</p>
 <p>You can play around with the non-western foreigners data on your own time. We now turn to a dataset that is integrated in R already. It is called <code>longley</code>. Use the <code>help()</code> function to see what this dataset is about.</p>
-<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" title="1"><span class="kw">help</span>(longley)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">help</span>(longley)</code></pre>
 <p>Let’s create a scatterplot with the <code>Year</code> variable on the x-axis and <code>Employed</code> on the y-axis.</p>
-<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb136-1" title="1"><span class="kw">plot</span>(<span class="dt">x =</span> longley<span class="op">$</span>Year, <span class="co"># x-axis variable</span></a>
-<a class="sourceLine" id="cb136-2" title="2">     <span class="dt">y =</span> longley<span class="op">$</span>Employed, <span class="co"># y-axis variable</span></a>
-<a class="sourceLine" id="cb136-3" title="3">     <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span> <span class="co"># no box around the plot</span></a>
-<a class="sourceLine" id="cb136-4" title="4">     )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dt">x =</span> longley<span class="op">$</span>Year, <span class="co"># x-axis variable</span>
+     <span class="dt">y =</span> longley<span class="op">$</span>Employed, <span class="co"># y-axis variable</span>
+     <span class="dt">bty =</span> <span class="st">&quot;n&quot;</span> <span class="co"># no box around the plot</span>
+     )</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-96-1.png" width="672" /></p>
 <p>To create a line plot instead, we use the same function with one additional argument <code>type = "l"</code>.</p>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1"><span class="kw">plot</span>(longley<span class="op">$</span>Year, longley<span class="op">$</span>Employed, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(longley<span class="op">$</span>Year, longley<span class="op">$</span>Employed, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>)</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
 <p>Create a plot that includes both points and lines.</p>
-<div class="sourceCode" id="cb138"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb138-1" title="1"><span class="kw">plot</span>(longley<span class="op">$</span>Year, longley<span class="op">$</span>Employed, <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r collapsible"><code class="sourceCode r"><span class="kw">plot</span>(longley<span class="op">$</span>Year, longley<span class="op">$</span>Employed, <span class="dt">type =</span> <span class="st">&quot;b&quot;</span>)</code></pre>
 <p><img src="suffolk2019_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
 
 </div>

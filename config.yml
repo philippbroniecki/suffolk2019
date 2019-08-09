@@ -1,6 +1,6 @@
-name: Suffolk 2019
-description: Introduction to Quantitative Methods
+name: Stats101
+description: Introduction to Statistics
 
-config_file: ~/.suffolk2019
-working_dir: ~/suffolk2019
+config_file: ~/.stats101
+working_dir: ~/stats101
 

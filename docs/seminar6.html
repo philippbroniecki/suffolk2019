@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 6 Loops and conditions | Suffolk 2019</title>
-  <meta name="description" content="Chapter 6 Loops and conditions | Suffolk 2019" />
-  <meta name="generator" content="bookdown 0.12 and GitBook 2.6.7" />
+  <title>Chapter 6 Linear Regression | Introduction to Statistics with R</title>
+  <meta name="description" content="Chapter 6 Linear Regression | Introduction to Statistics with R" />
+  <meta name="generator" content="bookdown 0.11 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 6 Loops and conditions | Suffolk 2019" />
+  <meta property="og:title" content="Chapter 6 Linear Regression | Introduction to Statistics with R" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 6 Loops and conditions | Suffolk 2019" />
+  <meta name="twitter:title" content="Chapter 6 Linear Regression | Introduction to Statistics with R" />
   
   
   
@@ -30,7 +30,7 @@
   
   
 <link rel="prev" href="seminar5.html">
-<link rel="next" href="seminar7.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -62,6 +62,7 @@ a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
 a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
 @media screen {
 div.sourceCode { overflow: auto; }
@@ -143,7 +144,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="1.1.4" data-path="seminar1.html"><a href="seminar1.html#scripts"><i class="fa fa-check"></i><b>1.1.4</b> Scripts</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="2" data-path="seminar2.html"><a href="seminar2.html"><i class="fa fa-check"></i><b>2</b> R-syntax, data structures and types</a><ul>
+<li class="chapter" data-level="2" data-path="seminar2.html"><a href="seminar2.html"><i class="fa fa-check"></i><b>2</b> Data Types And Levels of Measurement</a><ul>
 <li class="chapter" data-level="2.1" data-path="seminar2.html"><a href="seminar2.html#seminar"><i class="fa fa-check"></i><b>2.1</b> Seminar</a><ul>
 <li class="chapter" data-level="2.1.1" data-path="seminar2.html"><a href="seminar2.html#functions"><i class="fa fa-check"></i><b>2.1.1</b> Functions</a></li>
 <li class="chapter" data-level="2.1.2" data-path="seminar2.html"><a href="seminar2.html#getting-help"><i class="fa fa-check"></i><b>2.1.2</b> Getting Help</a></li>
@@ -153,7 +154,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="2.1.6" data-path="seminar2.html"><a href="seminar2.html#arrays"><i class="fa fa-check"></i><b>2.1.6</b> Arrays</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="3" data-path="seminar3.html"><a href="seminar3.html"><i class="fa fa-check"></i><b>3</b> Data import (from csv, txt, and excel)</a><ul>
+<li class="chapter" data-level="3" data-path="seminar3.html"><a href="seminar3.html"><i class="fa fa-check"></i><b>3</b> Central Tendency and Dispersion</a><ul>
 <li class="chapter" data-level="3.1" data-path="seminar3.html"><a href="seminar3.html#seminar-1"><i class="fa fa-check"></i><b>3.1</b> Seminar</a><ul>
 <li class="chapter" data-level="3.1.1" data-path="seminar3.html"><a href="seminar3.html#setting-up"><i class="fa fa-check"></i><b>3.1.1</b> Setting up</a></li>
 <li class="chapter" data-level="3.1.2" data-path="seminar3.html"><a href="seminar3.html#loading-data"><i class="fa fa-check"></i><b>3.1.2</b> Loading data</a></li>
@@ -163,7 +164,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.1.6" data-path="seminar3.html"><a href="seminar3.html#importing-a-dataset-in-.txt-format."><i class="fa fa-check"></i><b>3.1.6</b> Importing a dataset in .txt format.</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> Creating, amending, exporting data frames</a><ul>
+<li class="chapter" data-level="4" data-path="seminar4.html"><a href="seminar4.html"><i class="fa fa-check"></i><b>4</b> Covariance and Correlation</a><ul>
 <li class="chapter" data-level="4.1" data-path="seminar4.html"><a href="seminar4.html#seminar-2"><i class="fa fa-check"></i><b>4.1</b> Seminar</a><ul>
 <li class="chapter" data-level="4.1.1" data-path="seminar4.html"><a href="seminar4.html#creating-data-frames"><i class="fa fa-check"></i><b>4.1.1</b> Creating data frames</a></li>
 <li class="chapter" data-level="4.1.2" data-path="seminar4.html"><a href="seminar4.html#working-with-data-frames"><i class="fa fa-check"></i><b>4.1.2</b> Working with data frames</a></li>
@@ -171,49 +172,18 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.1.4" data-path="seminar4.html"><a href="seminar4.html#saving-data-frames"><i class="fa fa-check"></i><b>4.1.4</b> Saving data frames</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="seminar5.html"><a href="seminar5.html"><i class="fa fa-check"></i><b>5</b> Type coercion</a><ul>
+<li class="chapter" data-level="5" data-path="seminar5.html"><a href="seminar5.html"><i class="fa fa-check"></i><b>5</b> Hypothesis Testing</a><ul>
 <li class="chapter" data-level="5.1" data-path="seminar5.html"><a href="seminar5.html#seminar-3"><i class="fa fa-check"></i><b>5.1</b> Seminar</a><ul>
 <li class="chapter" data-level="5.1.1" data-path="seminar5.html"><a href="seminar5.html#coerce-a-factor-to-character"><i class="fa fa-check"></i><b>5.1.1</b> Coerce a factor to character</a></li>
 <li class="chapter" data-level="5.1.2" data-path="seminar5.html"><a href="seminar5.html#coerce-a-character-variable-into-a-factor-variable"><i class="fa fa-check"></i><b>5.1.2</b> Coerce a character variable into a factor variable</a></li>
 <li class="chapter" data-level="5.1.3" data-path="seminar5.html"><a href="seminar5.html#coerce-a-character-variable-into-a-numeric-variable"><i class="fa fa-check"></i><b>5.1.3</b> Coerce a character variable into a numeric variable</a></li>
 </ul></li>
 </ul></li>
-<li class="chapter" data-level="6" data-path="seminar6.html"><a href="seminar6.html"><i class="fa fa-check"></i><b>6</b> Loops and conditions</a><ul>
+<li class="chapter" data-level="6" data-path="seminar6.html"><a href="seminar6.html"><i class="fa fa-check"></i><b>6</b> Linear Regression</a><ul>
 <li class="chapter" data-level="6.1" data-path="seminar6.html"><a href="seminar6.html#seminar-4"><i class="fa fa-check"></i><b>6.1</b> Seminar</a><ul>
 <li class="chapter" data-level="6.1.1" data-path="seminar6.html"><a href="seminar6.html#for-loops"><i class="fa fa-check"></i><b>6.1.1</b> For loops</a></li>
 <li class="chapter" data-level="6.1.2" data-path="seminar6.html"><a href="seminar6.html#conditions"><i class="fa fa-check"></i><b>6.1.2</b> Conditions</a></li>
 <li class="chapter" data-level="6.1.3" data-path="seminar6.html"><a href="seminar6.html#the-ifelse-function"><i class="fa fa-check"></i><b>6.1.3</b> The ifelse() function</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="7" data-path="seminar7.html"><a href="seminar7.html"><i class="fa fa-check"></i><b>7</b> Visualising data</a><ul>
-<li class="chapter" data-level="7.1" data-path="seminar7.html"><a href="seminar7.html#seminar-5"><i class="fa fa-check"></i><b>7.1</b> Seminar</a><ul>
-<li class="chapter" data-level="7.1.1" data-path="seminar7.html"><a href="seminar7.html#plots"><i class="fa fa-check"></i><b>7.1.1</b> Plots</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="8" data-path="seminar8.html"><a href="seminar8.html"><i class="fa fa-check"></i><b>8</b> Correlations and differences in means</a><ul>
-<li class="chapter" data-level="8.1" data-path="seminar8.html"><a href="seminar8.html#seminar-6"><i class="fa fa-check"></i><b>8.1</b> Seminar</a><ul>
-<li class="chapter" data-level="8.1.1" data-path="seminar8.html"><a href="seminar8.html#sample-variance-and-sample-standard-deviation"><i class="fa fa-check"></i><b>8.1.1</b> Sample Variance and Sample Standard Deviation</a></li>
-<li class="chapter" data-level="8.1.2" data-path="seminar8.html"><a href="seminar8.html#t-test-for-the-sample-mean"><i class="fa fa-check"></i><b>8.1.2</b> T test for the sample mean</a></li>
-<li class="chapter" data-level="8.1.3" data-path="seminar8.html"><a href="seminar8.html#loading-real-data"><i class="fa fa-check"></i><b>8.1.3</b> Loading real data</a></li>
-<li class="chapter" data-level="8.1.4" data-path="seminar8.html"><a href="seminar8.html#t-test-one-sample-hypothesis-test-with-real-data"><i class="fa fa-check"></i><b>8.1.4</b> T-test (one-sample hypothesis test) with real data</a></li>
-<li class="chapter" data-level="8.1.5" data-path="seminar8.html"><a href="seminar8.html#t-test-difference-in-means"><i class="fa fa-check"></i><b>8.1.5</b> T-test (difference in means)</a></li>
-<li class="chapter" data-level="8.1.6" data-path="seminar8.html"><a href="seminar8.html#relationships-between-continuous-variables"><i class="fa fa-check"></i><b>8.1.6</b> Relationships between continuous variables</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="9" data-path="seminar9.html"><a href="seminar9.html"><i class="fa fa-check"></i><b>9</b> Regression</a><ul>
-<li class="chapter" data-level="9.1" data-path="seminar9.html"><a href="seminar9.html#seminar-7"><i class="fa fa-check"></i><b>9.1</b> Seminar</a><ul>
-<li class="chapter" data-level="9.1.1" data-path="seminar9.html"><a href="seminar9.html#interpreting-regression-output"><i class="fa fa-check"></i><b>9.1.1</b> Interpreting Regression Output</a></li>
-<li class="chapter" data-level="9.1.2" data-path="seminar9.html"><a href="seminar9.html#fitted-values"><i class="fa fa-check"></i><b>9.1.2</b> Fitted values</a></li>
-<li class="chapter" data-level="9.1.3" data-path="seminar9.html"><a href="seminar9.html#additional-resources"><i class="fa fa-check"></i><b>9.1.3</b> Additional Resources</a></li>
-<li class="chapter" data-level="9.1.4" data-path="seminar9.html"><a href="seminar9.html#multiple-linear-regression-models"><i class="fa fa-check"></i><b>9.1.4</b> Multiple linear regression models</a></li>
-<li class="chapter" data-level="9.1.5" data-path="seminar9.html"><a href="seminar9.html#estimating-a-bivariate-regression"><i class="fa fa-check"></i><b>9.1.5</b> Estimating a Bivariate Regression</a></li>
-<li class="chapter" data-level="9.1.6" data-path="seminar9.html"><a href="seminar9.html#non-linearities"><i class="fa fa-check"></i><b>9.1.6</b> Non-Linearities</a></li>
-</ul></li>
-</ul></li>
-<li class="chapter" data-level="10" data-path="seminar10.html"><a href="seminar10.html"><i class="fa fa-check"></i><b>10</b> Prediction and assessing prediction accuracy</a><ul>
-<li class="chapter" data-level="10.1" data-path="seminar10.html"><a href="seminar10.html#seminar-8"><i class="fa fa-check"></i><b>10.1</b> Seminar</a><ul>
-<li class="chapter" data-level="10.1.1" data-path="seminar10.html"><a href="seminar10.html#model-the-underlying-continuous-process"><i class="fa fa-check"></i><b>10.1.1</b> Model the Underlying Continuous Process</a></li>
-<li class="chapter" data-level="10.1.2" data-path="seminar10.html"><a href="seminar10.html#leave-one-out-cross-validation"><i class="fa fa-check"></i><b>10.1.2</b> Leave-One-Out-Cross-Validation</a></li>
 </ul></li>
 </ul></li>
 </ul>
@@ -225,7 +195,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
       <div class="body-inner">
         <div class="book-header" role="navigation">
           <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Suffolk 2019</a>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Introduction to Statistics with R</a>
           </h1>
         </div>
 
@@ -233,17 +203,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="loops-and-conditions" class="section level1">
-<h1><span class="header-section-number">Chapter 6</span> Loops and conditions</h1>
+<div id="linear-regression" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Linear Regression</h1>
 <div id="seminar-4" class="section level2">
 <h2><span class="header-section-number">6.1</span> Seminar</h2>
 <p>In this section, we introduce loops and conditional statements. Loops are generally useful, when we want to carry out the same operation over and over. Conditions are logical statements that are evaluated and if the statement is true a different operation is carried out than if the statement is false. We may, for instance, be interested in the average crime rate in our sample but only if the respondents are female. To do so, we need conditional statements.</p>
 <div id="for-loops" class="section level3">
 <h3><span class="header-section-number">6.1.1</span> For loops</h3>
 <p>Loops are useful when we need to carry out similar operations repeatedly. A for loop is an easy way to do this. We will create a simple “for loop” like so:</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1"><span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){</a>
-<a class="sourceLine" id="cb104-2" title="2">  <span class="kw">print</span>( idx )</a>
-<a class="sourceLine" id="cb104-3" title="3">}</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){
+  <span class="kw">print</span>( idx )
+}</code></pre>
 <pre><code>[1] 1
 [1] 2
 [1] 3
@@ -253,17 +223,17 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 [1] 7</code></pre>
 <p>In the above code, the <code>for()</code> function initiates the loop. We loop from 1 through 7 and <code>idx</code> takes the values from 1 to 7 iteratively. We can write code within the curly braces. Here, we simply print the current loop iteration.</p>
 <p>We can create nested loops, i.e. loops within loops like so:</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1"><span class="co"># first loop</span></a>
-<a class="sourceLine" id="cb106-2" title="2"><span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){</a>
-<a class="sourceLine" id="cb106-3" title="3">  </a>
-<a class="sourceLine" id="cb106-4" title="4">  <span class="co"># second loop</span></a>
-<a class="sourceLine" id="cb106-5" title="5">  <span class="cf">for</span> (idx2 <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="st"> </span><span class="dv">7</span>){</a>
-<a class="sourceLine" id="cb106-6" title="6">    </a>
-<a class="sourceLine" id="cb106-7" title="7">    <span class="cf">if</span> (idx <span class="op">&lt;</span><span class="st"> </span>idx2) <span class="kw">print</span>(<span class="st">&quot;idx1 is smaller than idx2&quot;</span>)</a>
-<a class="sourceLine" id="cb106-8" title="8">    <span class="cf">else</span> <span class="kw">print</span>(<span class="st">&quot;idx1 is larger than idx2&quot;</span>)</a>
-<a class="sourceLine" id="cb106-9" title="9">    </a>
-<a class="sourceLine" id="cb106-10" title="10">  } <span class="co"># end of second loop</span></a>
-<a class="sourceLine" id="cb106-11" title="11">} <span class="co"># end of first loop</span></a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># first loop</span>
+<span class="cf">for</span> (idx <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">7</span>){
+  
+  <span class="co"># second loop</span>
+  <span class="cf">for</span> (idx2 <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="st"> </span><span class="dv">7</span>){
+    
+    <span class="cf">if</span> (idx <span class="op">&lt;</span><span class="st"> </span>idx2) <span class="kw">print</span>(<span class="st">&quot;idx1 is smaller than idx2&quot;</span>)
+    <span class="cf">else</span> <span class="kw">print</span>(<span class="st">&quot;idx1 is larger than idx2&quot;</span>)
+    
+  } <span class="co"># end of second loop</span>
+} <span class="co"># end of first loop</span></code></pre>
 <pre><code>[1] &quot;idx1 is larger than idx2&quot;
 [1] &quot;idx1 is smaller than idx2&quot;
 [1] &quot;idx1 is smaller than idx2&quot;
@@ -318,7 +288,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="conditions" class="section level3">
 <h3><span class="header-section-number">6.1.2</span> Conditions</h3>
 <p>To illustrate the use of conditions we load the non-western foreigners dataset.</p>
-<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1">dat1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">dat1 &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;non_western_immigrants.csv&quot;</span>)</code></pre>
 <table>
 <colgroup>
 <col width="11%" />
@@ -386,15 +356,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </tbody>
 </table>
 <p>The variable <code>over.estimate</code> is equal to 1 if respondents over estimate the number of non-western immigrants in Britain. We will evaluate whether women are more or less likely to over estimate. First, we use the <code>mean()</code> function to assess the overall average value.</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb109-1" title="1"><span class="kw">mean</span>(dat1<span class="op">$</span>over.estimate)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(dat1<span class="op">$</span>over.estimate)</code></pre>
 <pre><code>[1] 0.7235462</code></pre>
 <p>A mean of 0.72 indicates that 72% of the 1049 respondents in the dataset over estimate the number of non-western immigrants. To assess whether the number is larger among men than women, we need conditional statements.</p>
 <p>We first take the mean of “over.estimate” for men:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb111-1" title="1"><span class="kw">mean</span>( dat1<span class="op">$</span>over.estimate[ dat1<span class="op">$</span>RSex<span class="op">==</span><span class="dv">1</span> ] )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>( dat1<span class="op">$</span>over.estimate[ dat1<span class="op">$</span>RSex<span class="op">==</span><span class="dv">1</span> ] )</code></pre>
 <pre><code>[1] 0.6527197</code></pre>
 <p>Here, we used square brackets to subset the data. The subset that we evaluate is described by the logical statement <code>dat1$RSex==1</code>. The <code>==</code> operator is a logical equal that is true if a condition is fulfilled and false otherwise. In this case, it is true if the variable “RSex” is 1 which stands for men.</p>
 <p>Take the mean of over.estimate for women on your own.</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r collapsible"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1"><span class="kw">mean</span>( dat1<span class="op">$</span>over.estimate[ dat1<span class="op">$</span>RSex<span class="op">==</span><span class="st"> </span><span class="dv">2</span>] )</a></code></pre></div>
+<pre class="sourceCode r collapsible"><code class="sourceCode r"><span class="kw">mean</span>( dat1<span class="op">$</span>over.estimate[ dat1<span class="op">$</span>RSex<span class="op">==</span><span class="st"> </span><span class="dv">2</span>] )</code></pre>
 <pre><code>[1] 0.7828371</code></pre>
 <p>It turns out, that females in our sample over estimate the number of non-western immigrants more. Whether the difference in our sample is systematic, i.e. whether it would hold in the population as well is a matter that we will return to.</p>
 <p>Here we have taken two conditional means and compared them. Doing so is the first step towards statistical inference.</p>
@@ -403,13 +373,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <h3><span class="header-section-number">6.1.3</span> The ifelse() function</h3>
 <p>Categorical variables such as “RSex” are usually coded 0/1 and the variable name usually refers to the category that is 1. “RSex” is a bad variable name because it is not clear whehter the values 1 and 2 refer to males or females.</p>
 <p>We will create a new variable called “female” that is equal to 1 if the respondent is female and 0 otherwise. We do so using the <code>ifelse()</code> function. The function first evaluates a logical condition and subsequently carries out one operation if the statement is true (yes) and another if the statement is false (no).</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1">dat1<span class="op">$</span>female &lt;-<span class="st"> </span><span class="kw">ifelse</span>( dat1<span class="op">$</span>RSex <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span> )</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r">dat1<span class="op">$</span>female &lt;-<span class="st"> </span><span class="kw">ifelse</span>( dat1<span class="op">$</span>RSex <span class="op">==</span><span class="st"> </span><span class="dv">2</span>, <span class="dt">yes =</span> <span class="dv">1</span>, <span class="dt">no =</span> <span class="dv">0</span> )</code></pre>
 <p>Let’s check whetehr we correctly converted the variable using the <code>table()</code> function which produces a frequency table.</p>
-<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb116-1" title="1"><span class="kw">table</span>(dat1<span class="op">$</span>RSex)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat1<span class="op">$</span>RSex)</code></pre>
 <pre><code>
   1   2 
 478 571 </code></pre>
-<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb118-1" title="1"><span class="kw">table</span>(dat1<span class="op">$</span>female)</a></code></pre></div>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(dat1<span class="op">$</span>female)</code></pre>
 <pre><code>
   0   1 
 478 571 </code></pre>
@@ -422,8 +392,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="seminar5.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="seminar7.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="seminar5.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -460,7 +430,7 @@ gitbook.start({
 "link": null,
 "text": null
 },
-"download": ["suffolk2019.pdf"],
+"download": ["stats101.pdf"],
 "toc": {
 "collapse": "section",
 "scroll_highlight": true
@@ -469,19 +439,6 @@ gitbook.start({
 });
 </script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    var src = "true";
-    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 </body>
 
 </html>

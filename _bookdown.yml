@@ -1,5 +1,5 @@
 output_dir: "docs"
-book_filename: "stats101.rmd"
+book_filename: "suffolk2019.rmd"
 language:
   ui:
     chapter_name: "Chapter "
@@ -28,6 +28,21 @@ rmd_files: [
 
   seminars/seminar6.Rmd,
   #solutions/solutions6.Rmd,
+
+  seminars/seminar7.Rmd,
+  #solutions/solutions7.Rmd,
+
+  seminars/seminar8.Rmd,
+  #solutions/solutions8.Rmd,
+
+  seminars/seminar9.Rmd,
+  #solutions/solutions9.Rmd,
+  
+  seminars/seminar10.Rmd,
+  #solutions/solutions9.Rmd,
+  
+  #seminars/seminar11.Rmd,
+  #solutions/solutions11.Rmd,
 
   #datacamp.Rmd,
   # optional material

@@ -1,4 +1,4 @@
-# Linear Regression
+# Loops and conditions
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')

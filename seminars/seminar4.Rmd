@@ -1,4 +1,4 @@
-# Covariance and Correlation
+# Creating, amending, exporting data frames
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')

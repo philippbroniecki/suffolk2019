@@ -1,4 +1,4 @@
-# Central Tendency and Dispersion
+# Data import (from csv, txt, and excel)
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')

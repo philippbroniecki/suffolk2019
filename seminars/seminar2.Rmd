@@ -1,4 +1,4 @@
-# Data Types And Levels of Measurement
+# R-syntax, data structures and types
 
 ```{r, include = FALSE}
 par(bg = '#fdf6e3')
